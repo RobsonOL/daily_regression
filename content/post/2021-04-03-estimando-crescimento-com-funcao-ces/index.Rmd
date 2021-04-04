@@ -1,0 +1,268 @@
+---
+title: Estimando Crescimento com Função CES
+author: ''
+date: '2021-04-03'
+slug: estimando-crescimento-com-funcao-ces
+categories: []
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2021-04-03T23:41:24-03:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+# Introdução
+
+A especifição formal de uma função de produção CES com dois inputs é dada por
+
+$$y = \gamma ( \delta x_1^{-\rho} + (1-\delta) x_2^{-\rho})^{-\frac{\nu}{\rho}}$$
+
+onde $y$ é a quantidade de produto, $x_1$ e $x_2$ são os input, e $\gamma$, $\delta$ e $\nu$ são parâmetros. O parâmetro $\gamma \in [0,\infty)$ determina a produtividade, $\delta \in [0,1]$ determina a distribuição ótima dos input, $\rho \in [-1,0) \cup (0,\infty)$, a elasticidade (constante) de substituição, que é igual a $\sigma = 1/(1+\rho)$, e $\nu \in [0,\infty)$ é igual a elasticidade de escala [^1].
+
+[^1]: Temos retornos crescentes e decrescentes de escala, caso $\nu > 1$ ou $\nu <1$, respectivamente.
+
+A função CES inclui três casos especiais: 
+
+* $\rho \to 0$, $\sigma$ se aproxima de 1 e a CES toma a forma de uma Cobb Douglas; 
+
+* $\rho \to \infty$ produz $\sigma \to 0$ e a CES se torna uma Leontief; e 
+
+* $\rho \to -1$ produz $\sigma \to \infty $ e a CES se torna uma fun??o linear se $\nu = 1$.
+
+Os dois procedimentos padrões para estimar os parâmetros das funções CES são a aproximação de Taylor desenvolvida por Kmenta (1967) e a estimação de Mínimos quadrados não lineares (NLS). Contudo, a aplicação da aproximação de Kmenta é limitada, porque ela não pode ser usada para funções CES com mais que dois inputs (Hoff, 2004), portanto só retornando resultados confiáveis se $\rho$ está próximo de zero. Ao mesmo tempo, algorítmos de aproximação não linear quase sempre se defrontam com problemas de convergência.
+
+Ferramentas para análise econômica com a função CES estão disponíveis no pacote R `micEconCES`
+
+Podemos demonstrar a estimação de uma função CES com dois inputs, bem como uma nested CES com três ou quatro inputs. Criando um banco de dados com quatro inputs e então criando um a função `cesCalc` para calcular o output determinístico para uma CES com dois inputs e com especificação $\gamma = 1$, $\delta = 0.6$, $\rho = 0.5$ e $\nu = 1.1$. Por fim, a última linha de comando produz a variável output estocástica adicionando erros normalmente distribuidos para a variável output deteminística.
+
+```{r message=FALSE, warning=FALSE}
+library(micEconCES)
+library(tidyverse)
+
+set.seed(123)
+cesData <- data.frame(x1 = rchisq(200, 10), 
+                      x2 = rchisq(200, 10),
+                      x3 = rchisq(200, 10),
+                      x4 = rchisq(200, 10))
+
+cesData <- cesData %>% 
+  mutate(y2 = cesCalc(xNames = c( "x1", "x2" ), data = cesData,
+                      coef = c(gamma = 1, delta = 0.6, rho =0.5, nu = 1.1)
+                      )) %>% 
+  mutate(y2 = y2 + 2.5*rnorm(200))
+
+cesData %>% head()
+```
+
+Podemos realizar o mesmo procedimento para uma função com três e quatro inputs:
+
+```{r}
+cesData <- cesData %>% 
+  mutate(y3 = cesCalc(xNames = c("x1", "x2", "x3"), data = cesData,
+                      coef = c( gamma = 1, delta_1 = 0.7, 
+                                delta = 0.6, rho_1 = 0.3, 
+                                rho = 0.5,nu = 1.1), nested = TRUE )) %>% 
+  mutate(y3 = y3 + 1.5*rnorm(200))
+
+
+cesData <- cesData %>% 
+  mutate(y4 = cesCalc(xNames = c("x1", "x2", "x3", "x4"), data = cesData,
+                      coef = c(gamma = 1, delta_1 = 0.7, 
+                               delta_2 = 0.6, delta = 0.5,
+                               rho_1 = 0.3, rho_2 = 0.4, 
+                               rho = 0.5, nu = 1.1), 
+                      nested = TRUE)) %>% 
+  mutate(y4 = y4 + 1.5*rnorm(200))
+
+cesData %>% head()
+```
+
+Como a CES é não linear nos seus parâmetros, a forma mais direta de estimar a função CES no R seria usando a função `nls`, que estima mínimos quadrados não lineares:
+
+```{r}
+cesNls <- cesNls <- nls(y2 ~ gamma*(delta*x1^(-rho) + (1-delta)*x2^(-rho))^(-phi/rho),
+                        data = cesData, start = c(gamma = 0.5, delta = 0.5, rho = 0.25, phi=1))
+print(cesNls)
+```
+
+Enquanto `nls` funciona bem em exemplos artificiais, ela não é capazes de produzir bons resultados com dados reais, seja por problemas de não-convergência, de convergência para mínimo local ou por estimativa de parâmetros teoricamente pouco razoáveis. Portanto, é preciso encontrar formas alternativas de estimação.
+
+# Aproximação Kmenta
+
+Aproximação de Kmenta produz uma linearidade que permite a estimação da CES por MQO:
+
+$$\ln y = \ln \gamma + \nu \delta \ln x_1 + \nu (1-\delta) \ln x_2 - \frac{\rho \nu}{2} \delta (1- \delta) (\ln x_1 - \ln x_2)^2$$
+
+Kmenta obteve esta fórmula logaritmizando a função CES e aplicando a expansão de Taylor de segunda ordem para $\ln (\delta x_1^{-\rho} + (1-\delta)x_2^{-\rho})$ no ponto $\rho = 0$. A mesma fórmula pode ser obtida aplicando a expansão de Taylor de primeira ordem para toda a função CES logaritmizada no ponto $\rho = 0$ (Uebe 2000).
+
+A Aproximação de Kmenta pode ser escrita como uma função translog restrita (Hoff 2004):
+
+$$\ln y =\alpha_0 + \alpha_1 \ln x_1 + \alpha_2 \ln x_2 $$
+$$+ \frac{1}{2} \beta_{11} (\ln x_1)^2 + \frac{1}{2} \beta_{22} (\ln x_2 )^2 + \beta_{12} \ln x_1 \ln x_2$$
+
+onde as restrições são que $\beta_{12} = -\beta_{11} = -\beta_{22}$. Se retornos constantes de escala são impostos, uma terceira restrição deve ser aplicada $\alpha_1 + \alpha_2  = 1$.
+
+Essas restrições podem ser utilizadas para testar se a aproximação de Kmenta é uma simplifição aceitável da forma funcional translog. Neste caso, um simples teste t para os coeficientes pode ser usado para checar se a forma funcional Cobb-Douglas é uma simplificação aceitável da aproximação Kmenta da CES.
+
+Os parámetros da função CES podem ser calculados a partir de parâmetros da translog restrita por:
+
+$$\gamma = \exp (\alpha_0)$$
+
+$$\nu = \alpha_1 + \alpha_2$$
+
+$$\delta = \frac{\alpha_1}{\alpha_1 + \alpha_2}$$
+
+$$\rho = \frac{\beta_{12}(\alpha_1 + \alpha_2)}{\alpha_1 \alpha_2}$$
+
+A aproximação de Kmenta pode ser estimada usando a função `cesEst`.
+
+```{r}
+cesKmenta <- cesEst(yName = "y2", xNames = c("x1","x2"), data = cesData, method = "Kmenta", vrs = TRUE)
+
+summary(cesKmenta)
+```
+
+O teste de Walk indica que as restrições na função translog implicadas pela apoximação de Kmenta não podem ser rejeitadas. Podemos ver se a tecnologia não tem forma Cobb Douglas, para isso checamos se $\beta_{12} = -\beta_{22} = -\beta_{11}$ são significante diferentes de zero. Como a estimação da aproximação de Kmenta está no componente `cesEst$kmenta`, podemos observa-los como
+
+```{r}
+cesKmenta %>% {.$kmenta} %>% summary() %>% coef()
+```
+
+Dado que $\beta_{12} = -\beta_{22} = -\beta_{11}$ diferem significatiamente de zero ao nível de 5\%, podemos concluir que a tecnologia não é da forma Cobb Douglas. Alternativamente podemos chegar se o parâmetro $\rho$ da função CES é significativamente diferente de zero. Que produz resultados semelhantes.
+
+Finalmente, plotando os valores ajustados contra os valores observados de $y$ para checar se os parâmetros são razoáveis:
+
+```{r}
+
+cesData %>% 
+  ggplot(aes(x = y2, y = fitted(cesKmenta))) + 
+  geom_point() + 
+  theme_bw()
+
+```
+
+Figura acima mostra que os parâmetros produzem valores ajustados razoáveis. Porém, a aproximação de Kmenta produz vários problemas. Primeiro, ela é uma série de Taylor truncada e o termo Resto deve ser visto como uma variável omitida. Segundo, a aproximação de Kmenta apenas converge para a função CES na região de convergência que é dependente do verdadeiro parâmetro da CES (Thursby and Lovell 1978).
+
+
+## Replicação de Sun, Henderson and Kumbhakar (2011)
+
+O estudo é uma replicação de Masanjala and Papagergious (2004). O objetivo é reeestimar um modelo de Solow baseado na função CES com capital e trabalho aumentado (i.e., a quantidade de trabalho multiplicada pela eficiência do trabalho) como inputs. O modelo é dado como:
+
+$$y_i = A \left[ \frac{1}{1-\alpha} - \frac{\alpha}{1-\alpha}\left(\frac{s_{ik}}{n_i + g + \delta}\right)^{\frac{\sigma -1}{\sigma}}\right]^{-\frac{\sigma}{\sigma - 1}}$$
+
+onde 
+
+* $y_i$ é o produto de estado estacionário (PIB) por unidade de trabalho.
+
+* $s_{ik}$ ? a razáo de investimento por produto agregado.
+
+* $n_i$ ? a taxa de crescimento da população com o subscrito $i$ indicando a população.
+
+* $g$ é a taxa de crescimento tecnologica.
+
+* $\delta$ ? a taxa de depreciação do capital.
+
+$A$ indica a eficiência do trabalho.
+
+$\alpha$ é o parâmetro de distribuição do capital.
+
+$\sigma$ é a elasticidade de substituição.
+
+Podemos redefinir os parâmetros e variáveis na função acima para obter a CES com dois inputs: $\gamma = A$, $\delta = \frac{1}{1-\alpha}$, $x_1 = 1$, $x_@ = (n_i + g + \delta)/s_{ik}$, $\rho = (\sigma - 1)/\sigma$ e $\nu = 1$. Neste caso, a elasticidade é um pouco diferente do modelo CES padrão, com elasticidade de substituição dada por $\sigma = 1/(1-\rho)$ (assim, o $\rho$ possui sinal inverso). Portanto, o $\rho$ estimado deve estar entre menos infinito e um. Além disso, $\alpha$ deve estar entre zero e um, de modo que $\delta$ estimado tenha valor maior que um ou igual a um.
+
+Os dados utilizados são aqueles de Mankiw, Romer e Weil (1992) e não inclui os países produtores de petróleo. 
+
+```{r message=FALSE, warning=FALSE}
+data("GrowthDJ", package = "AER")
+GrowthDJ <- GrowthDJ %>% 
+  filter(oil == "no")
+GrowthDJ %>% head()
+```
+
+Podemos calcular os dois inputs do modelo (seguindo a suposição de Mankiw de que $g + \delta = 0,05$:
+
+```{r}
+GrowthDJ <- GrowthDJ %>% 
+  mutate(x1 = 1,
+         x2 = (GrowthDJ$popgrowth + 5) / GrowthDJ$invest)
+
+```
+
+
+
+## Estimador em Nível: NLS
+
+O modelo a seguir estima o modelo de Solow em uma função CES usando NLS:
+
+```{r}
+cesNls <- cesEst("gdp85", c("x1", "x2"), data = GrowthDJ)
+summary(cesNls, ela = FALSE)
+```
+
+Agora, podemos calcular o parámetro de distribuição do capital ($\alpha$) e a elasticidade de substituição ($\sigma$) manualmente:
+
+```{r}
+cat("alpha =", (coef(cesNls)["delta"]- 1)/coef(cesNls)["delta"],"\n")
+
+cat("sigma =", 1/(1 - coef(cesNls)["rho"]),"\n")
+```
+
+#### Estimador PPML 
+
+```{r message=FALSE, warning=FALSE}
+#library(gravity)
+#PPML("gdp85", c("x1", "x2") ,data = GrowthDJ)
+```
+
+
+```{r}
+library(RStata)
+options("RStata.StataPath" =  
+          "\"C:\\Program Files (x86)\\Stata13\\StataMP-64\""
+)
+
+options("RStata.StataVersion" = 13)
+
+```
+
+PPML
+
+```{r}
+ppml <- stata("ppml gdp85 x1 x2", data.in = GrowthDJ, data.out = T)
+
+GrowthDJ <- GrowthDJ %>% 
+  mutate(lngdp85 = log(gdp85))
+
+
+
+nl<- stata("nl (lngdp85 = {b0} - 1/{rho=1}*ln({delta=0.5}*x1^(-1*{rho}) + (1 - {delta})*x2^(-1*{rho})))", 
+data.in = GrowthDJ, data.out = F)
+
+
+alpha <- stata("cat( 'alpha =', (coef(nl)['delta']- 1)/coef(nl)['delta'])")
+
+
+
+```
+De modo que $\alpha = \frac{\delta - 1}{\delta} = \frac{1.62 - 1}{1.62} = 0.32$.
+
+## Estimação em Log: Basic Solow CD equation
+
+$$\ln \left( \frac{Y_i}{L_i} \right) = \ln A(0) + gt + \frac{\alpha}{1-\alpha} \ln \left( \frac{s_{i,k}}{n_i + g + \delta} \right)$$
+
+```{r}
+GrowthDJ <- GrowthDJ %>% 
+  mutate(ln_sk = log(GrowthDJ$invest/100)) %>% 
+  mutate(ndelta =  (GrowthDJ$popgrowth + 5)/100)
+
+
+BasicSolowCD <- lm(gdp85 ~ ln_sk + ndelta , data = GrowthDJ)
+summary(BasicSolowCD)
+```
+

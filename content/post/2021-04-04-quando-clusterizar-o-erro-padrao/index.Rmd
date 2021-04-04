@@ -1,0 +1,91 @@
+---
+title: Quando clusterizar o erro padrão?
+author: ''
+date: '2021-04-04'
+slug: quando-clusterizar-o-erro-padrao
+categories: []
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2021-04-04T00:16:19-03:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+# Introdução
+
+Este texto é uma adaptação/tradução [deste texto](https://blogs.worldbank.org/impactevaluations/when-should-you-cluster-standard-errors-new-wisdom-econometrics-oracle) escrito pelo David Mckenzie. O autor discute resultados e recomendações feitas no [paper](https://arxiv.org/abs/1710.02926) *When Should You Adjust Standard Errors for Clustering* de Alberto Abadie, Susan Athey, Guido Imbens e Jeffrey Woodlridge. O conjunto de autores do paper não necessita de apresentações... 
+
+
+A ideia principal do paper é de que o fato de que o **erro padrão sofre mudanças quando a clusterização é feita não deve influenciar na decisão de realizar a clusterização**. Segundo os autores existem duas razões que guiam que devem guiar a escolha de como clusterizar o erro padrão:
+
+* Devido a forma como sua amostra foi tomada da população.
+    
+* Devido ao design do experimento: como os grupos de unidades foram atribuídos a um tratamento.
+
+
+# Devido ao Design Amostral
+
+Vamos discutir o primeiro ponto. Vamos considere a equação de Mincer:
+
+$$\log(\text{salario}) = \alpha + \beta \text{Escolaridade} + \gamma \text{experiencia} + \delta \text{experiencia}^2 + \epsilon$$
+
+Sua decisão é: devo clusterizar o erro padrão por estado ou cidade, pela indústria que o indivíduo trabalha ou até mesmo pela faixa etária. Sob a pespectiva da amostra, o que importa é **como a amostra foi selecionada** e se existem *clusters* na população de interesse que não estão representados na amostra.
+  
+### Cenário 1
+    
+> Você quer estudar a associação entre escolaridade e salário e usa uma amostra aleatória de trabalhadores. 
+
+**Resposta:** **Você não precisa ajustar o erro padrão.**
+        
+
+### Cenário 2
+
+> A amostra foi selecionada ao tomar 100 cidades aleatórias e dentro delas, escolher aleatoriamente um grupo de pessoas. Seu objetivo é responder algo sobre a população no geral, e não apenas para essas cidades sorteadas. 
+
+**Você deve clusterizar por cidade, já que existem cidades que não foram consideradas na sua amostra.**
+        
+
+### Cenário 3
+
+> Da mesma forma não faz sentido clusterizar por faixa etária já que é improvável que uma amostra aleatória de uma certa faixa fosse tomada e não de outras. E a clusterização por indústria só ocorreria se a amostra fosse tomada de um grupo de indústrias, e delas fossem tomadas certos indivíduos. 
+
+
+**Observações:** No caso (2), se o objetivo é fazer alguma afirmação sobre as cidades da amostra, o erro padrão robusto (Eicker-Huber-White ou EHW) é suficiente. Se o objetivo é generalizar para a população, se usa o erro padrão clusterizado (Liang-Zeger ou LZ). Se não existe heterogeneidade nos efeitos tratamento, EHW e LZ produzem o mesmo resultado.
+
+
+# Devido ao design do experimento
+
+A segunda razão para clusterizar é devido ao experimento. Ocorre quando clusters de unidades, em vez das unidades individuais são atribuídas a um tratamento, como  em uma escola, que é um cluster de alunos.
+
+Vamos assumir a seguinte equação:
+
+$$\log(\text{salário}) = \alpha + \beta \text{Tratamento} + \epsilon$$
+
+### Cenário 1
+
+> Se o tratamento é atribuído a nível de indivíduo. 
+
+**Não é necessário clusterização**
+
+
+### Cenário 2
+
+> A não ser que existam muito períodos de tempo, e então você deve clusterizar a nível de indivíduo, já que a unidade de aleatorização é o indivíduo e não o indivíduo-tempo.
+
+
+### Cenário 3
+
+> Se o tratamento é a nível de escola ou de cidade. 
+
+**Então faça a clusterização a nível de cidade.**
+
+
+# Efeitos Fixos
+
+E se a amostra é ao nível de cidades, mas são adicianados efeitos fixos de cidade? A regra geral é observar os passos anteriores, porém a clusterização só terá um efeito se existir heterogeneidade no tratamento. 

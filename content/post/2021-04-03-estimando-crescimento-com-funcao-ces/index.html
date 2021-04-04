@@ -1,0 +1,378 @@
+---
+title: Estimando Crescimento com Função CES
+author: ''
+date: '2021-04-03'
+slug: estimando-crescimento-com-funcao-ces
+categories: []
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2021-04-03T23:41:24-03:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+
+
+<div id="introdução" class="section level1">
+<h1>Introdução</h1>
+<p>A especifição formal de uma função de produção CES com dois inputs é dada por</p>
+<p><span class="math display">\[y = \gamma ( \delta x_1^{-\rho} + (1-\delta) x_2^{-\rho})^{-\frac{\nu}{\rho}}\]</span></p>
+<p>onde <span class="math inline">\(y\)</span> é a quantidade de produto, <span class="math inline">\(x_1\)</span> e <span class="math inline">\(x_2\)</span> são os input, e <span class="math inline">\(\gamma\)</span>, <span class="math inline">\(\delta\)</span> e <span class="math inline">\(\nu\)</span> são parâmetros. O parâmetro <span class="math inline">\(\gamma \in [0,\infty)\)</span> determina a produtividade, <span class="math inline">\(\delta \in [0,1]\)</span> determina a distribuição ótima dos input, <span class="math inline">\(\rho \in [-1,0) \cup (0,\infty)\)</span>, a elasticidade (constante) de substituição, que é igual a <span class="math inline">\(\sigma = 1/(1+\rho)\)</span>, e <span class="math inline">\(\nu \in [0,\infty)\)</span> é igual a elasticidade de escala <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
+<p>A função CES inclui três casos especiais:</p>
+<ul>
+<li><p><span class="math inline">\(\rho \to 0\)</span>, <span class="math inline">\(\sigma\)</span> se aproxima de 1 e a CES toma a forma de uma Cobb Douglas;</p></li>
+<li><p><span class="math inline">\(\rho \to \infty\)</span> produz <span class="math inline">\(\sigma \to 0\)</span> e a CES se torna uma Leontief; e</p></li>
+<li><p><span class="math inline">\(\rho \to -1\)</span> produz $$ e a CES se torna uma fun??o linear se <span class="math inline">\(\nu = 1\)</span>.</p></li>
+</ul>
+<p>Os dois procedimentos padrões para estimar os parâmetros das funções CES são a aproximação de Taylor desenvolvida por Kmenta (1967) e a estimação de Mínimos quadrados não lineares (NLS). Contudo, a aplicação da aproximação de Kmenta é limitada, porque ela não pode ser usada para funções CES com mais que dois inputs (Hoff, 2004), portanto só retornando resultados confiáveis se <span class="math inline">\(\rho\)</span> está próximo de zero. Ao mesmo tempo, algorítmos de aproximação não linear quase sempre se defrontam com problemas de convergência.</p>
+<p>Ferramentas para análise econômica com a função CES estão disponíveis no pacote R <code>micEconCES</code></p>
+<p>Podemos demonstrar a estimação de uma função CES com dois inputs, bem como uma nested CES com três ou quatro inputs. Criando um banco de dados com quatro inputs e então criando um a função <code>cesCalc</code> para calcular o output determinístico para uma CES com dois inputs e com especificação <span class="math inline">\(\gamma = 1\)</span>, <span class="math inline">\(\delta = 0.6\)</span>, <span class="math inline">\(\rho = 0.5\)</span> e <span class="math inline">\(\nu = 1.1\)</span>. Por fim, a última linha de comando produz a variável output estocástica adicionando erros normalmente distribuidos para a variável output deteminística.</p>
+<pre class="r"><code>library(micEconCES)
+library(tidyverse)
+
+set.seed(123)
+cesData &lt;- data.frame(x1 = rchisq(200, 10), 
+                      x2 = rchisq(200, 10),
+                      x3 = rchisq(200, 10),
+                      x4 = rchisq(200, 10))
+
+cesData &lt;- cesData %&gt;% 
+  mutate(y2 = cesCalc(xNames = c( &quot;x1&quot;, &quot;x2&quot; ), data = cesData,
+                      coef = c(gamma = 1, delta = 0.6, rho =0.5, nu = 1.1)
+                      )) %&gt;% 
+  mutate(y2 = y2 + 2.5*rnorm(200))
+
+cesData %&gt;% head()</code></pre>
+<pre><code>##          x1        x2        x3        x4        y2
+## 1  6.779170  8.628172  9.466569 14.289714  6.537563
+## 2 14.757915  7.912423  4.859748  2.691979 15.820243
+## 3  3.259122  8.524324  5.129477 23.531115  5.058388
+## 4  9.556879 13.206816  8.451157 21.763253 13.062918
+## 5 17.747128  7.591901  8.546469 10.469937 16.672353
+## 6 11.061724  9.201171 20.834041  8.290596 10.392037</code></pre>
+<p>Podemos realizar o mesmo procedimento para uma função com três e quatro inputs:</p>
+<pre class="r"><code>cesData &lt;- cesData %&gt;% 
+  mutate(y3 = cesCalc(xNames = c(&quot;x1&quot;, &quot;x2&quot;, &quot;x3&quot;), data = cesData,
+                      coef = c( gamma = 1, delta_1 = 0.7, 
+                                delta = 0.6, rho_1 = 0.3, 
+                                rho = 0.5,nu = 1.1), nested = TRUE )) %&gt;% 
+  mutate(y3 = y3 + 1.5*rnorm(200))
+
+
+cesData &lt;- cesData %&gt;% 
+  mutate(y4 = cesCalc(xNames = c(&quot;x1&quot;, &quot;x2&quot;, &quot;x3&quot;, &quot;x4&quot;), data = cesData,
+                      coef = c(gamma = 1, delta_1 = 0.7, 
+                               delta_2 = 0.6, delta = 0.5,
+                               rho_1 = 0.3, rho_2 = 0.4, 
+                               rho = 0.5, nu = 1.1), 
+                      nested = TRUE)) %&gt;% 
+  mutate(y4 = y4 + 1.5*rnorm(200))
+
+cesData %&gt;% head()</code></pre>
+<pre><code>##          x1        x2        x3        x4        y2        y3        y4
+## 1  6.779170  8.628172  9.466569 14.289714  6.537563  8.827164 11.032190
+## 2 14.757915  7.912423  4.859748  2.691979 15.820243 11.029816  9.515718
+## 3  3.259122  8.524324  5.129477 23.531115  5.058388  7.441439  5.979330
+## 4  9.556879 13.206816  8.451157 21.763253 13.062918 10.856928 15.007432
+## 5 17.747128  7.591901  8.546469 10.469937 16.672353 13.105363 14.566526
+## 6 11.061724  9.201171 20.834041  8.290596 10.392037 18.345526 13.565679</code></pre>
+<p>Como a CES é não linear nos seus parâmetros, a forma mais direta de estimar a função CES no R seria usando a função <code>nls</code>, que estima mínimos quadrados não lineares:</p>
+<pre class="r"><code>cesNls &lt;- cesNls &lt;- nls(y2 ~ gamma*(delta*x1^(-rho) + (1-delta)*x2^(-rho))^(-phi/rho),
+                        data = cesData, start = c(gamma = 0.5, delta = 0.5, rho = 0.25, phi=1))
+print(cesNls)</code></pre>
+<pre><code>## Nonlinear regression model
+##   model: y2 ~ gamma * (delta * x1^(-rho) + (1 - delta) * x2^(-rho))^(-phi/rho)
+##    data: cesData
+##  gamma  delta    rho    phi 
+## 1.0239 0.6222 0.5420 1.0858 
+##  residual sum-of-squares: 1197
+## 
+## Number of iterations to convergence: 6 
+## Achieved convergence tolerance: 8.194e-06</code></pre>
+<p>Enquanto <code>nls</code> funciona bem em exemplos artificiais, ela não é capazes de produzir bons resultados com dados reais, seja por problemas de não-convergência, de convergência para mínimo local ou por estimativa de parâmetros teoricamente pouco razoáveis. Portanto, é preciso encontrar formas alternativas de estimação.</p>
+</div>
+<div id="aproximação-kmenta" class="section level1">
+<h1>Aproximação Kmenta</h1>
+<p>Aproximação de Kmenta produz uma linearidade que permite a estimação da CES por MQO:</p>
+<p><span class="math display">\[\ln y = \ln \gamma + \nu \delta \ln x_1 + \nu (1-\delta) \ln x_2 - \frac{\rho \nu}{2} \delta (1- \delta) (\ln x_1 - \ln x_2)^2\]</span></p>
+<p>Kmenta obteve esta fórmula logaritmizando a função CES e aplicando a expansão de Taylor de segunda ordem para <span class="math inline">\(\ln (\delta x_1^{-\rho} + (1-\delta)x_2^{-\rho})\)</span> no ponto <span class="math inline">\(\rho = 0\)</span>. A mesma fórmula pode ser obtida aplicando a expansão de Taylor de primeira ordem para toda a função CES logaritmizada no ponto <span class="math inline">\(\rho = 0\)</span> (Uebe 2000).</p>
+<p>A Aproximação de Kmenta pode ser escrita como uma função translog restrita (Hoff 2004):</p>
+<p><span class="math display">\[\ln y =\alpha_0 + \alpha_1 \ln x_1 + \alpha_2 \ln x_2 \]</span>
+<span class="math display">\[+ \frac{1}{2} \beta_{11} (\ln x_1)^2 + \frac{1}{2} \beta_{22} (\ln x_2 )^2 + \beta_{12} \ln x_1 \ln x_2\]</span></p>
+<p>onde as restrições são que <span class="math inline">\(\beta_{12} = -\beta_{11} = -\beta_{22}\)</span>. Se retornos constantes de escala são impostos, uma terceira restrição deve ser aplicada <span class="math inline">\(\alpha_1 + \alpha_2 = 1\)</span>.</p>
+<p>Essas restrições podem ser utilizadas para testar se a aproximação de Kmenta é uma simplifição aceitável da forma funcional translog. Neste caso, um simples teste t para os coeficientes pode ser usado para checar se a forma funcional Cobb-Douglas é uma simplificação aceitável da aproximação Kmenta da CES.</p>
+<p>Os parámetros da função CES podem ser calculados a partir de parâmetros da translog restrita por:</p>
+<p><span class="math display">\[\gamma = \exp (\alpha_0)\]</span></p>
+<p><span class="math display">\[\nu = \alpha_1 + \alpha_2\]</span></p>
+<p><span class="math display">\[\delta = \frac{\alpha_1}{\alpha_1 + \alpha_2}\]</span></p>
+<p><span class="math display">\[\rho = \frac{\beta_{12}(\alpha_1 + \alpha_2)}{\alpha_1 \alpha_2}\]</span></p>
+<p>A aproximação de Kmenta pode ser estimada usando a função <code>cesEst</code>.</p>
+<pre class="r"><code>cesKmenta &lt;- cesEst(yName = &quot;y2&quot;, xNames = c(&quot;x1&quot;,&quot;x2&quot;), data = cesData, method = &quot;Kmenta&quot;, vrs = TRUE)</code></pre>
+<pre><code>## Warning in log(data[[varNames[i]]]): NaNs produzidos</code></pre>
+<pre><code>## Warning in estData$y - result$residuals: comprimento do objeto maior não é
+## múltiplo do comprimento do objeto menor</code></pre>
+<pre class="r"><code>summary(cesKmenta)</code></pre>
+<pre><code>## Estimated CES function with variable returns to scale
+## 
+## Call:
+## cesEst(yName = &quot;y2&quot;, xNames = c(&quot;x1&quot;, &quot;x2&quot;), data = cesData, 
+##     vrs = TRUE, method = &quot;Kmenta&quot;)
+## 
+## Estimation by the linear Kmenta approximation
+## Test of the null hypothesis that the restrictions of the Translog
+## function required by the Kmenta approximation are true:
+## P-value = 0.2269042
+## 
+## Coefficients:
+##       Estimate Std. Error t value Pr(&gt;|t|)    
+## gamma  0.89834    0.14738   6.095 1.09e-09 ***
+## delta  0.68126    0.04029  16.910  &lt; 2e-16 ***
+## rho    0.86321    0.41286   2.091   0.0365 *  
+## nu     1.13442    0.07308  15.523  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.498807 
+## Multiple R-squared: 0.7548401 
+## 
+## Elasticity of Substitution:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## E_1_2 (all)   0.5367     0.1189   4.513 6.39e-06 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>O teste de Walk indica que as restrições na função translog implicadas pela apoximação de Kmenta não podem ser rejeitadas. Podemos ver se a tecnologia não tem forma Cobb Douglas, para isso checamos se <span class="math inline">\(\beta_{12} = -\beta_{22} = -\beta_{11}\)</span> são significante diferentes de zero. Como a estimação da aproximação de Kmenta está no componente <code>cesEst$kmenta</code>, podemos observa-los como</p>
+<pre class="r"><code>cesKmenta %&gt;% {.$kmenta} %&gt;% summary() %&gt;% coef()</code></pre>
+<pre><code>##                   Estimate Std. Error    t value     Pr(&gt;|t|)
+## eq1_(Intercept) -0.1072116 0.16406442 -0.6534723 5.142216e-01
+## eq1_a_1          0.7728315 0.05785460 13.3581693 0.000000e+00
+## eq1_a_2          0.3615885 0.05658941  6.3896839 1.195467e-09
+## eq1_b_1_1       -0.2126387 0.09627881 -2.2085723 2.836951e-02
+## eq1_b_1_2        0.2126387 0.09627881  2.2085723 2.836951e-02
+## eq1_b_2_2       -0.2126387 0.09627881 -2.2085723 2.836951e-02</code></pre>
+<p>Dado que <span class="math inline">\(\beta_{12} = -\beta_{22} = -\beta_{11}\)</span> diferem significatiamente de zero ao nível de 5%, podemos concluir que a tecnologia não é da forma Cobb Douglas. Alternativamente podemos chegar se o parâmetro <span class="math inline">\(\rho\)</span> da função CES é significativamente diferente de zero. Que produz resultados semelhantes.</p>
+<p>Finalmente, plotando os valores ajustados contra os valores observados de <span class="math inline">\(y\)</span> para checar se os parâmetros são razoáveis:</p>
+<pre class="r"><code>cesData %&gt;% 
+  ggplot(aes(x = y2, y = fitted(cesKmenta))) + 
+  geom_point() + 
+  theme_bw()</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>Figura acima mostra que os parâmetros produzem valores ajustados razoáveis. Porém, a aproximação de Kmenta produz vários problemas. Primeiro, ela é uma série de Taylor truncada e o termo Resto deve ser visto como uma variável omitida. Segundo, a aproximação de Kmenta apenas converge para a função CES na região de convergência que é dependente do verdadeiro parâmetro da CES (Thursby and Lovell 1978).</p>
+<div id="replicação-de-sun-henderson-and-kumbhakar-2011" class="section level2">
+<h2>Replicação de Sun, Henderson and Kumbhakar (2011)</h2>
+<p>O estudo é uma replicação de Masanjala and Papagergious (2004). O objetivo é reeestimar um modelo de Solow baseado na função CES com capital e trabalho aumentado (i.e., a quantidade de trabalho multiplicada pela eficiência do trabalho) como inputs. O modelo é dado como:</p>
+<p><span class="math display">\[y_i = A \left[ \frac{1}{1-\alpha} - \frac{\alpha}{1-\alpha}\left(\frac{s_{ik}}{n_i + g + \delta}\right)^{\frac{\sigma -1}{\sigma}}\right]^{-\frac{\sigma}{\sigma - 1}}\]</span></p>
+<p>onde</p>
+<ul>
+<li><p><span class="math inline">\(y_i\)</span> é o produto de estado estacionário (PIB) por unidade de trabalho.</p></li>
+<li><p><span class="math inline">\(s_{ik}\)</span> ? a razáo de investimento por produto agregado.</p></li>
+<li><p><span class="math inline">\(n_i\)</span> ? a taxa de crescimento da população com o subscrito <span class="math inline">\(i\)</span> indicando a população.</p></li>
+<li><p><span class="math inline">\(g\)</span> é a taxa de crescimento tecnologica.</p></li>
+<li><p><span class="math inline">\(\delta\)</span> ? a taxa de depreciação do capital.</p></li>
+</ul>
+<p><span class="math inline">\(A\)</span> indica a eficiência do trabalho.</p>
+<p><span class="math inline">\(\alpha\)</span> é o parâmetro de distribuição do capital.</p>
+<p><span class="math inline">\(\sigma\)</span> é a elasticidade de substituição.</p>
+<p>Podemos redefinir os parâmetros e variáveis na função acima para obter a CES com dois inputs: <span class="math inline">\(\gamma = A\)</span>, <span class="math inline">\(\delta = \frac{1}{1-\alpha}\)</span>, <span class="math inline">\(x_1 = 1\)</span>, <span class="math inline">\(x_@ = (n_i + g + \delta)/s_{ik}\)</span>, <span class="math inline">\(\rho = (\sigma - 1)/\sigma\)</span> e <span class="math inline">\(\nu = 1\)</span>. Neste caso, a elasticidade é um pouco diferente do modelo CES padrão, com elasticidade de substituição dada por <span class="math inline">\(\sigma = 1/(1-\rho)\)</span> (assim, o <span class="math inline">\(\rho\)</span> possui sinal inverso). Portanto, o <span class="math inline">\(\rho\)</span> estimado deve estar entre menos infinito e um. Além disso, <span class="math inline">\(\alpha\)</span> deve estar entre zero e um, de modo que <span class="math inline">\(\delta\)</span> estimado tenha valor maior que um ou igual a um.</p>
+<p>Os dados utilizados são aqueles de Mankiw, Romer e Weil (1992) e não inclui os países produtores de petróleo.</p>
+<pre class="r"><code>data(&quot;GrowthDJ&quot;, package = &quot;AER&quot;)
+GrowthDJ &lt;- GrowthDJ %&gt;% 
+  filter(oil == &quot;no&quot;)
+GrowthDJ %&gt;% head()</code></pre>
+<pre><code>##   oil inter oecd gdp60 gdp85 gdpgrowth popgrowth invest school literacy60
+## 1  no   yes   no  2485  4371       4.8       2.6   24.1    4.5         10
+## 2  no    no   no  1588  1171       0.8       2.1    5.8    1.8          5
+## 3  no    no   no  1116  1071       2.2       2.4   10.8    1.8          5
+## 4  no   yes   no   959  3671       8.6       3.2   28.3    2.9         NA
+## 5  no    no   no   529   857       2.9       0.9   12.7    0.4          2
+## 6  no    no   no   755   663       1.2       1.7    5.1    0.4         14</code></pre>
+<p>Podemos calcular os dois inputs do modelo (seguindo a suposição de Mankiw de que <span class="math inline">\(g + \delta = 0,05\)</span>:</p>
+<pre class="r"><code>GrowthDJ &lt;- GrowthDJ %&gt;% 
+  mutate(x1 = 1,
+         x2 = (GrowthDJ$popgrowth + 5) / GrowthDJ$invest)</code></pre>
+</div>
+<div id="estimador-em-nível-nls" class="section level2">
+<h2>Estimador em Nível: NLS</h2>
+<p>O modelo a seguir estima o modelo de Solow em uma função CES usando NLS:</p>
+<pre class="r"><code>cesNls &lt;- cesEst(&quot;gdp85&quot;, c(&quot;x1&quot;, &quot;x2&quot;), data = GrowthDJ)
+summary(cesNls, ela = FALSE)</code></pre>
+<pre><code>## Estimated CES function with constant returns to scale
+## 
+## Call:
+## cesEst(yName = &quot;gdp85&quot;, xNames = c(&quot;x1&quot;, &quot;x2&quot;), data = GrowthDJ)
+## 
+## Estimation by non-linear least-squares using the &#39;LM&#39; optimizer
+## assuming an additive error term
+## Convergence achieved after 23 iterations
+## Message: Relative error in the sum of squares is at most `ftol&#39;. 
+## 
+## Coefficients:
+##       Estimate Std. Error t value Pr(&gt;|t|)  
+## gamma  646.141    549.993   1.175   0.2401  
+## delta    3.977      2.239   1.776   0.0757 .
+## rho     -0.197      0.166  -1.187   0.2354  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 3313.748 
+## Multiple R-squared: 0.6016277</code></pre>
+<p>Agora, podemos calcular o parámetro de distribuição do capital (<span class="math inline">\(\alpha\)</span>) e a elasticidade de substituição (<span class="math inline">\(\sigma\)</span>) manualmente:</p>
+<pre class="r"><code>cat(&quot;alpha =&quot;, (coef(cesNls)[&quot;delta&quot;]- 1)/coef(cesNls)[&quot;delta&quot;],&quot;\n&quot;)</code></pre>
+<pre><code>## alpha = 0.7485641</code></pre>
+<pre class="r"><code>cat(&quot;sigma =&quot;, 1/(1 - coef(cesNls)[&quot;rho&quot;]),&quot;\n&quot;)</code></pre>
+<pre><code>## sigma = 0.835429</code></pre>
+<div id="estimador-ppml" class="section level4">
+<h4>Estimador PPML</h4>
+<pre class="r"><code>#library(gravity)
+#PPML(&quot;gdp85&quot;, c(&quot;x1&quot;, &quot;x2&quot;) ,data = GrowthDJ)</code></pre>
+<pre class="r"><code>library(RStata)
+options(&quot;RStata.StataPath&quot; =  
+          &quot;\&quot;C:\\Program Files (x86)\\Stata13\\StataMP-64\&quot;&quot;
+)
+
+options(&quot;RStata.StataVersion&quot; = 13)</code></pre>
+<p>PPML</p>
+<pre class="r"><code>ppml &lt;- stata(&quot;ppml gdp85 x1 x2&quot;, data.in = GrowthDJ, data.out = T)</code></pre>
+<pre><code>## . ppml gdp85 x1 x2
+## note: checking the existence of the estimates
+## note: starting ppml estimation
+## 
+## Iteration 1:   deviance =  216457.8
+## Iteration 2:   deviance =  189591.8
+## Iteration 3:   deviance =  187978.6
+## Iteration 4:   deviance =  187971.6
+## Iteration 5:   deviance =  187971.6
+## Iteration 6:   deviance =  187971.6
+## 
+## Number of parameters: 2
+## Number of observations: 98
+## Number of observations dropped: 0
+## Pseudo log-likelihood: -94470.186
+## R-squared: .58293426
+## -------------------------------------------------------
+## &gt; -----------------------
+##              |               Robust
+##        gdp85 |      Coef.   Std. Err.      z    P&gt;|z|  
+## &gt;    [95% Con                                          
+## &gt;            f. Interval]
+## -------------+-----------------------------------------
+## &gt; -----------------------
+##           x2 |  -3.558712   .3502415   -10.16   0.000  
+## &gt;   -4.245172                                          
+## &gt;               -2.872251
+##        _cons |   10.05512   .1438674    69.89   0.000  
+## &gt;    9.773144                                          
+## &gt;                10.33709
+## -------------------------------------------------------
+## &gt; -----------------------
+## Number of regressors dropped to ensure that the estimat
+## &gt; es exist: 1
+## Dropped variables:  x1
+## Option strict is off</code></pre>
+<pre class="r"><code>GrowthDJ &lt;- GrowthDJ %&gt;% 
+  mutate(lngdp85 = log(gdp85))
+
+
+
+nl&lt;- stata(&quot;nl (lngdp85 = {b0} - 1/{rho=1}*ln({delta=0.5}*x1^(-1*{rho}) + (1 - {delta})*x2^(-1*{rho})))&quot;, 
+data.in = GrowthDJ, data.out = F)</code></pre>
+<pre><code>## . nl (lngdp85 = {b0} - 1/{rho=1}*ln({delta=0.5}*x1^(-1*
+## &gt; {rho}) + (1 - {delta})*x2^(-1*{rho})))
+## (obs = 98)
+## 
+## Iteration 0:  residual SS =  2157.958
+## Iteration 1:  residual SS =  1855.725
+## Iteration 2:  residual SS =  1312.245
+## Iteration 3:  residual SS =  278.2478
+## Iteration 4:  residual SS =  44.94087
+## Iteration 5:  residual SS =  44.19495
+## Iteration 6:  residual SS =  44.19333
+## Iteration 7:  residual SS =   44.1933
+## Iteration 8:  residual SS =   44.1933
+## Iteration 9:  residual SS =   44.1933
+## Iteration 10:  residual SS =   44.1933
+## Iteration 11:  residual SS =   44.1933
+## 
+##       Source |       SS       df       MS
+## -------------+------------------------------         Nu
+## &gt; mber of obs =        98
+##        Model |   68.820112     2   34.410056         R-
+## &gt; squared     =    0.6090
+##     Residual |  44.1932972    95  .465192602         Ad
+## &gt; j R-squared =    0.6007
+## -------------+------------------------------         Ro
+## &gt; ot MSE      =  .6820503
+##        Total |  113.013409    97  1.16508669         Re
+## &gt; s. dev.     =  200.0653
+## 
+## -------------------------------------------------------
+## &gt; -----------------------
+##      lngdp85 |      Coef.   Std. Err.      t    P&gt;|t|  
+## &gt;    [95% Con                                          
+## &gt;            f. Interval]
+## -------------+-----------------------------------------
+## &gt; -----------------------
+##          /b0 |   6.937532   .1284953    53.99   0.000  
+## &gt;    6.682436                                          
+## &gt;                7.192627
+##         /rho |   .1662469     .10777     1.54   0.126  
+## &gt;   -.0477037                                          
+## &gt;                .3801975
+##       /delta |   2.105344   .2431788     8.66   0.000  
+## &gt;    1.622573                                          
+## &gt;                2.588115
+## -------------------------------------------------------
+## &gt; -----------------------
+##   Parameter b0 taken as constant term in model &amp; ANOVA 
+## &gt; table</code></pre>
+<pre class="r"><code>alpha &lt;- stata(&quot;cat( &#39;alpha =&#39;, (coef(nl)[&#39;delta&#39;]- 1)/coef(nl)[&#39;delta&#39;])&quot;)</code></pre>
+<pre><code>## . cat( &#39;alpha =&#39;, (coef(nl)[&#39;delta&#39;]- 1)/coef(nl)[&#39;delt
+## &gt; a&#39;])
+## invalid &#39;&#39;&#39; 
+## r(198);</code></pre>
+<p>De modo que <span class="math inline">\(\alpha = \frac{\delta - 1}{\delta} = \frac{1.62 - 1}{1.62} = 0.32\)</span>.</p>
+</div>
+</div>
+<div id="estimação-em-log-basic-solow-cd-equation" class="section level2">
+<h2>Estimação em Log: Basic Solow CD equation</h2>
+<p><span class="math display">\[\ln \left( \frac{Y_i}{L_i} \right) = \ln A(0) + gt + \frac{\alpha}{1-\alpha} \ln \left( \frac{s_{i,k}}{n_i + g + \delta} \right)\]</span></p>
+<pre class="r"><code>GrowthDJ &lt;- GrowthDJ %&gt;% 
+  mutate(ln_sk = log(GrowthDJ$invest/100)) %&gt;% 
+  mutate(ndelta =  (GrowthDJ$popgrowth + 5)/100)
+
+
+BasicSolowCD &lt;- lm(gdp85 ~ ln_sk + ndelta , data = GrowthDJ)
+summary(BasicSolowCD)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = gdp85 ~ ln_sk + ndelta, data = GrowthDJ)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -6966.1 -2199.6  -431.2  2486.9 10374.5 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)    32818       2954  11.111  &lt; 2e-16 ***
+## ln_sk           5534        726   7.624 1.85e-11 ***
+## ndelta       -239899      41600  -5.767 1.00e-07 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 3510 on 95 degrees of freedom
+## Multiple R-squared:  0.5668, Adjusted R-squared:  0.5577 
+## F-statistic: 62.15 on 2 and 95 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Temos retornos crescentes e decrescentes de escala, caso <span class="math inline">\(\nu &gt; 1\)</span> ou <span class="math inline">\(\nu &lt;1\)</span>, respectivamente.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
