@@ -1,0 +1,377 @@
+---
+title: Analise de Churn com Tidymodels Parte 2
+author: ''
+date: '2021-04-03'
+slug: analise-de-churn-com-tidymodels-parte-2
+categories: []
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2021-04-03T22:56:59-03:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+
+
+<div id="introdução" class="section level1">
+<h1>Introdução</h1>
+<p>Na primeira parte desta série, começamos analisando um banco de dados de <strong>churn customer</strong> com o pacote <code>tidymodels</code>. Nele discutimos a criação de etapas de pré-processamento dos dados com o pacote <code>recipes</code>, a criação de bases de treinamento e teste com <code>rsample</code>, a estimação de modelos com o <code>parsnip</code>e a criação de workflows com <code>workflow</code>. Por fim estimamos um modelo de random forest com alguns hiperparâmetros fixos que obteve um F-1 de 0,85.</p>
+<p>Agora vamos utilizar <em>cross-validation</em> para determinar os valores de hiperparâmetros que minimizam algum critério de performance do modelo. Para isto, vamos utilizar os pacotes <code>tune</code> e <code>dials</code> do <code>tidymodels</code>.</p>
+</div>
+<div id="tuning-e-cross-validation-tune-e-dials" class="section level1">
+<h1>Tuning e Cross-validation: <code>tune</code> e <code>dials</code></h1>
+<p>Vamos começar importando os dados e declarando a mesma receita utilizada na parte 1 desta série.</p>
+<pre class="r"><code>library(tidyverse)
+library(tidymodels)
+library(skimr)
+library(knitr)
+library(doFuture)
+
+data(wa_churn, package = &quot;modeldata&quot;)
+
+set.seed(123)
+
+# base de treinamento e teste
+tbl_treinamento_teste &lt;- initial_split(data = wa_churn, prop = 0.8)
+
+receita_simples &lt;- recipe(churn ~ ., data = training(tbl_treinamento_teste)) %&gt;% 
+  step_impute_linear(all_numeric()) %&gt;% 
+  step_dummy(all_nominal(), -all_outcomes()) %&gt;% 
+  step_normalize(all_numeric())</code></pre>
+<p>Agora, em vez de utilizar um valor padrão para os hiperparâmetros do modelo, podemos ajustar diferentes valores utilizando a função <code>tune()</code> do pacote <code>tune</code>. Assim, deixamos que o procedimento de cross-validation decida o melhor valor dos hiperparâmetros do nosso modelo.</p>
+<p>Para encontrar os valores ótimos dos hiperparâmetros podemos utilizar otimização bayesiana (função <code>tune_bayes()</code>) quando o problema de <em>tuning</em> for complexo. Contudo, para problemas mais simples como este, um <em>grid search</em> é suficiente (<code>grid_regular</code>). Assim, vamos construir uma combinação de valores dos hiperparâmetros, de modo que em cada fold do cross-validation serão estimados múltiplos modelos com diferentes hiperparâmetros.</p>
+<p>Antes disto, precisamos construir nossa base de cross-validation. O pacote <code>rsample</code> permite construir um objetivo de cross-validation com <code>n</code> folds. Para minimizar o tempo de execução dos modelos, vamos construir apenas 4 folds diferentes. Em cada <em>fold</em> temos uma base de análise (equivalente ao treinamento) e de assessment (equivalente ao teste).</p>
+<p>A função <code>vfold_cv</code> também aceita um argumento <code>strata</code>, que faz com que a amostragem aleatória seja conduzida de modo estratificado. No nosso exemplo, faremos uma amostragem aleatória simples. É possível observar que em todos os folds a proporção de <em>churns</em> é semelhante.</p>
+<pre class="r"><code>cv_folds &lt;- vfold_cv(wa_churn, v = 4)
+
+map_dbl(cv_folds$splits, ~ mean(as.data.frame(.x)$churn == &quot;Yes&quot;))</code></pre>
+<pre><code>## [1] 0.2673230 0.2667550 0.2635365 0.2638652</code></pre>
+<p>Agora precisamos definir novamente nosso modelo, mas agora sem valores fixos para <code>mtry</code>, <code>trees</code> e <code>min_n</code>. Na parte 1, haviamos definido o modelo como:</p>
+<pre class="r"><code>modelo_rf &lt;-
+  rand_forest(mtry = 3, trees = 200, min_n = 30) %&gt;% 
+  set_mode(&quot;classification&quot;) %&gt;% 
+  set_engine(&quot;ranger&quot;)
+modelo_rf</code></pre>
+<pre><code>## Random Forest Model Specification (classification)
+## 
+## Main Arguments:
+##   mtry = 3
+##   trees = 200
+##   min_n = 30
+## 
+## Computational engine: ranger</code></pre>
+<p>Agora, vamos sinalizar com o uso de <code>tune()</code> que diferentes valores dos hiperparâmetros devem ser utilizados.</p>
+<pre class="r"><code>modelo_rf_tuning &lt;-
+  rand_forest(mtry = tune(), trees = tune(), min_n = tune()) %&gt;% 
+  set_mode(&quot;classification&quot;) %&gt;% 
+  set_engine(&quot;ranger&quot;)
+
+modelo_rf_tuning</code></pre>
+<pre><code>## Random Forest Model Specification (classification)
+## 
+## Main Arguments:
+##   mtry = tune()
+##   trees = tune()
+##   min_n = tune()
+## 
+## Computational engine: ranger</code></pre>
+<p>E criar um workflow diferente, agora com um modelo que aceita hiperparâmetros não fixos.</p>
+<pre class="r"><code>workflow_rf_tuning &lt;- workflow() %&gt;% 
+  add_model(modelo_rf_tuning) %&gt;% 
+  add_recipe(receita_simples)
+
+workflow_rf_tuning</code></pre>
+<pre><code>## == Workflow ====================================================================
+## Preprocessor: Recipe
+## Model: rand_forest()
+## 
+## -- Preprocessor ----------------------------------------------------------------
+## 3 Recipe Steps
+## 
+## * step_impute_linear()
+## * step_dummy()
+## * step_normalize()
+## 
+## -- Model -----------------------------------------------------------------------
+## Random Forest Model Specification (classification)
+## 
+## Main Arguments:
+##   mtry = tune()
+##   trees = tune()
+##   min_n = tune()
+## 
+## Computational engine: ranger</code></pre>
+<p>Para utilizar a função <code>grid_regular</code>, precisamos informar os valores possíveis de cada hiperparâmetro. Para o randomForest, <code>trees</code> e <code>min_n</code> tem valores previamente definidos para o intervalo [1,2000] e [2,40], respectivamente. Contudo, <code>mtry</code> não possui um intervalo definido por padrão.</p>
+<pre class="r"><code>workflow_rf_tuning %&gt;% parameters %&gt;% {.$object}</code></pre>
+<pre><code>## [[1]]
+## # Randomly Selected Predictors (quantitative)
+## Range: [1, ?]
+## 
+## [[2]]
+## # Trees (quantitative)
+## Range: [1, 2000]
+## 
+## [[3]]
+## Minimal Node Size (quantitative)
+## Range: [2, 40]</code></pre>
+<p>Para tanto, vamos atualizar nosso modelo com os valores máximos e mínimos dos hiperparâmetros utilizando <code>update.parameters</code> do pacote <code>dials</code>. Para <code>mtry</code> vamos definir seus valores mínimos e maximos como 1 e 30. <code>trees</code> é um hiperparâmetro quantitativo sem relação com a base de dados, seus valores máximos e mínimos já são definidos por padrão como 1 e 2000. O mesmo ocorre para <code>min_n</code>, que possui valor entre 2 e 40. Vamos guardar estas informações no objeto <code>rf_parametros</code>.</p>
+<pre class="r"><code>rf_parametros &lt;- workflow_rf_tuning %&gt;% 
+  parameters() %&gt;% 
+  update(mtry = mtry(range = c(1L, 30L)),
+         trees = trees(),
+         min_n = min_n())
+
+rf_parametros$object</code></pre>
+<pre><code>## [[1]]
+## # Randomly Selected Predictors (quantitative)
+## Range: [1, 30]
+## 
+## [[2]]
+## # Trees (quantitative)
+## Range: [1, 2000]
+## 
+## [[3]]
+## Minimal Node Size (quantitative)
+## Range: [2, 40]</code></pre>
+<p>Os valores do grid poderiam ser definidos manualmente com o uso de uma função como <code>expand.grid</code>:</p>
+<pre class="r"><code>expand.grid(mtry = c(1,30), 
+            trees = c(1,2000),
+            min_2 = c(2,40)) </code></pre>
+<pre><code>##   mtry trees min_2
+## 1    1     1     2
+## 2   30     1     2
+## 3    1  2000     2
+## 4   30  2000     2
+## 5    1     1    40
+## 6   30     1    40
+## 7    1  2000    40
+## 8   30  2000    40</code></pre>
+<p>Mas <code>grid_regular</code> torna esta tarefa mais conveniente. Assim, passamos o argumento <code>levels = 2</code> que indica que serão utilizados 2 valores igualmente esparçados dos três hiperparâmetros. Poderiamos ainda produzir valores aleatórios do <em>grid</em> utilizando a função <code>random_grid()</code>.</p>
+<pre class="r"><code>rf_grid &lt;- grid_regular(rf_parametros, levels = 2)
+rf_grid</code></pre>
+<pre><code>## # A tibble: 8 x 3
+##    mtry trees min_n
+##   &lt;int&gt; &lt;int&gt; &lt;int&gt;
+## 1     1     1     2
+## 2    30     1     2
+## 3     1  2000     2
+## 4    30  2000     2
+## 5     1     1    40
+## 6    30     1    40
+## 7     1  2000    40
+## 8    30  2000    40</code></pre>
+<p>A tabela acima mostra que temos <span class="math inline">\(\text{level}^m = 2 \times 2 \times 2\)</span> combinações de hiperparâmetros. Isso significa que a realização de <em>cross-validation</em> e do <em>tuning</em> de hiperparâmetros aumenta enormente o número de modelos que serão ajustados. Temos 4 <em>folds</em> e 8 combinações possíveis de hiperparâmetros, totalizando 32 modelos.</p>
+<p>Para aumentar a velocidade com que o processo de estimação ocorre, podemos estimar os modelos em paralelo com o uso do pacote <code>doFuture</code>. Para tanto, será necessário a instalações de alguns pacotes adicionais como <code>Rmpi</code> e <code>snow</code>, que dependem da instalação do Microsoft MPI que pode ser encontrado <a href="https://www.microsoft.com/en-us/download/details.aspx?id=57467">aqui</a>. Caso ocorra dificuldades na instalação dos pacotes acima, é possível ignorar os códigos abaixo. Neste caso, os modelos podem ser ajustados serialmente, com o único custo sendo um tempo maior de processamento.</p>
+<pre class="r"><code>all_cores &lt;- parallel::detectCores(logical = FALSE) - 1
+registerDoFuture()
+
+cl &lt;- makeClusterPSOCK(all_cores)
+plan(future::cluster, workers = cl)</code></pre>
+<p>Finalmente podemos iniciar o trabalho de <em>tuning</em> dos hiperparâmetros utilizando <code>tune_grid()</code>. A função irá estimar os 32 modelos e calcular um conjunto de medidas de performance como a acurácia e o RMSE para cada um deles. A função precisa do novo workflow (<code>rf_wflow_tune</code>) com o modelo e a receita a ser utilizada; dos valores possíveis dos hiperparâmetros (<code>rf_grid</code>) e do objeto indicando quais são os folds do cross-validation (<code>cv_folds</code>). Como os hiperparâmetros possuem o valor <code>tune()</code>, <code>tune_grid</code> sabe que pode atribuir valores definidos por <code>grid_regular</code> aos hiperparâmetros.</p>
+<pre class="r"><code>rf_grid_search &lt;- tune_grid(workflow_rf_tuning, 
+                            grid = rf_grid, 
+                            resamples = cv_folds,
+                       param_info = rf_parametros)
+rf_grid_search</code></pre>
+<pre><code>## # Tuning results
+## # 4-fold cross-validation 
+## # A tibble: 4 x 4
+##   splits              id    .metrics          .notes          
+##   &lt;list&gt;              &lt;chr&gt; &lt;list&gt;            &lt;list&gt;          
+## 1 &lt;split [5282/1761]&gt; Fold1 &lt;tibble [16 x 7]&gt; &lt;tibble [9 x 1]&gt;
+## 2 &lt;split [5282/1761]&gt; Fold2 &lt;tibble [16 x 7]&gt; &lt;tibble [9 x 1]&gt;
+## 3 &lt;split [5282/1761]&gt; Fold3 &lt;tibble [16 x 7]&gt; &lt;tibble [9 x 1]&gt;
+## 4 &lt;split [5283/1760]&gt; Fold4 &lt;tibble [16 x 7]&gt; &lt;tibble [9 x 1]&gt;</code></pre>
+<p>Alguns (bons) minutos depois, com os 32 modelos estimados, podemos calcular o valor médio de cada medida de performance para as 8 combinações diferentes de hiperparâmetros. A tabela abaixo lista os cinco modelos com melhores performance segundo o critério de ROC-UAC a partir do uso da função <code>show_best()</code>.</p>
+<pre class="r"><code>rf_grid_search %&gt;% 
+  show_best(n = 5, metric = &#39;roc_auc&#39;) %&gt;% 
+  kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">mtry</th>
+<th align="right">trees</th>
+<th align="right">min_n</th>
+<th align="left">.metric</th>
+<th align="left">.estimator</th>
+<th align="right">mean</th>
+<th align="right">n</th>
+<th align="right">std_err</th>
+<th align="left">.config</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">30</td>
+<td align="right">2000</td>
+<td align="right">40</td>
+<td align="left">roc_auc</td>
+<td align="left">binary</td>
+<td align="right">0.8382110</td>
+<td align="right">4</td>
+<td align="right">0.0071251</td>
+<td align="left">Preprocessor1_Model8</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">2000</td>
+<td align="right">40</td>
+<td align="left">roc_auc</td>
+<td align="left">binary</td>
+<td align="right">0.8289523</td>
+<td align="right">4</td>
+<td align="right">0.0058132</td>
+<td align="left">Preprocessor1_Model7</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">2000</td>
+<td align="right">2</td>
+<td align="left">roc_auc</td>
+<td align="left">binary</td>
+<td align="right">0.8285522</td>
+<td align="right">4</td>
+<td align="right">0.0057340</td>
+<td align="left">Preprocessor1_Model3</td>
+</tr>
+<tr class="even">
+<td align="right">30</td>
+<td align="right">2000</td>
+<td align="right">2</td>
+<td align="left">roc_auc</td>
+<td align="left">binary</td>
+<td align="right">0.8234573</td>
+<td align="right">4</td>
+<td align="right">0.0063827</td>
+<td align="left">Preprocessor1_Model4</td>
+</tr>
+<tr class="odd">
+<td align="right">30</td>
+<td align="right">1</td>
+<td align="right">40</td>
+<td align="left">roc_auc</td>
+<td align="left">binary</td>
+<td align="right">0.7624851</td>
+<td align="right">4</td>
+<td align="right">0.0099800</td>
+<td align="left">Preprocessor1_Model6</td>
+</tr>
+</tbody>
+</table>
+<p>O modelo com menor ROC-AUC foi o Random Forest com <code>mtry = 30</code>, <code>trees = 2000</code> e <code>min_n = 40</code>. Este vai ser o modelo que utilizaremos para realizar nossa previsão final.</p>
+</div>
+<div id="previsão-final" class="section level1">
+<h1>Previsão Final</h1>
+<p>Podemos utilizar a função <code>select_best</code> para retornar o conjunto de hiperparâmetros do melhor modelo, como definido acima.</p>
+<pre class="r"><code>rf_param_final &lt;- select_best(rf_grid_search, degree, metric = &#39;roc_auc&#39;)
+rf_param_final %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">mtry</th>
+<th align="right">trees</th>
+<th align="right">min_n</th>
+<th align="left">.config</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">30</td>
+<td align="right">2000</td>
+<td align="right">40</td>
+<td align="left">Preprocessor1_Model8</td>
+</tr>
+</tbody>
+</table>
+<p>Usamos <code>finalize_workflow()</code> para criar um workflow atualizado com os valores de hiperparâmetros do modelo acima. Isso equivale a construir um novo workflow com <code>mtry = 30</code>, <code>trees = 2000</code> e <code>min_n = 40</code>. Por fim, podemos ajustar o modelo utilizando toda a base de treinamento. Os folds do cross-validation já realizaram seu trabalho.</p>
+<pre class="r"><code>rf_wflow_final_fit &lt;- workflow_rf_tuning %&gt;% 
+  finalize_workflow(rf_param_final) %&gt;% 
+  fit(training(tbl_treinamento_teste))
+rf_wflow_final_fit</code></pre>
+<pre><code>## == Workflow [trained] ==========================================================
+## Preprocessor: Recipe
+## Model: rand_forest()
+## 
+## -- Preprocessor ----------------------------------------------------------------
+## 3 Recipe Steps
+## 
+## * step_impute_linear()
+## * step_dummy()
+## * step_normalize()
+## 
+## -- Model -----------------------------------------------------------------------
+## Ranger result
+## 
+## Call:
+##  ranger::ranger(x = maybe_data_frame(x), y = y, mtry = min_cols(~30L,      x), num.trees = ~2000L, min.node.size = min_rows(~40L, x),      num.threads = 1, verbose = FALSE, seed = sample.int(10^5,          1), probability = TRUE) 
+## 
+## Type:                             Probability estimation 
+## Number of trees:                  2000 
+## Sample size:                      5635 
+## Number of independent variables:  30 
+## Mtry:                             30 
+## Target node size:                 40 
+## Variable importance mode:         none 
+## Splitrule:                        gini 
+## OOB prediction error (Brier s.):  0.1366449</code></pre>
+<p>E realizar a previsão do modelo, calculando todas as medidas de performance.</p>
+<pre class="r"><code>rf_wflow_final_fit %&gt;% 
+  predict(new_data = testing(tbl_treinamento_teste)) %&gt;% 
+  bind_cols(testing(tbl_treinamento_teste) %&gt;% select(churn)) %&gt;% 
+  mutate_all(as.factor) %&gt;% 
+  conf_mat(churn, .pred_class) %&gt;% 
+  summary() %&gt;% 
+  select(-.estimator) %&gt;% 
+  filter(.metric %in% c(&#39;precision&#39;, &#39;recall&#39;, &#39;f_meas&#39;,
+                        &#39;accuracy&#39;, &#39;spec&#39;, &#39;sens&#39;)) %&gt;% 
+  kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">.metric</th>
+<th align="right">.estimate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">accuracy</td>
+<td align="right">0.7840909</td>
+</tr>
+<tr class="even">
+<td align="left">sens</td>
+<td align="right">0.4832905</td>
+</tr>
+<tr class="odd">
+<td align="left">spec</td>
+<td align="right">0.8989205</td>
+</tr>
+<tr class="even">
+<td align="left">precision</td>
+<td align="right">0.6460481</td>
+</tr>
+<tr class="odd">
+<td align="left">recall</td>
+<td align="right">0.4832905</td>
+</tr>
+<tr class="even">
+<td align="left">f_meas</td>
+<td align="right">0.5529412</td>
+</tr>
+</tbody>
+</table>
+<p>É possível observar que o modelo de random forest com parâmetros afinado não excedeu em muito o que já havia sido obtido no nosso primeiro modelo da parte 1.</p>
+</div>
+<div id="conclusão" class="section level1">
+<h1>Conclusão</h1>
+<p>Existe muito espaço para melhoramento do modelo acima, sobretudo em relação ao processo de <em>feature engineering</em> aplicado com o uso de <code>recipes</code>, ou mesmo com a aplicação de outros modelos alternativos.</p>
+<p>Para além do que foi desenvolvido na parte 1 e 2 desta série, o <code>tidymodels</code> oferece soluções para compararação de diferentes modelos e pré-processamentos (receitas) utilizando o pacote <code>workflowsets</code>. Com uma lista de modelos e uma lista de diferentes receitas é possível estimar uma grande combinação de diferentes especificações, inclusive permitindo que modelos com hiperparâmetros sejam <em>tunados</em>.</p>
+<p>O <code>tidymodels</code> também permite a criação de <em>assembly</em> (conjunto de modelos), seja por stacks com o uso do pacote <code>stacks</code> ou por <em>bagging</em>, com o pacote <code>baguette</code>, de modo a construir classificadores e previsores melhores a partir da união de diferentes algorítimos.</p>
+<p>Na parte 3 vamos analisar o uso do <code>workflowsets</code>e do pacote <code>baguette</code>.</p>
+</div>
