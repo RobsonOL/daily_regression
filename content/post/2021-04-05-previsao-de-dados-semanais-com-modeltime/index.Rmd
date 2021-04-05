@@ -204,7 +204,9 @@ E agora as medidas de desempenho. O modelo de Regressão com Erros Arima e o Mod
 ```{r}
 tbl_calibracao %>%
   modeltime_accuracy(new_data = testing(tbl_treinamento_teste)) %>% 
-  table_modeltime_accuracy()
+  select(.model_desc, mape, rmse) %>% 
+  kableExtra::kable()
+  
 
 ```
 
