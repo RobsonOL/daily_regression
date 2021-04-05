@@ -831,8 +831,6 @@ tbl_treinamento_teste</code></pre>
 <p>Para utilizar o <code>parsnip</code>, sempre começamos definindo o modelo. Assim, para estimar uma regressão linear utilizamos a função <code>linear_reg()</code> e para estimar um random forest utilizamos a função <code>rand_forest()</code>. Contudo, muitos outros modelos estão presentes, como o modelo ARIMA (<code>arima_reg</code>), o modelo prophet (<code>prophet_reg</code>), Support Vector Machines (<code>svm_poly</code> e <code>svm_rbf</code>), regressão logística (<code>logistic_reg</code>), KNN (<code>nearest_neighbor</code>) e muitos outros. Uma lista completa de todos os modelos suportados pode ser encontrada na <a href="https://www.tidymodels.org/find/parsnip/">documentação do parsnip</a>.</p>
 <p>Definido o modelo, devemos informar a implementação do algorítimo, que é definida pela função <code>set_engine()</code>. Assim, ao rodar um modelo de Random Forest podemos utilizar a implementação do pacote <code>randomForest</code>, com <code>set_engine("randomForest")</code>, a implementação do pacote <code>ranger</code> com <code>set_engine("ranger")</code> ou do spark com <code>set_engine("spark")</code>. Mais uma vez reforço a conveniência do <code>parsnip</code>. Em cada um dos pacotes, os hiperparâmetros são nomeados de maneiras diferentes, como <code>n.trees</code> no ranger e <code>trees</code> no randomForest, mas o <code>parsnip</code> unifica essas sintaxes e utiliza o mesmo nome para os hiperparâmetros.</p>
 <p>Para nossos dados, podemos estimar um modelo de Random Forest. Nenhuma razão específica nesta escolha, a não ser que ele é um modelo bastante popular para o problema de classificação que temos. O pacote <a href="https://workflowsets.tidymodels.org/"><code>workflowset</code></a> é uma alternativa interessante para quando precisamos estimar vários modelos diferentes, com diferentes especificações (ou <code>recipes</code>). Mas por simplicidade, vamos continuar com um único modelo.</p>
-<p>Assim, para ajustar o modelo de random forest aos dados, definimos o modelo com a função <code>rand_forest()</code> especificando três hiperparâmetros do modelo: <code>mtry</code>, <code>trees</code> e <code>min_n</code>. Como o modelo de árvore aleatória é uma <em>ensemble</em> (conjunto) de modelos de árvore de decisão, precisamos definir o número de árvores com <code>trees</code>. Além disto, quando criando uma árvore, um número fixo de variáveis (<code>mtry</code>) é escolhido aleatoriamente quando um nó se divide em dois (split). Enquanto que <code>min_n</code> representa o número mínimo de observações que devem existir em um nó para que o modelo de árvore de decisão continue produzindo <em>splits</em>.</p>
-<p>Neste primeiro momento, vamos fixar estes valores com base no nosso achismo, e declara-los na função <code>rand_forest</code>. Depois informamos em <code>set_mode</code> que desejamos estimar um modelo de classificação (e não de regressão), por fim, escolhemos a implementação do algorítimo de random forest com <code>set_engine</code>.</p>
 <pre class="r"><code>modelo_rf &lt;-
   rand_forest(mtry = 3, trees = 200, min_n = 30) %&gt;% 
   set_mode(&quot;classification&quot;) %&gt;% 
@@ -846,6 +844,8 @@ modelo_rf</code></pre>
 ##   min_n = 30
 ## 
 ## Computational engine: ranger</code></pre>
+<p>Assim, para ajustar o modelo de random forest aos dados, definimos o modelo com a função <code>rand_forest()</code> especificando três hiperparâmetros do modelo: <code>mtry</code>, <code>trees</code> e <code>min_n</code>. Como o modelo de árvore aleatória é uma <em>ensemble</em> (conjunto) de modelos de árvore de decisão, precisamos definir o número de árvores com <code>trees</code>. Além disto, quando criamos uma árvore, um número fixo de variáveis (<code>mtry</code>) é escolhido aleatoriamente quando um nó se divide em dois (split). Enquanto que <code>min_n</code> representa o número mínimo de observações que devem existir em um nó para que o modelo de árvore de decisão continue produzindo <em>splits</em>.</p>
+<p>Neste primeiro momento, vamos fixar estes valores com base no nosso achismo, e declara-los na função <code>rand_forest</code>. Depois informamos em <code>set_mode</code> que desejamos estimar um modelo de classificação (e não de regressão), por fim, escolhemos a implementação do algorítimo de random forest com <code>set_engine</code>.</p>
 </div>
 <div id="combinando-tudo-workflows" class="section level1">
 <h1>Combinando tudo: <code>workflows</code></h1>
@@ -887,7 +887,8 @@ workflow_rf</code></pre>
 <div id="avaliando-a-performance-do-modelo-yardstick" class="section level1">
 <h1>Avaliando a Performance do Modelo: <code>yardstick</code></h1>
 <p>O último passo é calibrar o modelo no conjunto de teste e construir medidas de performance do modelo a partir da comparação dos valores previstos e dos valores verdadeiros. Para tanto utilizamos o pacote <code>yardstick</code> e sua função <code>conf_mat()</code> para a construção da matriz de confusão. Para problemas de regressão é possível utilizar a função <code>metrics()</code>, que retorna medidas como RMSE, MAE e R-Quadrado.</p>
-<p>A partir do modelo ajustado que está armazenado no objeto <code>workflow_rf</code>, utilizamos a função <code>predict</code> para produzir o vetor de valores previstos e unimos com os dados observamos da base de teste. É importante destacar que a base teste sofrerá as mesmas transformações que foram aplicadas na base de treinamento. Isso ocorre porque <code>new_data</code> em <code>predict</code> está herdando a receita de <code>workflow_rf</code>.</p>
+<p>A partir do modelo ajustado que está armazenado no objeto <code>workflow_rf</code>, utilizamos a função <code>predict</code> para produzir o vetor de valores previstos. Com <code>bind_cols</code> criamos um <code>data.frame</code> com valores previstos e os dados observados da base de teste.</p>
+<p>É importante destacar que a base teste sofrerá as mesmas transformações que foram aplicadas na base de treinamento. Isso ocorre porque <code>new_data</code> em <code>predict</code> está herdando a receita de <code>workflow_rf</code>.</p>
 <p>Munido dos dados previstos e dos dados observados, a função <code>conf_mat</code> pode construir nossa matriz de confusão:</p>
 <pre class="r"><code>matriz_confusao &lt;- workflow_rf %&gt;% 
   predict(new_data = testing(tbl_treinamento_teste)) %&gt;% 
@@ -903,7 +904,7 @@ matriz_confusao %&gt;%
   labs(x = &quot;Previsto&quot;, y = &quot;Observado&quot;) + 
   geom_text(aes(label = n), color = &#39;white&#39;, alpha = 1, size = 8)</code></pre>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
-<p>A matriz de confusão mostra que o modelo erroneamente previu como negativo 222 clientes que iriam sair da empresa e previu incorretamente que 90 clientes iriam sair da empresa quando na verdade eles permaneceram como clientes.</p>
+<p>A matriz de confusão mostra que o modelo erroneamente previu como negativo 222 clientes que iriam abandonar a empresa. E previu incorretamente que 90 clientes iriam sair da empresa quando na verdade eles permaneceram como clientes.</p>
 <p>A partir da matriz de confusão podemos estimar algumas medidas de performance, como acurácia, precisão e recall.</p>
 <pre class="r"><code>matriz_confusao %&gt;% 
 summary() %&gt;% 
@@ -953,6 +954,6 @@ summary() %&gt;%
 </div>
 <div id="conclusão" class="section level1">
 <h1>Conclusão</h1>
-<p>O <code>tidymodels</code> e seus pacotes tornam muito simples a tarefa de aplicar modelos estatísticos e de machine learning para bases de dados. Desde o pré-processamento com <code>recipes</code>, a produção de reamostragens com o <code>rsample</code>, a estimação de modelos com <code>parsnip</code>e a criação de workflows com <code>workflow</code>.</p>
+<p>O <code>tidymodels</code> e seus pacotes tornam muito simples a tarefa de aplicar modelos estatísticos e de machine learning para bases de dados. Desde o pré-processamento com <code>recipes</code>, a produção de reamostragens com o <code>rsample</code>, a estimação de modelos com <code>parsnip</code>, a avaliação da qualidade das previsões com <code>yardstick</code> e a criação de workflows com <code>workflow</code>.</p>
 <p>Na <a href="https://dailyregression.netlify.app/post/analise-de-churn-com-tidymodels-parte-2/">próxima parte</a> desta série, vamos analisar o afinamento do modelo de random forest utilizando os pacotes <code>tune</code> e <code>dials</code>.</p>
 </div>

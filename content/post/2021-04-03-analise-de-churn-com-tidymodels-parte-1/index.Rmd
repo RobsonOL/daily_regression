@@ -117,11 +117,7 @@ Definido o modelo, devemos informar a implementação do algorítimo, que é def
  
 Para nossos dados, podemos estimar um modelo de Random Forest. Nenhuma razão específica nesta escolha, a não ser que ele é um modelo bastante popular para o problema de classificação que temos. O pacote [`workflowset`](https://workflowsets.tidymodels.org/) é uma alternativa interessante para quando precisamos estimar vários modelos diferentes, com diferentes especificações (ou `recipes`). Mas por simplicidade, vamos continuar com um único modelo.
  
-Assim, para ajustar o modelo de random forest aos dados, definimos o modelo com a função `rand_forest()` especificando três hiperparâmetros do modelo: `mtry`, `trees` e `min_n`. Como o modelo de árvore aleatória é uma *ensemble* (conjunto) de modelos de árvore de decisão, precisamos definir o número de árvores com `trees`. Além disto, quando criando uma árvore, um número fixo de variáveis (`mtry`) é escolhido aleatoriamente quando um nó se divide em dois (split). Enquanto que `min_n` representa o número mínimo de observações que devem existir em um nó para que o modelo de árvore de decisão continue produzindo *splits*. 
-
-Neste primeiro momento, vamos fixar estes valores com base no nosso achismo, e declara-los na função `rand_forest`. Depois informamos em `set_mode` que desejamos estimar um modelo de classificação (e não de regressão), por fim, escolhemos a implementação do algorítimo de random forest com `set_engine`. 
-
-
+ 
 ```{r}
 modelo_rf <-
   rand_forest(mtry = 3, trees = 200, min_n = 30) %>% 
@@ -129,6 +125,12 @@ modelo_rf <-
   set_engine("ranger")
 modelo_rf
 ```
+
+Assim, para ajustar o modelo de random forest aos dados, definimos o modelo com a função `rand_forest()` especificando três hiperparâmetros do modelo: `mtry`, `trees` e `min_n`. Como o modelo de árvore aleatória é uma *ensemble* (conjunto) de modelos de árvore de decisão, precisamos definir o número de árvores com `trees`. Além disto, quando criamos uma árvore, um número fixo de variáveis (`mtry`) é escolhido aleatoriamente quando um nó se divide em dois (split). Enquanto que `min_n` representa o número mínimo de observações que devem existir em um nó para que o modelo de árvore de decisão continue produzindo *splits*. 
+
+Neste primeiro momento, vamos fixar estes valores com base no nosso achismo, e declara-los na função `rand_forest`. Depois informamos em `set_mode` que desejamos estimar um modelo de classificação (e não de regressão), por fim, escolhemos a implementação do algorítimo de random forest com `set_engine`. 
+
+
 
 
 # Combinando tudo: `workflows`
@@ -154,7 +156,9 @@ Assim, é possível observar que o modelo foi ajustado para as 5635 observaçõe
 
 O último passo é calibrar o modelo no conjunto de teste e construir medidas de performance do modelo a partir da comparação dos valores previstos e dos valores verdadeiros. Para tanto utilizamos o pacote `yardstick` e sua função `conf_mat()` para a construção da matriz de confusão. Para problemas de regressão é possível utilizar a função `metrics()`, que retorna medidas como RMSE, MAE e R-Quadrado. 
 
-A partir do modelo ajustado que está armazenado no objeto `workflow_rf`, utilizamos a função `predict` para produzir o vetor de valores previstos e unimos com os dados observamos da base de teste. É importante destacar que a base teste sofrerá as mesmas transformações que foram aplicadas na base de treinamento. Isso ocorre porque `new_data` em `predict` está herdando a receita de `workflow_rf`.
+A partir do modelo ajustado que está armazenado no objeto `workflow_rf`, utilizamos a função `predict` para produzir o vetor de valores previstos. Com `bind_cols` criamos um `data.frame` com valores previstos e os dados observados da base de teste. 
+
+É importante destacar que a base teste sofrerá as mesmas transformações que foram aplicadas na base de treinamento. Isso ocorre porque `new_data` em `predict` está herdando a receita de `workflow_rf`.
 
 Munido dos dados previstos e dos dados observados, a função `conf_mat` pode construir nossa matriz de confusão:
 
@@ -179,7 +183,7 @@ matriz_confusao %>%
 ```
 
 
-A matriz de confusão mostra que o modelo erroneamente previu como negativo 222 clientes que iriam sair da empresa e previu incorretamente que 90 clientes iriam sair da empresa quando na verdade eles permaneceram como clientes. 
+A matriz de confusão mostra que o modelo erroneamente previu como negativo 222 clientes que iriam abandonar a empresa. E previu incorretamente que 90 clientes iriam sair da empresa quando na verdade eles permaneceram como clientes. 
 
 A partir da matriz de confusão podemos estimar algumas medidas de performance, como acurácia, precisão e recall.
 
@@ -204,7 +208,7 @@ Outra medida popular é o **F1 Score**, que é uma média harmônica da precisã
 
 # Conclusão
 
-O `tidymodels` e seus pacotes tornam muito simples a tarefa de aplicar modelos estatísticos e de machine learning para bases de dados. Desde o pré-processamento com `recipes`, a produção de reamostragens com o `rsample`, a estimação de modelos com `parsnip`e a criação de workflows com `workflow`. 
+O `tidymodels` e seus pacotes tornam muito simples a tarefa de aplicar modelos estatísticos e de machine learning para bases de dados. Desde o pré-processamento com `recipes`, a produção de reamostragens com o `rsample`, a estimação de modelos com `parsnip`, a avaliação da qualidade das previsões com `yardstick` e a criação de workflows com `workflow`. 
 
 Na [próxima parte](https://dailyregression.netlify.app/post/analise-de-churn-com-tidymodels-parte-2/) desta série, vamos analisar o afinamento do modelo de random forest utilizando os pacotes `tune` e `dials`.
 

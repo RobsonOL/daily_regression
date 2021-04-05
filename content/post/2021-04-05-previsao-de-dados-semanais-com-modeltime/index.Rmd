@@ -206,7 +206,6 @@ tbl_calibracao %>%
   modeltime_accuracy(new_data = testing(tbl_treinamento_teste)) %>% 
   select(.model_desc, mape, rmse) %>% 
   kableExtra::kable()
-  
 
 ```
 
