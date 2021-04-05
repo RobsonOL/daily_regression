@@ -28,13 +28,13 @@ knitr::opts_chunk$set(echo = TRUE,
 
 Duas das técnicas de série temporais mais comumente utilizadas para realizar previsões são os modelos (S)ARIMA e o Exponential Smoothing (ETS). Modelos ARIMA tendem a produzir resultados interessantes com séries mensais, trimestrais e anuais. O modelo ETS atribui pesos exponentialmente decrescentes aos valores defasados da série para estimar seus valores atuais, e funcionam bem com [dados diários](https://robjhyndman.com/hyndsight/dailydata/), mensais e anuais. 
 
-Para séries diárias, se o período de análise compreende mais de um ano, é possível que além da sazonalidade semanal usual destes dados (frequência de 7), em que existe uma relação entre os dias da semana, seja preciso permitir a presença de sazonalidade anual, quando assumimos que os mesmos dias de diferentes anos são autocorrelacionados. Nesta situação o modelo ETS produzirá resultados inconsistentes. 
+Para séries diárias, se o período de análise compreende mais de um ano, é possível que além da sazonalidade semanal usual destes dados (frequência de 7), em que existe uma relação entre os dias da semana, seja preciso permitir a presença de sazonalidade anual. Nesta situação o modelo ETS produzirá resultados inconsistentes. 
 
 O problema é ainda maior para dados semanais. [Segundo Hyndman](https://robjhyndman.com/hyndsight/forecasting-weekly-data/), criador do pacote `forecast`, modelos ARIMA e ETS tem dificuldades em produzir boas previsões para séries semanais devido a sua sazonalidade peculiar, dado que o período de sazonalidade é de em média $365,25/7 = 52.18$. Como estes modelos só aceitam valores inteiros para a frequência, mesmo um valor aproximado de 52 períodos pode gerar resultados inadequados. 
 
 Seja com dados diários muito longos ou para dados semanais, uma alternativa é o uso do modelo TBATS. Este modelo é uma extensão do ETS que adiciona uma série de transformações Box-Cox, séries Fourier com coeficientes variantes no tempo além de correção de erro ARMA. Ele é especialmente útil para produzir previsão de séries temporais com múltiplos períodos de sazonalidade, sazonalidade de altíssima-frequência, sazonalidade não-inteira (como a frequência de 52,18 discutida acima) e múltiplos efeito calendários. 
 
-Outra solução é utilizar termos de Fourier, que são úteis em lidar com sazonalidade. Uma forma de utilizar estes termos é estimando modelos que aceitam covariadas externas como parte da especificação, como os modelos (S)ARIMAX e de Regressão com Erros ARIMA (RegARIMA). De modo geral, ambos possuem [capacidade preditiva semelhante](https://robjhyndman.com/hyndsight/arimax/), mas o RegARIMA tem a vantagem adicional de que os coeficientes das covariadas tem a interpretação usual dos modelos de regressão. Se interpretabilidade for algo importante, a escolha parece natural. Abaixo a notação usual do RegARIMA:
+Outra solução é utilizar termos de Fourier, que são úteis em lidar com sazonalidade. Uma forma de utilizar estes termos é estimando modelos que aceitam covariadas externas como parte da especificação. É o caso dos modelos (S)ARIMAX e do modelo de Regressão com Erros ARIMA (RegARIMA). De modo geral, ambos possuem [capacidade preditiva semelhante](https://robjhyndman.com/hyndsight/arimax/), mas o RegARIMA tem a vantagem adicional de que os coeficientes das covariadas tem a interpretação usual dos modelos de regressão. Se interpretabilidade for algo importante, a escolha parece natural. Abaixo a notação usual do RegARIMA:
 
 $$y_t = \beta x_t + \eta_t$$
 
@@ -47,7 +47,7 @@ Na seção seguinte vamos apresentar uma base de dados semanal, e estimar o conj
 
 # Banco de Dados
 
-Abaixo eu analiso uma dessas séries semanais, que se trata de uma série de gasolina que pode ser encontrada [aqui](http://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&s=wgfupus2&f=W). Abaixo um gráfico rápido da série. 
+Abaixo eu analiso uma temos uma série de oferta semanal de gasolina para os estados. Os dados podem ser obtidos [aqui](http://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&s=wgfupus2&f=W). 
 
 
 ```{r}
@@ -67,7 +67,7 @@ df %>% plot_time_series(date, gasoline)
 
 # Criação de Base de Treinamento e Teste
 
-Podemos usar o pacote `rsample` para construir uma base de treinamento e teste. Atribuimos 80% da série original à base de treinamento (596 pontos) e 20% à base de teste (149 observações).
+O pacote `rsample` permite a construção de bases de treinamento e teste. Atribuimos 80% da série original à base de treinamento (596 pontos) e 20% à base de teste (149 observações).
 
 ```{r}
 set.seed(123)
@@ -83,7 +83,7 @@ tbl_treinamento_teste %>%
 
 # Pré-Processamento dos Dados
 
-Primeiro vamos especificar uma `receita_simples` utilizando o pacote `recipes` para ser aplicado aos modelos univariados que não aceitam covariadas. Em `receita_fourier` vamos utilizar a coluna `date` para construir termos de Fourier. Especificamente vamos criar termos com período de $365.25/7 = 52.18$. Para o hiperparâmetro $K$ podemos testar um grid de valores possíveis e selecionar aquele que produza o menor valor de AICc ou utilizar cross-validation para obter o valor ideal. Por simplicidade vou fixar o valor em $K = 2$.
+Agora vamos especificar uma `receita_simples` utilizando o pacote `recipes` para ser aplicado aos modelos univariados que não aceitam covariadas. Em `receita_fourier` vamos utilizar a coluna `date` para construir termos de Fourier. Especificamente vamos criar termos com frequência de $365.25/7 = 52.18$. Para o hiperparâmetro $K$ podemos testar um grid de valores possíveis e selecionar aquele que produza o menor valor de AICc ou utilizar cross-validation para obter o valor ideal. Por simplicidade vou fixar o valor em $K = 2$.
 
 
 ```{r}
@@ -95,7 +95,7 @@ receita_fourier <- recipe(gasoline ~ date, training(tbl_treinamento_teste)) %>%
 ```
 
 
-Podemos extrair o banco de dados com as transformações utilizando as funções `prep`, que prepara a receita na base de treinamento, e `juice`. 
+Abaixo vemos as quatro variáveis criadas. O banco de dados pode ser extraído com uso da função `prep`, que prepara a receita na base de treinamento, e da aplicação da função `juice`. 
 
 ```{r}
 receita_fourier %>%
@@ -104,7 +104,7 @@ receita_fourier %>%
   head()
 ```
 
-Para ilustrar, podemos plotar o gráfico para as 4 variáveis de Fourier de frequência 52.18 que acabamos de criar. Estas variáveis serão incluídas no modelo RegARIMA como variáveis exógenas.
+Talvez um gráfico das variáveis ilustre melhor o que elas pretendem captar. Estas variáveis serão incluídas no modelo RegARIMA como variáveis exógenas.
 
 ```{r}
 receita_fourier %>% prep() %>% juice() %>% 
@@ -139,7 +139,7 @@ modelo_tbats <- seasonal_reg() %>%
   set_engine("tbats")
 ```
 
-Agora podemos criar um *workflow*, que especifica os dados a serem utilizados, o pré-processamento a ser aplicado aos dados e o modelo a ser estimado.
+Agora podemos criar um *workflow*, que especifica três objetos: (1) os dados a serem utilizados, (2) o pré-processamento a ser aplicado e (3) o modelo a ser estimado.
 
 ```{r}
 # modelo arima
@@ -168,7 +168,7 @@ workflow_tbats <- workflow() %>%
 ```
 
 
-Uma das funções mais úteis do pacote `Modeltime` é `modeltime_table`, que permite construir listas de modelos que podem ser facilmente manipulados em conjunto: calibração na base de teste, criação de medidas de performance e criação de previsões.
+Uma das funções mais úteis do pacote `Modeltime` é `modeltime_table`, que permite construir listas de modelos que podem ser facilmente manipulados em conjunto. É possível calibrar as estimativas na base de teste, criar medidas de performance, além de produzir previsões para um grande número de modelos de uma única vez.
 
 ```{r}
 tbl_modelos <- modeltime_table(
@@ -179,7 +179,7 @@ tbl_modelos <- modeltime_table(
 )
 ```
 
-Agora podemos calibrar o modelo informando a base de teste e os dados observados. É importante destacar que a operação abaixo aplica as transformações passadas por `recipe` para a base de teste da mesma forma que o `workflow()` acima aplicou transformações a base de treinamento. A tabela de calibração mostra os 4 modelos estimados: um ARIMA(0,1,2), um modelo de Regressão com Erros ARIMA(0,1,2), um modelo de ETS(A,A,N) e um modelo TBATS. Perceba que o pacote TBATS tenta automaticamente encontrar a frequência da série em 13,6 que equivale a uma sazonalidade trimestral dos dados. Talvez isso comprometa os resultados do TBATS. Seria possível fixar o valor da frequência utilizando a opção `seasonal_reg(seasonal_period_1 = 52.18)`. 
+Agora podemos calibrar o modelo informando a base de teste e os dados observados. É importante destacar que a operação abaixo aplica as transformações passadas por `recipe` para a base de teste da mesma forma que o `workflow()` acima aplicou transformações a base de treinamento. A tabela de calibração mostra os 4 modelos estimados: um ARIMA(0,1,2), um modelo de Regressão com Erros ARIMA(0,1,2), um modelo de ETS(A,A,N) e um modelo TBATS. Perceba que o pacote TBATS tenta automaticamente encontrar a frequência da série, a definindo como 13,6, o que equivale a uma sazonalidade trimestral. Talvez isso comprometa os resultados do TBATS, assumindo que 52,18 seja o valor mais adequado. Seria possível ainda fixar o valor da frequência utilizando a opção `seasonal_reg(seasonal_period_1 = 52.18)`. 
 
 ```{r}
 tbl_calibracao <- tbl_modelos %>% 
@@ -197,7 +197,7 @@ tbl_calibracao %>%
   plot_modeltime_forecast()
 ```
 
-E agora as medidas de desempenho. O modelo de Regressão com Erros Arima e o Modelo ETS produziram as previsões com o menores valores de MAPE. 
+E agora as medidas de desempenho. O modelo de Regressão com Erros Arima e o Modelo ETS produziram as previsões com o menores valores de MAPE. Porém, os valores previstos pelo modelo ETS são bem estranhos.
 
 ```{r}
 tbl_calibracao %>%
@@ -211,7 +211,7 @@ Assim, Nosso modelo ajustado com RegARIMA possui 2 pares de termos de Fourier e 
 $$y_t = b_t +  \sum_{j=1}^2 \left[ \alpha_j \sin \left( \frac{2\pi jt}{52.18}\right) + \beta_j \cos \left( \frac{2 \pi jt}{52.18}\right) \right] + \eta_t$$
 Sendo o termo $\eta_t$ um processo ARIMA(0,1,2). 
 
-Como foi discutido, é possível melhorar o modelo utilizando mais termos de Fourier. O Professor Hyndman inclui 12 termos na sua análise. É interessante notar que a Regressão com Erros Arima produziu resultados até superiores aqueles obtidos pelo TBATS, mas em linha com o modelo ETS (um resultado até interessante).
+Como foi discutido, é possível melhorar o modelo utilizando mais termos de Fourier. O Professor Hyndman inclui 12 termos na sua análise. É interessante notar que a Regressão com Erros Arima produziu resultados até superiores aqueles obtidos pelo TBATS.
 
 Por curiosidade, o resultado com $K = 12$ produz um MAPE de 1.82.
 
