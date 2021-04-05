@@ -53,7 +53,8 @@ markup:
     renderer:
       unsafe: true
   highlight:
-    codeFences: false
+    codeFences: true
+    style: monokai
   tableOfContents:
     startLevel: 2
     endLevel: 3

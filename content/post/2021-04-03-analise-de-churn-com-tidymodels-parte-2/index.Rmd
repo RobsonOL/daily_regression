@@ -29,7 +29,7 @@ options(kableExtra.html.bsTable = TRUE)
 
 # Introdução
 
-Na primeira parte desta série, começamos analisando um banco de dados de **churn customer** com o pacote `tidymodels`. Nele discutimos a criação de etapas de pré-processamento dos dados com o pacote `recipes`, a criação de bases de treinamento e teste com `rsample`, a estimação de modelos com o `parsnip`e a criação de workflows com `workflow`. Por fim estimamos um modelo de random forest com alguns hiperparâmetros fixos que obteve um F-1 de 0,85.
+Na [primeira parte](https://dailyregression.netlify.app/post/analise-de-churn-com-tidymodels-parte-1/) desta série, começamos analisando um banco de dados de **churn customer** com o pacote `tidymodels`. Nele discutimos a criação de etapas de pré-processamento dos dados com o pacote `recipes`, a criação de bases de treinamento e teste com `rsample`, a estimação de modelos com o `parsnip`e a criação de workflows com `workflow`. Por fim estimamos um modelo de random forest com alguns hiperparâmetros fixos que obteve um F-1 de 0,85.
 
 Agora vamos utilizar *cross-validation* para determinar os valores de hiperparâmetros que minimizam algum critério de performance do modelo. Para isto, vamos utilizar os pacotes `tune` e `dials` do `tidymodels`. 
 

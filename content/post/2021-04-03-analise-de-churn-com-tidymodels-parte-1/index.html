@@ -325,7 +325,7 @@ data(wa_churn, package = &quot;modeldata&quot;)</code></pre>
 <div id="definindo-o-conjunto-de-treinamento-e-teste-rsample" class="section level1">
 <h1>Definindo o Conjunto de Treinamento e Teste: <code>rsample</code></h1>
 <p>Antes de partir para o pré-processamento e para a estimação dos modelos, podemos utilizar o pacote <code>rsample</code> para construir um conjunto de treinamento e de teste. O pacote fornece uma série de funções que tornam simples o processo de gerar reamostragens aleatórias para além do <em>split training-test</em>, como boostraps via <code>rsample::bootstraps</code>, a criação de <em>split</em> para séries temporais com a função <code>rsample::initial_time_split</code> e a criação de folds para cross-validation com a função <code>rsample::vfold_cv()</code>.</p>
-<p>Na parte final do post utilizaremos cross-validation para <em>afinar</em> os modelos, mas por enquanto vamos utilizar a função <code>initial_split()</code> para gerar uma base de treinamento com 80% das informações do banco de dados original.</p>
+<p>Na <a href="https://dailyregression.netlify.app/post/analise-de-churn-com-tidymodels-parte-2/">segunda parte</a> do post utilizaremos cross-validation para <em>afinar</em> os modelos, mas por enquanto vamos utilizar a função <code>initial_split()</code> para gerar uma base de treinamento com 80% das informações do banco de dados original.</p>
 <pre class="r"><code>set.seed(123)
 
 tbl_treinamento_teste &lt;- initial_split(data = wa_churn, prop = 0.8)
@@ -954,5 +954,5 @@ summary() %&gt;%
 <div id="conclusão" class="section level1">
 <h1>Conclusão</h1>
 <p>O <code>tidymodels</code> e seus pacotes tornam muito simples a tarefa de aplicar modelos estatísticos e de machine learning para bases de dados. Desde o pré-processamento com <code>recipes</code>, a produção de reamostragens com o <code>rsample</code>, a estimação de modelos com <code>parsnip</code>e a criação de workflows com <code>workflow</code>.</p>
-<p>Na próxima parte desta série, vamos analisar o afinamento do modelo de random forest utilizando os pacotes <code>tune</code> e <code>dials</code>.</p>
+<p>Na <a href="https://dailyregression.netlify.app/post/analise-de-churn-com-tidymodels-parte-2/">próxima parte</a> desta série, vamos analisar o afinamento do modelo de random forest utilizando os pacotes <code>tune</code> e <code>dials</code>.</p>
 </div>

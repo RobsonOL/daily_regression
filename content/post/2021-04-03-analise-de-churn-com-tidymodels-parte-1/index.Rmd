@@ -65,7 +65,7 @@ wa_churn %>% skim()
 
 Antes de partir para o pré-processamento e para a estimação dos modelos, podemos utilizar o pacote `rsample`  para construir um conjunto de treinamento e de teste. O pacote fornece uma série de funções que tornam simples o processo de gerar reamostragens aleatórias para além do *split training-test*, como boostraps via `rsample::bootstraps`, a criação de *split* para séries temporais com a função `rsample::initial_time_split` e a criação de folds para cross-validation com a função `rsample::vfold_cv()`. 
 
-Na parte final do post utilizaremos cross-validation para *afinar* os modelos, mas por enquanto vamos utilizar a função `initial_split()` para gerar uma base de treinamento com 80\% das informações do banco de dados original. 
+Na [segunda parte](https://dailyregression.netlify.app/post/analise-de-churn-com-tidymodels-parte-2/) do post utilizaremos cross-validation para *afinar* os modelos, mas por enquanto vamos utilizar a função `initial_split()` para gerar uma base de treinamento com 80\% das informações do banco de dados original. 
 
 ```{r}
 set.seed(123)
@@ -206,5 +206,5 @@ Outra medida popular é o **F1 Score**, que é uma média harmônica da precisã
 
 O `tidymodels` e seus pacotes tornam muito simples a tarefa de aplicar modelos estatísticos e de machine learning para bases de dados. Desde o pré-processamento com `recipes`, a produção de reamostragens com o `rsample`, a estimação de modelos com `parsnip`e a criação de workflows com `workflow`. 
 
-Na próxima parte desta série, vamos analisar o afinamento do modelo de random forest utilizando os pacotes `tune` e `dials`.
+Na [próxima parte](https://dailyregression.netlify.app/post/analise-de-churn-com-tidymodels-parte-2/) desta série, vamos analisar o afinamento do modelo de random forest utilizando os pacotes `tune` e `dials`.
 
