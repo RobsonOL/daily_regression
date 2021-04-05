@@ -26,7 +26,7 @@ knitr::opts_chunk$set(echo = TRUE,
 
 # Introdução
 
-Duas das técnicas de série temporais mais comumente utilizadas para realizar previsões são os modelos (S)ARIMA e o Exponential Smoothing (ETS). Modelos ARIMA tendem a produzir resultados interessantes com séries mensais, trimestrais e anuais. O modelo ETS atribui pesos exponentialmente decrescentes aos valores defasados da série para estimar seus valores atuais, e funcionam bem com [dados diários](https://robjhyndman.com/hyndsight/dailydata/), mensais e anuais. 
+Duas das técnicas de série temporais mais comumente utilizadas para realizar previsões são os modelos (S)ARIMA e o Exponential Smoothing (ETS). Modelos ARIMA tendem a produzir resultados interessantes com séries mensais, trimestrais e anuais. O modelo ETS atribui pesos exponencialmente decrescentes aos valores defasados da série para estimar seus valores atuais, e funcionam bem com [dados diários](https://robjhyndman.com/hyndsight/dailydata/), mensais e anuais. 
 
 Para séries diárias, se o período de análise compreende mais de um ano, é possível que além da sazonalidade semanal usual destes dados (frequência de 7), em que existe uma relação entre os dias da semana, seja preciso permitir a presença de sazonalidade anual. Nesta situação o modelo ETS produzirá resultados inconsistentes. 
 
@@ -40,14 +40,14 @@ $$y_t = \beta x_t + \eta_t$$
 
 $$\eta_t = \phi_1 \eta_{t-1} + ... + \phi_p \eta_{t-p} - \theta_1 w_{t-1} - \theta_q w_{t-q} + w_t$$
 
-onde $w_t$ é um termo de ruido branco. 
+onde $x_t$ é o conjunto de covariadas, $\eta_t$ é o resíduo modelado como um ARIMA e $w_t$, um termo de ruído branco. 
 
 Na seção seguinte vamos apresentar uma base de dados semanal, e estimar o conjunto de modelos discutido acima com uso do pacote `Modeltime`. Este pacote é construído acima do `tidymodels` e possui uma série de funções convenientes para lidar com dados de série temporal. 
 
 
 # Banco de Dados
 
-Abaixo eu analiso uma temos uma série de oferta semanal de gasolina para os estados. Os dados podem ser obtidos [aqui](http://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&s=wgfupus2&f=W). 
+Abaixo temos uma série de oferta semanal de gasolina para os Estados Unidos. Os dados podem ser obtidos no site da [EIA](http://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&s=wgfupus2&f=W). 
 
 
 ```{r}
@@ -63,7 +63,7 @@ df <- read_csv("gasolina.csv") %>%
 df %>% plot_time_series(date, gasoline)
 ```
 
-É possível observar que temos uma série bastante longa, com 745 observações, com inicio em Janeiro de 1991 e em 10 de Abril de 2005. 
+É possível observar que a série é bastante longa, com 745 observações, e tendo inicio em Janeiro de 1991 e em 10 de Abril de 2005.
 
 # Criação de Base de Treinamento e Teste
 
@@ -95,7 +95,7 @@ receita_fourier <- recipe(gasoline ~ date, training(tbl_treinamento_teste)) %>%
 ```
 
 
-Abaixo vemos as quatro variáveis criadas. O banco de dados pode ser extraído com uso da função `prep`, que prepara a receita na base de treinamento, e da aplicação da função `juice`. 
+Abaixo vemos as quatro variáveis criadas. O banco de dados pode ser extraído com uso da função `prep` e `juice`, para preparar a receita na base de treinamento e extrair o `data.frame`.
 
 ```{r}
 receita_fourier %>%
@@ -139,7 +139,7 @@ modelo_tbats <- seasonal_reg() %>%
   set_engine("tbats")
 ```
 
-Agora podemos criar um *workflow*, que especifica três objetos: (1) os dados a serem utilizados, (2) o pré-processamento a ser aplicado e (3) o modelo a ser estimado.
+Abaixo criamos um *workflow* com o pacote `workflow`, que especifica três objetos: (1) os dados a serem utilizados, (2) o pré-processamento a ser conduzido e (3) o a especificação do modelo a ser estimado.
 
 ```{r}
 # modelo arima
@@ -168,7 +168,7 @@ workflow_tbats <- workflow() %>%
 ```
 
 
-Uma das funções mais úteis do pacote `Modeltime` é `modeltime_table`, que permite construir listas de modelos que podem ser facilmente manipulados em conjunto. É possível calibrar as estimativas na base de teste, criar medidas de performance, além de produzir previsões para um grande número de modelos de uma única vez.
+Uma das funções mais úteis do pacote `Modeltime` é o `modeltime_table`, que permite construir listas de modelos que podem ser facilmente interagidas. É possível calibrar as estimativas na base de teste, criar medidas de performance, além de produzir previsões para um grande número de modelos de uma única vez.
 
 ```{r}
 tbl_modelos <- modeltime_table(
@@ -179,7 +179,9 @@ tbl_modelos <- modeltime_table(
 )
 ```
 
-Agora podemos calibrar o modelo informando a base de teste e os dados observados. É importante destacar que a operação abaixo aplica as transformações passadas por `recipe` para a base de teste da mesma forma que o `workflow()` acima aplicou transformações a base de treinamento. A tabela de calibração mostra os 4 modelos estimados: um ARIMA(0,1,2), um modelo de Regressão com Erros ARIMA(0,1,2), um modelo de ETS(A,A,N) e um modelo TBATS. Perceba que o pacote TBATS tenta automaticamente encontrar a frequência da série, a definindo como 13,6, o que equivale a uma sazonalidade trimestral. Talvez isso comprometa os resultados do TBATS, assumindo que 52,18 seja o valor mais adequado. Seria possível ainda fixar o valor da frequência utilizando a opção `seasonal_reg(seasonal_period_1 = 52.18)`. 
+Agora podemos calibrar o modelo informando a base de teste e os dados observados. É importante destacar que a operação abaixo aplica as transformações passadas por `recipe` para a base de teste da mesma forma que o `workflow()` aplicou transformações à base de treinamento. 
+
+A tabela de calibração mostra os 4 modelos estimados: um ARIMA(0,1,2), um modelo de Regressão com Erros ARIMA(0,1,2), um modelo de ETS(A,A,N) (um modelo simples com erros aditivos) e um modelo TBATS. Perceba que o pacote TBATS tenta automaticamente encontrar a frequência da série, a definindo como 13,6, o que equivale a uma sazonalidade trimestral. Talvez isso comprometa os resultados do TBATS, assumindo que 52,18 seja o valor mais adequado. Seria possível ainda fixar o valor da frequência utilizando a opção `seasonal_reg(seasonal_period_1 = 52.18)`. 
 
 ```{r}
 tbl_calibracao <- tbl_modelos %>% 
@@ -239,4 +241,6 @@ fit_12_k %>%
                      actual_data = df) %>% 
   plot_modeltime_forecast()
 ```
+
+
 
