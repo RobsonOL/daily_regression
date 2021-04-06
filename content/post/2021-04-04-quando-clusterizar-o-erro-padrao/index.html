@@ -23,17 +23,17 @@ projects: []
 <div id="introdução" class="section level1">
 <h1>Introdução</h1>
 <p>Este texto é uma adaptação/tradução <a href="https://blogs.worldbank.org/impactevaluations/when-should-you-cluster-standard-errors-new-wisdom-econometrics-oracle">deste texto</a> escrito pelo David Mckenzie. O autor discute resultados e recomendações feitas no <a href="https://arxiv.org/abs/1710.02926">paper</a> <em>When Should You Adjust Standard Errors for Clustering</em> de Alberto Abadie, Susan Athey, Guido Imbens e Jeffrey Woodlridge. O conjunto de autores do paper não necessita de apresentações…</p>
-<p>A ideia principal do paper é de que o fato de que o <strong>erro padrão sofre mudanças quando a clusterização é feita não deve influenciar na decisão de realizar a clusterização</strong>. Segundo os autores existem duas razões que guiam que devem guiar a escolha de como clusterizar o erro padrão:</p>
+<p>A ideia principal do paper é de que o fato de que <strong>a clusterização não deve ser feito só porque o valor do erro padrão se alterou com o processo de clusterização</strong>. Segundo os autores existem duas razões que devem guiar a escolha de como clusterizar o erro padrão:</p>
 <ul>
-<li><p>Devido a forma como sua amostra foi tomada da população.</p></li>
-<li><p>Devido ao design do experimento: como os grupos de unidades foram atribuídos a um tratamento.</p></li>
+<li><p>A forma como sua amostra foi tomada da população.</p></li>
+<li><p>O design do experimento: como os grupos de unidades foram atribuídos a um tratamento.</p></li>
 </ul>
 </div>
 <div id="devido-ao-design-amostral" class="section level1">
 <h1>Devido ao Design Amostral</h1>
-<p>Vamos discutir o primeiro ponto. Vamos considere a equação de Mincer:</p>
+<p>Vamos discutir o primeiro ponto. Vamos considerar a equação de Mincer:</p>
 <p><span class="math display">\[\log(\text{salario}) = \alpha + \beta \text{Escolaridade} + \gamma \text{experiencia} + \delta \text{experiencia}^2 + \epsilon\]</span></p>
-<p>Sua decisão é: devo clusterizar o erro padrão por estado ou cidade, pela indústria que o indivíduo trabalha ou até mesmo pela faixa etária. Sob a pespectiva da amostra, o que importa é <strong>como a amostra foi selecionada</strong> e se existem <em>clusters</em> na população de interesse que não estão representados na amostra.</p>
+<p>A dúvida fica: devemos clusterizar o erro padrão por estado, pela indústria que o indivíduo trabalha ou pela faixa etária? Sob a pespectiva da amostra, o que importa é <strong>como a amostra foi selecionada</strong> e se existem <em>clusters</em> na população de interesse que não estão representados na amostra.</p>
 <div id="cenário-1" class="section level3">
 <h3>Cenário 1</h3>
 <blockquote>
@@ -44,21 +44,21 @@ projects: []
 <div id="cenário-2" class="section level3">
 <h3>Cenário 2</h3>
 <blockquote>
-<p>A amostra foi selecionada ao tomar 100 cidades aleatórias e dentro delas, escolher aleatoriamente um grupo de pessoas. Seu objetivo é responder algo sobre a população no geral, e não apenas para essas cidades sorteadas.</p>
+<p>A amostra foi selecionada ao tomar 100 cidades aleatórias e dentro delas, escolhemos aleatoriamente um grupo de pessoas. Seu objetivo é responder algo sobre a população no geral, e não apenas para essas cidades escolhidas.</p>
 </blockquote>
-<p><strong>Você deve clusterizar por cidade, já que existem cidades que não foram consideradas na sua amostra.</strong></p>
+<p><strong>Resposta:</strong> <strong>Você deve clusterizar por cidade, já que existem cidades que não foram consideradas na sua amostra.</strong></p>
 </div>
 <div id="cenário-3" class="section level3">
 <h3>Cenário 3</h3>
 <blockquote>
-<p>Da mesma forma não faz sentido clusterizar por faixa etária já que é improvável que uma amostra aleatória de uma certa faixa fosse tomada e não de outras. E a clusterização por indústria só ocorreria se a amostra fosse tomada de um grupo de indústrias, e delas fossem tomadas certos indivíduos.</p>
+<p>E a clusterização por faixa etária e por indústria? Ela não faz sentido clusterizar já que é improvável que uma amostra aleatória de uma certa faixa fosse tomada e não de outras. E a clusterização por indústria só ocorreria se a amostra fosse tomada de um grupo de indústrias, e delas fossem tomadas certos indivíduos.</p>
 </blockquote>
 <p><strong>Observações:</strong> No caso (2), se o objetivo é fazer alguma afirmação sobre as cidades da amostra, o erro padrão robusto (Eicker-Huber-White ou EHW) é suficiente. Se o objetivo é generalizar para a população, se usa o erro padrão clusterizado (Liang-Zeger ou LZ). Se não existe heterogeneidade nos efeitos tratamento, EHW e LZ produzem o mesmo resultado.</p>
 </div>
 </div>
 <div id="devido-ao-design-do-experimento" class="section level1">
 <h1>Devido ao design do experimento</h1>
-<p>A segunda razão para clusterizar é devido ao experimento. Ocorre quando clusters de unidades, em vez das unidades individuais são atribuídas a um tratamento, como em uma escola, que é um cluster de alunos.</p>
+<p>A segunda razão para clusterizar depende do desenho experimental. Quando clusters de unidades, em vez das unidades individuais, são atribuídos a um tratamento. Um exemplo é um experimento que produz uma intervenção em uma escola. Todos esses alunos da escolha serão impactados pelo experimento, de modo que a escola é um cluster de alunos.</p>
 <p>Vamos assumir a seguinte equação:</p>
 <p><span class="math display">\[\log(\text{salário}) = \alpha + \beta \text{Tratamento} + \epsilon\]</span></p>
 <div id="cenário-1-1" class="section level3">
@@ -66,23 +66,27 @@ projects: []
 <blockquote>
 <p>Se o tratamento é atribuído a nível de indivíduo.</p>
 </blockquote>
-<p><strong>Não é necessário clusterização</strong></p>
+<p><strong>Não é necessário clusterização</strong>.</p>
 </div>
 <div id="cenário-2-1" class="section level3">
 <h3>Cenário 2</h3>
 <blockquote>
-<p>A não ser que existam muito períodos de tempo, e então você deve clusterizar a nível de indivíduo, já que a unidade de aleatorização é o indivíduo e não o indivíduo-tempo.</p>
+<p>O tratamento é atribuido à nível de indivíduo, mas observamos estes indivíduos ao longo de muitos períodos.</p>
 </blockquote>
+<p><strong>Devemos clusterizar ànível de indivíduo, já que a unidade de aleatorização é o indivíduo, e não o indivíduo-tempo.</strong></p>
 </div>
 <div id="cenário-3-1" class="section level3">
 <h3>Cenário 3</h3>
 <blockquote>
 <p>Se o tratamento é a nível de escola ou de cidade.</p>
 </blockquote>
-<p><strong>Então faça a clusterização a nível de cidade.</strong></p>
+<p><strong>Clusterização à nível de cidade ou escola.</strong></p>
 </div>
 </div>
 <div id="efeitos-fixos" class="section level1">
 <h1>Efeitos Fixos</h1>
-<p>E se a amostra é ao nível de cidades, mas são adicianados efeitos fixos de cidade? A regra geral é observar os passos anteriores, porém a clusterização só terá um efeito se existir heterogeneidade no tratamento.</p>
+<blockquote>
+<p>E se a amostra é ao nível de cidades, mas são adicianados efeitos fixos de cidade?</p>
+</blockquote>
+<p>A regra geral é observar os passos anteriores, porém a clusterização só terá um efeito se existir heterogeneidade no tratamento.</p>
 </div>
