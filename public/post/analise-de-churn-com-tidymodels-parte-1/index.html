@@ -1,0 +1,2113 @@
+<!DOCTYPE html><html lang="en-us" >
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  
+  
+    <meta name="generator" content="Wowchemy 5.1.0 for Hugo" />
+  
+
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Robson Oliveira" />
+
+  
+  
+  
+    
+  
+  <meta name="description" content="IntroduçãoO objetivo do post é apresentar o pacote tidymodels resolvendo um problema simples de customer churn. O tidymodels é uma constelação de pacotes de modelagem estatística e de machine learning presentes no R e que torna simples e prático diversas tarefas presentes no fluxo de trabalho da criação de modelos preditivos." />
+
+  
+  <link rel="alternate" hreflang="en-us" href="/post/analise-de-churn-com-tidymodels-parte-1/" />
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+
+  
+  
+  
+    <meta name="theme-color" content="#1565c0" />
+  
+
+  
+  
+    
+    <script src="/js/mathjax-config.js"></script>
+  
+
+  
+  
+  
+  
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha256-FMvZuGapsJLjouA6k7Eo2lusoAX9i0ShlWFG6qt7SLc=" crossorigin="anonymous">
+
+    
+    
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/github.min.css" crossorigin="anonymous" title="hl-light" media="print" onload="this.media='all'">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" media="print" onload="this.media='all'" disabled>
+        
+      
+    
+
+    
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css" integrity="sha512-1xoFisiGdy9nvho8EgXuXvnpR5GAMSjFwp40gSRE3NwdUdIMIKuPa7bqoUhLD0O/5tPNhteAsE5XyyMi5reQVA==" crossorigin="anonymous" media="print" onload="this.media='all'">
+    
+
+    
+
+    
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+  
+
+  
+  
+  
+    
+      
+      <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+    
+  
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/wowchemy.9a66e344a68eb664b392d406a3f80726.css" />
+
+  
+
+
+
+  
+
+  
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+    <link rel="manifest" href="/index.webmanifest" />
+  
+
+  <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_2.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_180x180_fill_lanczos_center_2.png" />
+
+  <link rel="canonical" href="/post/analise-de-churn-com-tidymodels-parte-1/" />
+
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  <meta property="twitter:card" content="summary" />
+  
+  <meta property="og:site_name" content="Daily Regression" />
+  <meta property="og:url" content="/post/analise-de-churn-com-tidymodels-parte-1/" />
+  <meta property="og:title" content="Analise de Churn com Tidymodels Parte 1 | Daily Regression" />
+  <meta property="og:description" content="IntroduçãoO objetivo do post é apresentar o pacote tidymodels resolvendo um problema simples de customer churn. O tidymodels é uma constelação de pacotes de modelagem estatística e de machine learning presentes no R e que torna simples e prático diversas tarefas presentes no fluxo de trabalho da criação de modelos preditivos." /><meta property="og:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" />
+    <meta property="twitter:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" /><meta property="og:locale" content="en-us" />
+  
+    
+      <meta
+        property="article:published_time"
+        content="2021-04-03T00:00:00&#43;00:00"
+      />
+    
+    <meta property="article:modified_time" content="2021-04-03T22:55:01-03:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+  
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/post/analise-de-churn-com-tidymodels-parte-1/"
+  },
+  "headline": "Analise de Churn com Tidymodels Parte 1",
+  
+  "datePublished": "2021-04-03T00:00:00Z",
+  "dateModified": "2021-04-03T22:55:01-03:00",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Robson Oliveira"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "Daily Regression",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_192x192_fill_lanczos_center_2.png"
+    }
+  },
+  "description": "Introdução\rO objetivo do post é apresentar o pacote tidymodels resolvendo um problema simples de customer churn. O tidymodels é uma constelação de pacotes de modelagem estatística e de machine learning presentes no R e que torna simples e prático diversas tarefas presentes no fluxo de trabalho da criação de modelos preditivos."
+}
+</script>
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+  <title>Analise de Churn com Tidymodels Parte 1 | Daily Regression</title>
+</head>
+
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="01d48b65700a5139f0a436cf25e107c5" >
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <script src="/js/wowchemy-init.min.226a9011996d125bf3fe4a5f22353a49.js"></script>
+
+  
+
+
+<aside class="search-modal" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#" aria-label="Close"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search" class="form-control"
+        aria-label="Search...">
+        
+      </div>
+
+      
+      
+
+      
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+
+  <div class="page-header">
+    
+
+
+
+
+
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container-xl">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="/">Daily Regression</a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="/">Daily Regression</a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#about"><span>About</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#posts"><span>Posts</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#featured"><span>Publications</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/courses/"><span>Courses</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#contact"><span>Contact</span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+
+      
+      
+        
+          
+          <li class="nav-item d-none d-lg-inline-flex">
+            <a class="nav-link" href="https://twitter.com/robsonol" data-toggle="tooltip" data-placement="bottom" title="Twitter" target="_blank" rel="noopener" aria-label="Twitter">
+              <i class="fab fa-twitter" aria-hidden="true"></i>
+            </a>
+          </li>
+        
+      
+
+      
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+      
+      <li class="nav-item dropdown theme-dropdown">
+        <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-label="Display preferences">
+          <i class="fas fa-moon" aria-hidden="true"></i>
+        </a>
+        <div class="dropdown-menu">
+          <a href="#" class="dropdown-item js-set-theme-light">
+            <span>Light</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-dark">
+            <span>Dark</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-auto">
+            <span>Automatic</span>
+          </a>
+        </div>
+      </li>
+      
+
+      
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  </div>
+
+  <div class="page-body">
+    <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>Analise de Churn com Tidymodels Parte 1</h1>
+
+  
+
+  
+    
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+          Last updated on
+      
+    
+    Apr 3, 2021
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    15 min read
+  </span>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+  
+
+</div>
+
+    
+
+
+
+
+
+  
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      
+<script src="/post/analise-de-churn-com-tidymodels-parte-1/index_files/header-attrs/header-attrs.js"></script>
+
+
+<div id="introdução" class="section level1">
+<h1>Introdução</h1>
+<p>O objetivo do post é apresentar o pacote <code>tidymodels</code> resolvendo um problema simples de <strong>customer churn</strong>. O <code>tidymodels</code> é uma constelação de pacotes de modelagem estatística e de machine learning presentes no R e que torna simples e prático diversas tarefas presentes no fluxo de trabalho da criação de modelos preditivos. Isto inclui a tarefa de <em>feature engineering</em> dos dados; a criação de conjuntos de teste, treinamento ou folds de cross validation; a estimação e afinamento (<em>tuning</em>) de dezenas de modelos, além do cálculo de diversas medidas de avaliação de performance.</p>
+<p>Talvez o principal pacote do <code>tidymodels</code> seja o <a href="https://parsnip.tidymodels.org/"><code>parsnip</code></a>. Como sucessor espiritual do <code>caret</code>, seu grande merito é unificar a sintaxe de um gama enorme de modelos estatísticos e de machine learning. Já o pacote <a href="https://rsample.tidymodels.org/"><code>rsample</code></a> tem o objetivo de realizar reamostragens dos dados, como a criação de conjuntos de dados de treinamento e de teste e de folds para realização de <em>cross validation</em>, duas operações importantes para a criação de modelos preditivos.</p>
+<p>Mas antes de aplicar qualquer modelo aos dados, podemos utilizar o pacote <a href="https://recipes.tidymodels.org/"><code>recipes</code></a> para criar pequenas receitas de bolo com instruções de pré-processamento dos dados. Ele torna simples tarefas como a criação de variáveis <em>dummies</em>, a normalização de variáveis numéricas, remoção de colunas com variância zero, a criação de variáveis derivadas da coluna de tempo (como dummy de dia, mês, ano e dia da semana), além de muitas outras operações de <em>feature engineering</em> que são tão importantes, mas por vezes tediosas.</p>
+<p>Já o <a href="https://yardstick.tidymodels.org/"><code>yardstick</code></a> facilita a criação de medidas de performance dos modelos que serão estimados, produzindo as principais medidas de desempenho para problemas de regressão (RMSE, R-Quadrado e outros) e de classificação (matriz de confusão, precisão, acurácia e outros).</p>
+<p>Por fim, temos os pacotes <a href="https://tune.tidymodels.org/"><code>tune</code></a> e <a href="https://dials.tidymodels.org/"><code>dials</code></a> que facilitam a busca de hiperparâmetros ideais dos modelos e o pacote <a href="https://workflows.tidymodels.org/"><code>workflow</code></a>, que garante que todas as etapas acima possam se comunicar de maneira simples e prática.</p>
+</div>
+<div id="o-banco-de-dados" class="section level1">
+<h1>O Banco de Dados</h1>
+<p>Para este projeto vou utilizar uma base de <strong>customer churn</strong> da Telco. Ela contém 7043 linhas, cada uma representando um cliente, e 20 colunas que representam potenciais preditores da probabilidade de <em>churn</em>. Eles oferecem informações que podem nos ajudar a prever o comportamento dos clientes e a desenvolver programas focados em retenção de clientes.</p>
+<pre class="r"><code>library(tidyverse)
+library(tidymodels)
+library(skimr)
+library(knitr)
+library(doFuture)
+
+data(wa_churn, package = &quot;modeldata&quot;)</code></pre>
+<p>O banco de dados inclui 20 variáveis, sendo 4 numéricas e 16 categóricas. <code>Churn</code> é a nossa variável de interesse, e indica se o cliente abandonou ou não a empresa. Como a ideia é apresentar os procedimentos do <code>tidymodels</code>, não irei passar muito tempo analisando o banco de dados, mas é possível observar que existem 11 observações sem valor definido (<em>missing</em> ou NA) na coluna <code>totalcharges</code>. Nas etapas de pré-processamento podemos tratar estes problemas.</p>
+<pre class="r"><code>wa_churn %&gt;% skim()</code></pre>
+<table>
+<caption><span id="tab:unnamed-chunk-3">Table 1: </span>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">Piped data</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">7043</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">20</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">factor</td>
+<td align="left">11</td>
+</tr>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">9</td>
+</tr>
+<tr class="even">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: factor</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">ordered</th>
+<th align="right">n_unique</th>
+<th align="left">top_counts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">churn</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">2</td>
+<td align="left">No: 5174, Yes: 1869</td>
+</tr>
+<tr class="even">
+<td align="left">multiple_lines</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">3</td>
+<td align="left">No: 3390, Yes: 2971, No : 682</td>
+</tr>
+<tr class="odd">
+<td align="left">internet_service</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">3</td>
+<td align="left">Fib: 3096, DSL: 2421, No: 1526</td>
+</tr>
+<tr class="even">
+<td align="left">online_security</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">3</td>
+<td align="left">No: 3498, Yes: 2019, No : 1526</td>
+</tr>
+<tr class="odd">
+<td align="left">online_backup</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">3</td>
+<td align="left">No: 3088, Yes: 2429, No : 1526</td>
+</tr>
+<tr class="even">
+<td align="left">device_protection</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">3</td>
+<td align="left">No: 3095, Yes: 2422, No : 1526</td>
+</tr>
+<tr class="odd">
+<td align="left">tech_support</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">3</td>
+<td align="left">No: 3473, Yes: 2044, No : 1526</td>
+</tr>
+<tr class="even">
+<td align="left">streaming_tv</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">3</td>
+<td align="left">No: 2810, Yes: 2707, No : 1526</td>
+</tr>
+<tr class="odd">
+<td align="left">streaming_movies</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">3</td>
+<td align="left">No: 2785, Yes: 2732, No : 1526</td>
+</tr>
+<tr class="even">
+<td align="left">contract</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">3</td>
+<td align="left">Mon: 3875, Two: 1695, One: 1473</td>
+</tr>
+<tr class="odd">
+<td align="left">payment_method</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">4</td>
+<td align="left">Ele: 2365, Mai: 1612, Ban: 1544, Cre: 1522</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">female</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.50</td>
+<td align="right">0.50</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="left">▇▁▁▁▇</td>
+</tr>
+<tr class="even">
+<td align="left">senior_citizen</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.16</td>
+<td align="right">0.37</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">1.00</td>
+<td align="left">▇▁▁▁▂</td>
+</tr>
+<tr class="odd">
+<td align="left">partner</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.48</td>
+<td align="right">0.50</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="left">▇▁▁▁▇</td>
+</tr>
+<tr class="even">
+<td align="left">dependents</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.30</td>
+<td align="right">0.46</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="left">▇▁▁▁▃</td>
+</tr>
+<tr class="odd">
+<td align="left">tenure</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">32.37</td>
+<td align="right">24.56</td>
+<td align="right">0.00</td>
+<td align="right">9.00</td>
+<td align="right">29.00</td>
+<td align="right">55.00</td>
+<td align="right">72.00</td>
+<td align="left">▇▃▃▃▆</td>
+</tr>
+<tr class="even">
+<td align="left">phone_service</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.90</td>
+<td align="right">0.30</td>
+<td align="right">0.00</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="left">▁▁▁▁▇</td>
+</tr>
+<tr class="odd">
+<td align="left">paperless_billing</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.59</td>
+<td align="right">0.49</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="left">▆▁▁▁▇</td>
+</tr>
+<tr class="even">
+<td align="left">monthly_charges</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">64.76</td>
+<td align="right">30.09</td>
+<td align="right">18.25</td>
+<td align="right">35.50</td>
+<td align="right">70.35</td>
+<td align="right">89.85</td>
+<td align="right">118.75</td>
+<td align="left">▇▅▆▇▅</td>
+</tr>
+<tr class="odd">
+<td align="left">total_charges</td>
+<td align="right">11</td>
+<td align="right">1</td>
+<td align="right">2283.30</td>
+<td align="right">2266.77</td>
+<td align="right">18.80</td>
+<td align="right">401.45</td>
+<td align="right">1397.47</td>
+<td align="right">3794.74</td>
+<td align="right">8684.80</td>
+<td align="left">▇▂▂▂▁</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="definindo-o-conjunto-de-treinamento-e-teste-rsample" class="section level1">
+<h1>Definindo o Conjunto de Treinamento e Teste: <code>rsample</code></h1>
+<p>Antes de partir para o pré-processamento e para a estimação dos modelos, podemos utilizar o pacote <code>rsample</code> para construir um conjunto de treinamento e de teste. O pacote fornece uma série de funções que tornam simples o processo de gerar reamostragens aleatórias para além do <em>split training-test</em>, como boostraps via <code>rsample::bootstraps</code>, a criação de <em>split</em> para séries temporais com a função <code>rsample::initial_time_split</code> e a criação de folds para cross-validation com a função <code>rsample::vfold_cv()</code>.</p>
+<p>Na <a href="https://dailyregression.netlify.app/post/analise-de-churn-com-tidymodels-parte-2/">segunda parte</a> do post utilizaremos cross-validation para <em>afinar</em> os modelos, mas por enquanto vamos utilizar a função <code>initial_split()</code> para gerar uma base de treinamento com 80% das informações do banco de dados original.</p>
+<pre class="r"><code>set.seed(123)
+
+tbl_treinamento_teste &lt;- initial_split(data = wa_churn, prop = 0.8)
+tbl_treinamento &lt;- tbl_treinamento_teste %&gt;% training()
+tbl_teste &lt;- tbl_treinamento_teste %&gt;% testing()
+
+tbl_treinamento_teste</code></pre>
+<pre><code>## &lt;Analysis/Assess/Total&gt;
+## &lt;5635/1408/7043&gt;</code></pre>
+<p>Do total de 7043 clientes, 5635 foram atribuídos ao conjunto de treinamento e 1408 para o conjunto de teste.</p>
+</div>
+<div id="pré-processando-dados-recipes" class="section level1">
+<h1>Pré-processando dados: <code>recipes</code></h1>
+<p>Como discutido na introdução, o pacote <code>recipes</code> utiliza uma série de funções para lidar com o pré-processamento dos dados. O primeiro passo é informar a formula utilizada na receita, no nosso caso <code>Churn</code> como nossa variável dependente e as demais como preditores. Além de servir como a fórmula dos modelos que vamos estimar, a fórmula também tem o objetivo de permitir o acesso a uma série de funções seletoras bastante convenientes como <code>all_predictors()</code>, que permite aplicar transformações sobre todos os preditores, ou <code>all_outcomes()</code>, que permite transformações sobre os outcomes.</p>
+<p>Com <code>step_impute_linear</code> imputamos valores àquelas linhas com observações faltantes na coluna <code>totalCharge</code>. Com <code>step_dummy</code> queremos criar uma série de colunas dummies a partir dos preditores categoricos. Para não informar cada coluna manualmente, podemos utilizar a função selectora <em>all_nominal</em>, além de informar à função <code>step_dummy</code> que ignore os outcomes. Logo, nossas 16 variáveis categóricas dão lugar a outras tantas colunas dummies. Por fim, vamos normalizar os valores das variáveis numéricas utilizando <code>step_normalize</code>.</p>
+<pre class="r"><code>receita_simples &lt;- recipe(churn ~ ., data = tbl_treinamento) %&gt;% 
+  step_impute_linear(all_numeric()) %&gt;% 
+  step_dummy(all_nominal(), -all_outcomes()) %&gt;% 
+  step_normalize(all_numeric())</code></pre>
+<p>Note que muitas outras funções de transformação estão incluidas no pacote <code>recipe</code>, permitindo a ímputação de valores missings pela média <code>step_meanimpute</code>; as transformações log (<code>step_log</code>) e quadrática (<code>step_sqrt</code>) das variáveis, a especificação genérica da função <code>dplyr::mutate</code> com <code>step_mutate</code>, a discretização de variáveis numéricas com <code>step_cut</code>, a geração de variáveis de data com <code>step_date</code> (dummies de dia, mês, ano, e dia da semana) e muitas outras. Uma lista de todas as transformações possíveis pode ser obtida na <a href="https://recipes.tidymodels.org/reference/index.html">documentação do recipe</a>.</p>
+<p>Para exibir como o banco de dados ficou após as transformações, Chamamos <code>prep()</code>, que aplica a receita ao banco de dados, e utilizamos <code>juice()</code> para extrair o banco de dados transformado.</p>
+<pre class="r"><code>receita_simples %&gt;% prep() %&gt;% juice() %&gt;% skim()</code></pre>
+<table>
+<caption><span id="tab:unnamed-chunk-6">Table 2: </span>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">Piped data</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">5635</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">31</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">factor</td>
+<td align="left">1</td>
+</tr>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">30</td>
+</tr>
+<tr class="even">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: factor</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">ordered</th>
+<th align="right">n_unique</th>
+<th align="left">top_counts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">churn</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">2</td>
+<td align="left">No: 4155, Yes: 1480</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">female</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-0.98</td>
+<td align="right">-0.98</td>
+<td align="right">-0.98</td>
+<td align="right">1.02</td>
+<td align="right">1.02</td>
+<td align="left">▇▁▁▁▇</td>
+</tr>
+<tr class="even">
+<td align="left">senior_citizen</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-0.45</td>
+<td align="right">-0.45</td>
+<td align="right">-0.45</td>
+<td align="right">-0.45</td>
+<td align="right">2.23</td>
+<td align="left">▇▁▁▁▂</td>
+</tr>
+<tr class="odd">
+<td align="left">partner</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-0.97</td>
+<td align="right">-0.97</td>
+<td align="right">-0.97</td>
+<td align="right">1.03</td>
+<td align="right">1.03</td>
+<td align="left">▇▁▁▁▇</td>
+</tr>
+<tr class="even">
+<td align="left">dependents</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-0.66</td>
+<td align="right">-0.66</td>
+<td align="right">-0.66</td>
+<td align="right">1.52</td>
+<td align="right">1.52</td>
+<td align="left">▇▁▁▁▃</td>
+</tr>
+<tr class="odd">
+<td align="left">tenure</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-1.32</td>
+<td align="right">-0.95</td>
+<td align="right">-0.14</td>
+<td align="right">0.96</td>
+<td align="right">1.60</td>
+<td align="left">▇▃▃▃▆</td>
+</tr>
+<tr class="even">
+<td align="left">phone_service</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-3.09</td>
+<td align="right">0.32</td>
+<td align="right">0.32</td>
+<td align="right">0.32</td>
+<td align="right">0.32</td>
+<td align="left">▁▁▁▁▇</td>
+</tr>
+<tr class="odd">
+<td align="left">paperless_billing</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-1.20</td>
+<td align="right">-1.20</td>
+<td align="right">0.83</td>
+<td align="right">0.83</td>
+<td align="right">0.83</td>
+<td align="left">▆▁▁▁▇</td>
+</tr>
+<tr class="even">
+<td align="left">monthly_charges</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-1.53</td>
+<td align="right">-0.98</td>
+<td align="right">0.19</td>
+<td align="right">0.84</td>
+<td align="right">1.79</td>
+<td align="left">▇▅▆▇▅</td>
+</tr>
+<tr class="odd">
+<td align="left">total_charges</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-1.57</td>
+<td align="right">-0.83</td>
+<td align="right">-0.39</td>
+<td align="right">0.66</td>
+<td align="right">2.80</td>
+<td align="left">▇▇▃▃▂</td>
+</tr>
+<tr class="even">
+<td align="left">multiple_lines_No.phone.service</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-0.32</td>
+<td align="right">-0.32</td>
+<td align="right">-0.32</td>
+<td align="right">-0.32</td>
+<td align="right">3.09</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">multiple_lines_Yes</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-0.86</td>
+<td align="right">-0.86</td>
+<td align="right">-0.86</td>
+<td align="right">1.17</td>
+<td align="right">1.17</td>
+<td align="left">▇▁▁▁▆</td>
+</tr>
+<tr class="even">
+<td align="left">internet_service_Fiber.optic</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-0.88</td>
+<td align="right">-0.88</td>
+<td align="right">-0.88</td>
+<td align="right">1.13</td>
+<td align="right">1.13</td>
+<td align="left">▇▁▁▁▆</td>
+</tr>
+<tr class="odd">
+<td align="left">internet_service_No</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-0.53</td>
+<td align="right">-0.53</td>
+<td align="right">-0.53</td>
+<td align="right">-0.53</td>
+<td align="right">1.88</td>
+<td align="left">▇▁▁▁▂</td>
+</tr>
+<tr class="even">
+<td align="left">online_security_No.internet.service</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-0.53</td>
+<td align="right">-0.53</td>
+<td align="right">-0.53</td>
+<td align="right">-0.53</td>
+<td align="right">1.88</td>
+<td align="left">▇▁▁▁▂</td>
+</tr>
+<tr class="odd">
+<td align="left">online_security_Yes</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-0.64</td>
+<td align="right">-0.64</td>
+<td align="right">-0.64</td>
+<td align="right">1.57</td>
+<td align="right">1.57</td>
+<td align="left">▇▁▁▁▃</td>
+</tr>
+<tr class="even">
+<td align="left">online_backup_No.internet.service</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-0.53</td>
+<td align="right">-0.53</td>
+<td align="right">-0.53</td>
+<td align="right">-0.53</td>
+<td align="right">1.88</td>
+<td align="left">▇▁▁▁▂</td>
+</tr>
+<tr class="odd">
+<td align="left">online_backup_Yes</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-0.72</td>
+<td align="right">-0.72</td>
+<td align="right">-0.72</td>
+<td align="right">1.39</td>
+<td align="right">1.39</td>
+<td align="left">▇▁▁▁▅</td>
+</tr>
+<tr class="even">
+<td align="left">device_protection_No.internet.service</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-0.53</td>
+<td align="right">-0.53</td>
+<td align="right">-0.53</td>
+<td align="right">-0.53</td>
+<td align="right">1.88</td>
+<td align="left">▇▁▁▁▂</td>
+</tr>
+<tr class="odd">
+<td align="left">device_protection_Yes</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-0.72</td>
+<td align="right">-0.72</td>
+<td align="right">-0.72</td>
+<td align="right">1.38</td>
+<td align="right">1.38</td>
+<td align="left">▇▁▁▁▅</td>
+</tr>
+<tr class="even">
+<td align="left">tech_support_No.internet.service</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-0.53</td>
+<td align="right">-0.53</td>
+<td align="right">-0.53</td>
+<td align="right">-0.53</td>
+<td align="right">1.88</td>
+<td align="left">▇▁▁▁▂</td>
+</tr>
+<tr class="odd">
+<td align="left">tech_support_Yes</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-0.63</td>
+<td align="right">-0.63</td>
+<td align="right">-0.63</td>
+<td align="right">1.58</td>
+<td align="right">1.58</td>
+<td align="left">▇▁▁▁▃</td>
+</tr>
+<tr class="even">
+<td align="left">streaming_tv_No.internet.service</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-0.53</td>
+<td align="right">-0.53</td>
+<td align="right">-0.53</td>
+<td align="right">-0.53</td>
+<td align="right">1.88</td>
+<td align="left">▇▁▁▁▂</td>
+</tr>
+<tr class="odd">
+<td align="left">streaming_tv_Yes</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-0.79</td>
+<td align="right">-0.79</td>
+<td align="right">-0.79</td>
+<td align="right">1.27</td>
+<td align="right">1.27</td>
+<td align="left">▇▁▁▁▅</td>
+</tr>
+<tr class="even">
+<td align="left">streaming_movies_No.internet.service</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-0.53</td>
+<td align="right">-0.53</td>
+<td align="right">-0.53</td>
+<td align="right">-0.53</td>
+<td align="right">1.88</td>
+<td align="left">▇▁▁▁▂</td>
+</tr>
+<tr class="odd">
+<td align="left">streaming_movies_Yes</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-0.80</td>
+<td align="right">-0.80</td>
+<td align="right">-0.80</td>
+<td align="right">1.25</td>
+<td align="right">1.25</td>
+<td align="left">▇▁▁▁▅</td>
+</tr>
+<tr class="even">
+<td align="left">contract_One.year</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-0.52</td>
+<td align="right">-0.52</td>
+<td align="right">-0.52</td>
+<td align="right">-0.52</td>
+<td align="right">1.93</td>
+<td align="left">▇▁▁▁▂</td>
+</tr>
+<tr class="odd">
+<td align="left">contract_Two.year</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-0.57</td>
+<td align="right">-0.57</td>
+<td align="right">-0.57</td>
+<td align="right">-0.57</td>
+<td align="right">1.77</td>
+<td align="left">▇▁▁▁▂</td>
+</tr>
+<tr class="even">
+<td align="left">payment_method_Credit.card..automatic.</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-0.52</td>
+<td align="right">-0.52</td>
+<td align="right">-0.52</td>
+<td align="right">-0.52</td>
+<td align="right">1.93</td>
+<td align="left">▇▁▁▁▂</td>
+</tr>
+<tr class="odd">
+<td align="left">payment_method_Electronic.check</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-0.70</td>
+<td align="right">-0.70</td>
+<td align="right">-0.70</td>
+<td align="right">1.43</td>
+<td align="right">1.43</td>
+<td align="left">▇▁▁▁▃</td>
+</tr>
+<tr class="even">
+<td align="left">payment_method_Mailed.check</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-0.55</td>
+<td align="right">-0.55</td>
+<td align="right">-0.55</td>
+<td align="right">-0.55</td>
+<td align="right">1.81</td>
+<td align="left">▇▁▁▁▂</td>
+</tr>
+</tbody>
+</table>
+<p>Agora temos uma variável categórica, que é a resposta do modelo, e 30 variáveis numéricas, a maioria delas criadas a partir da transformação <code>step_dummy</code>.</p>
+</div>
+<div id="ajustando-modelos-parsnip" class="section level1">
+<h1>Ajustando modelos: <code>parsnip</code></h1>
+<p>Finalmente, após as etapas de pré-processamento dos dados e a criação de um conjunto de treinamento e teste podemos utilizar o pacote <code>parsnip</code> para estimar alguns modelos.</p>
+<p>Como discutimos na introdução, o <code>parsnip</code> realiza um trabalho incrível de unificar uma série de diferentes modelos estatísticos e de machine learning em um único ambiente. O pacote é extremamente conveniente porque permite que o usuário utilize uma única forma de se comunicar com diferentes modelos que inicialmente possuiam sintaxes totalmente diferentes ou exigiam dados em diferentes formatos (<code>matrix</code>, <code>ts</code>, <code>data.frame</code>).</p>
+<p>Para utilizar o <code>parsnip</code>, sempre começamos definindo o modelo. Assim, para estimar uma regressão linear utilizamos a função <code>linear_reg()</code> e para estimar um random forest utilizamos a função <code>rand_forest()</code>. Contudo, muitos outros modelos estão presentes, como o modelo ARIMA (<code>arima_reg</code>), o modelo prophet (<code>prophet_reg</code>), Support Vector Machines (<code>svm_poly</code> e <code>svm_rbf</code>), regressão logística (<code>logistic_reg</code>), KNN (<code>nearest_neighbor</code>) e muitos outros. Uma lista completa de todos os modelos suportados pode ser encontrada na <a href="https://www.tidymodels.org/find/parsnip/">documentação do parsnip</a>.</p>
+<p>Definido o modelo, devemos informar a implementação do algorítimo, que é definida pela função <code>set_engine()</code>. Assim, ao rodar um modelo de Random Forest podemos utilizar a implementação do pacote <code>randomForest</code>, com <code>set_engine("randomForest")</code>, a implementação do pacote <code>ranger</code> com <code>set_engine("ranger")</code> ou do spark com <code>set_engine("spark")</code>. Mais uma vez reforço a conveniência do <code>parsnip</code>. Em cada um dos pacotes, os hiperparâmetros são nomeados de maneiras diferentes, como <code>n.trees</code> no ranger e <code>trees</code> no randomForest, mas o <code>parsnip</code> unifica essas sintaxes e utiliza o mesmo nome para os hiperparâmetros.</p>
+<p>Para nossos dados, podemos estimar um modelo de Random Forest. Nenhuma razão específica nesta escolha, a não ser que ele é um modelo bastante popular para o problema de classificação que temos. O pacote <a href="https://workflowsets.tidymodels.org/"><code>workflowset</code></a> é uma alternativa interessante para quando precisamos estimar vários modelos diferentes, com diferentes especificações (ou <code>recipes</code>). Mas por simplicidade, vamos continuar com um único modelo.</p>
+<pre class="r"><code>modelo_rf &lt;-
+  rand_forest(mtry = 3, trees = 200, min_n = 30) %&gt;% 
+  set_mode(&quot;classification&quot;) %&gt;% 
+  set_engine(&quot;ranger&quot;)
+modelo_rf</code></pre>
+<pre><code>## Random Forest Model Specification (classification)
+## 
+## Main Arguments:
+##   mtry = 3
+##   trees = 200
+##   min_n = 30
+## 
+## Computational engine: ranger</code></pre>
+<p>Assim, para ajustar o modelo de random forest aos dados, definimos o modelo com a função <code>rand_forest()</code> especificando três hiperparâmetros do modelo: <code>mtry</code>, <code>trees</code> e <code>min_n</code>. Como o modelo de árvore aleatória é uma <em>ensemble</em> (conjunto) de modelos de árvore de decisão, precisamos definir o número de árvores com <code>trees</code>. Além disto, quando criamos uma árvore, um número fixo de variáveis (<code>mtry</code>) é escolhido aleatoriamente quando um nó se divide em dois (split). Enquanto que <code>min_n</code> representa o número mínimo de observações que devem existir em um nó para que o modelo de árvore de decisão continue produzindo <em>splits</em>.</p>
+<p>Neste primeiro momento, vamos fixar estes valores com base no nosso achismo, e declara-los na função <code>rand_forest</code>. Depois informamos em <code>set_mode</code> que desejamos estimar um modelo de classificação (e não de regressão), por fim, escolhemos a implementação do algorítimo de random forest com <code>set_engine</code>.</p>
+</div>
+<div id="combinando-tudo-workflows" class="section level1">
+<h1>Combinando tudo: <code>workflows</code></h1>
+<p>Agora temos os três ingredientes mais importantes para nosso modelo preditivo: (1) temos as bases de treinamento e teste, (2) temos uma receita de bolo com o passo-a-passo do pré-processamento que deve ser aplicado em todas as bases de dados; e (3) declaramos o modelo que deve ser ajustado. Para facilitar a integração de todas essas peças, podemos utilizar o pacote <code>workflows</code>.</p>
+<p>Iniciamos um workflow sempre com a função <code>workflow()</code>. Adicionamos o modelo definido acima com <code>add_model</code> e a receita que deve ser aplicada aos dados com <code>add_recipe</code>. O último passo é o <code>fit</code>, onde passamos a base de treinamento construida pelo pacote <code>rsample</code> para que o random forest seja estimado.</p>
+<pre class="r"><code>workflow_rf &lt;- workflow() %&gt;% 
+  add_model(modelo_rf) %&gt;% 
+  add_recipe(receita_simples) %&gt;% 
+  fit(training(tbl_treinamento_teste))
+workflow_rf</code></pre>
+<pre><code>## == Workflow [trained] ==========================================================
+## Preprocessor: Recipe
+## Model: rand_forest()
+## 
+## -- Preprocessor ----------------------------------------------------------------
+## 3 Recipe Steps
+## 
+## * step_impute_linear()
+## * step_dummy()
+## * step_normalize()
+## 
+## -- Model -----------------------------------------------------------------------
+## Ranger result
+## 
+## Call:
+##  ranger::ranger(x = maybe_data_frame(x), y = y, mtry = min_cols(~3,      x), num.trees = ~200, min.node.size = min_rows(~30, x), num.threads = 1,      verbose = FALSE, seed = sample.int(10^5, 1), probability = TRUE) 
+## 
+## Type:                             Probability estimation 
+## Number of trees:                  200 
+## Sample size:                      5635 
+## Number of independent variables:  30 
+## Mtry:                             3 
+## Target node size:                 30 
+## Variable importance mode:         none 
+## Splitrule:                        gini 
+## OOB prediction error (Brier s.):  0.1347099</code></pre>
+<p>Assim, é possível observar que o modelo foi ajustado para as 5635 observações do conjunto de treinamento. O número de variáveis independentes é igual a 30, como resultado da aplicação da receita sobre as variáveis do banco de dados original. Em <strong>Call</strong> observamos que nossos dados foram aplicados na função <code>ranger::ranger()</code>, como definido no <code>set_engine()</code>.</p>
+</div>
+<div id="avaliando-a-performance-do-modelo-yardstick" class="section level1">
+<h1>Avaliando a Performance do Modelo: <code>yardstick</code></h1>
+<p>O último passo é calibrar o modelo no conjunto de teste e construir medidas de performance do modelo a partir da comparação dos valores previstos e dos valores verdadeiros. Para tanto utilizamos o pacote <code>yardstick</code> e sua função <code>conf_mat()</code> para a construção da matriz de confusão. Para problemas de regressão é possível utilizar a função <code>metrics()</code>, que retorna medidas como RMSE, MAE e R-Quadrado.</p>
+<p>A partir do modelo ajustado que está armazenado no objeto <code>workflow_rf</code>, utilizamos a função <code>predict</code> para produzir o vetor de valores previstos. Com <code>bind_cols</code> criamos um <code>data.frame</code> com valores previstos e os dados observados da base de teste.</p>
+<p>É importante destacar que a base teste sofrerá as mesmas transformações que foram aplicadas na base de treinamento. Isso ocorre porque <code>new_data</code> em <code>predict</code> está herdando a receita de <code>workflow_rf</code>.</p>
+<p>Munido dos dados previstos e dos dados observados, a função <code>conf_mat</code> pode construir nossa matriz de confusão:</p>
+<pre class="r"><code>matriz_confusao &lt;- workflow_rf %&gt;% 
+  predict(new_data = testing(tbl_treinamento_teste)) %&gt;% 
+  bind_cols(testing(tbl_treinamento_teste) %&gt;% select(churn)) %&gt;% 
+  mutate_all(as.factor) %&gt;% 
+  conf_mat(churn, .pred_class)
+
+matriz_confusao %&gt;% 
+  pluck(1) %&gt;% 
+  as_tibble() %&gt;% 
+  ggplot(aes(Prediction, Truth, alpha = n)) +
+  geom_tile(show.legend = FALSE) +
+  labs(x = &quot;Previsto&quot;, y = &quot;Observado&quot;) + 
+  geom_text(aes(label = n), color = &#39;white&#39;, alpha = 1, size = 8)</code></pre>
+<p><img src="/post/analise-de-churn-com-tidymodels-parte-1/index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>A matriz de confusão mostra que o modelo erroneamente previu como negativo 222 clientes que iriam abandonar a empresa. E previu incorretamente que 90 clientes iriam sair da empresa quando na verdade eles permaneceram como clientes.</p>
+<p>A partir da matriz de confusão podemos estimar algumas medidas de performance, como acurácia, precisão e recall.</p>
+<pre class="r"><code>matriz_confusao %&gt;% 
+summary() %&gt;% 
+  select(-.estimator) %&gt;% 
+  filter(.metric %in% c(&#39;precision&#39;, &#39;recall&#39;, &#39;f_meas&#39;,
+                        &#39;accuracy&#39;, &#39;spec&#39;, &#39;sens&#39;)) %&gt;% 
+  rename(Medida = 1, Estimativa = 2) %&gt;% 
+  kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Medida</th>
+<th align="right">Estimativa</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">accuracy</td>
+<td align="right">0.7784091</td>
+</tr>
+<tr class="even">
+<td align="left">sens</td>
+<td align="right">0.4293059</td>
+</tr>
+<tr class="odd">
+<td align="left">spec</td>
+<td align="right">0.9116781</td>
+</tr>
+<tr class="even">
+<td align="left">precision</td>
+<td align="right">0.6498054</td>
+</tr>
+<tr class="odd">
+<td align="left">recall</td>
+<td align="right">0.4293059</td>
+</tr>
+<tr class="even">
+<td align="left">f_meas</td>
+<td align="right">0.5170279</td>
+</tr>
+</tbody>
+</table>
+<p>A <strong>acurácia</strong> do modelo é a fração de previsões que o modelo fez corretamente. Contudo, acurácia não é uma medida muito confiável como ela pode produzir resultados incorretos se a base de dados for muito desbalanceada. No caso, nosso modelo random Forest produziu uma acurácia de 78%. Contudo, 73% das observações no banco de dados são negativas.</p>
+<p>Já a <strong>precisão</strong> mostra o quanto o modelo é sensível a falsos positivos (FP), como prever que um cliente está abandonando a empresa quando na verdade ele vai permanecer. O <strong>recall</strong> procura mostrar o quão sensível o modelo é a falsos negativos (FN), como prever que o cliente irá permanecer quando na verdade ele está saindo.</p>
+<p>Estas duas medidas são mais relevantes no contexto de uma empresa, dado que a firma está interessada em prever de maneira precisa quais clientes realmente estão em risco de se desligar. A previsão correta garante que a empresa pode conduzir estratégias de retenção com estes clientes, ao mesmo tempo que minimiza a possibilidade de aplicar esforços de retenção sob clientes falsos positivos.</p>
+<p>Outra medida popular é o <strong>F1 Score</strong>, que é uma média harmônica da precisão e do recall. Um F1 score obtém seu melhor valor em 1 quando se tem um recall e precisão perfeitos. O nosso modelo obteve um F1 de 0,85. Por fim, temos a medida de UAC-ROC, que vamos utilizar na próxima seção para escolher o melhor modelo.</p>
+</div>
+<div id="conclusão" class="section level1">
+<h1>Conclusão</h1>
+<p>O <code>tidymodels</code> e seus pacotes tornam muito simples a tarefa de aplicar modelos estatísticos e de machine learning para bases de dados. Desde o pré-processamento com <code>recipes</code>, a produção de reamostragens com o <code>rsample</code>, a estimação de modelos com <code>parsnip</code>, a avaliação da qualidade das previsões com <code>yardstick</code> e a criação de workflows com <code>workflow</code>.</p>
+<p>Na <a href="https://dailyregression.netlify.app/post/analise-de-churn-com-tidymodels-parte-2/">próxima parte</a> desta série, vamos analisar o afinamento do modelo de random forest utilizando os pacotes <code>tune</code> e <code>dials</code>.</p>
+</div>
+
+    </div>
+
+    
+
+
+
+
+
+
+
+
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=/post/analise-de-churn-com-tidymodels-parte-1/&amp;text=Analise%20de%20Churn%20com%20Tidymodels%20Parte%201" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=/post/analise-de-churn-com-tidymodels-parte-1/&amp;t=Analise%20de%20Churn%20com%20Tidymodels%20Parte%201" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=Analise%20de%20Churn%20com%20Tidymodels%20Parte%201&amp;body=/post/analise-de-churn-com-tidymodels-parte-1/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=/post/analise-de-churn-com-tidymodels-parte-1/&amp;title=Analise%20de%20Churn%20com%20Tidymodels%20Parte%201" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=Analise%20de%20Churn%20com%20Tidymodels%20Parte%201%20/post/analise-de-churn-com-tidymodels-parte-1/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=/post/analise-de-churn-com-tidymodels-parte-1/&amp;title=Analise%20de%20Churn%20com%20Tidymodels%20Parte%201" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <img class="avatar mr-3 avatar-circle" src="/author/robson-oliveira/avatar_huecec962d4ebaa2f510296f512dd0906d_32502_270x270_fill_q75_lanczos_center.jpg" alt="Robson Oliveira">
+    
+
+    <div class="media-body">
+      <h5 class="card-title">Robson Oliveira</h5>
+      <h6 class="card-subtitle">Professor</h6>
+      <p class="card-text">Data analysis and modelling with a focus on Economics.</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="/robson.lima@ifpb.edu.br" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/robsonol" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/robsonol" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  </div>
+</article>
+  </div>
+
+  <div class="page-footer">
+    
+    
+    <div class="container">
+      <footer class="site-footer">
+
+  
+
+  
+
+  <p class="powered-by">
+    © 2021 Robson Oliveira
+  </p>
+
+  
+  
+
+
+
+
+
+
+  <p class="powered-by">
+    
+    
+    
+      
+      
+      
+      
+      
+      
+      Published with <a href="https://wowchemy.com/?utm_campaign=poweredby" target="_blank" rel="noopener">Wowchemy</a> — the free, <a href="https://github.com/wowchemy/wowchemy-hugo-modules" target="_blank" rel="noopener">open source</a> website builder that empowers creators.
+    
+  </p>
+</footer>
+
+    </div>
+    
+  </div>
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/instant.page/5.1.0/instantpage.min.js" integrity="sha512-1+qUtKoh9XZW7j+6LhRMAyOrgSQKenQ4mluTR+cvxXjP1Z54RxZuzstR/H9kgPXQsVB8IW7DMDFUJpzLjvhGSQ==" crossorigin="anonymous"></script>
+
+      
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      
+
+      
+      
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/highlight.min.js" integrity="sha512-TDKKr+IvoqZnPzc3l35hdjpHD0m+b2EC2SrLEgKDRWpxf2rFCxemkgvJ5kfU48ip+Y+m2XVKyOCD85ybtlZDmw==" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/r.min.js"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/python.min.js"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/latex.min.js"></script>
+        
+      
+
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.js" integrity="sha512-SeiQaaDh73yrb56sTW/RgVdi/mMqNeM2oBwubFHagc5BkixSpP1fvqF47mKzPGWYSSy4RwbBunrJBQ4Co8fRWA==" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+    
+      
+      <script id="search-hit-fuse-template" type="text/x-template">
+        <div class="search-hit" id="summary-{{key}}">
+          <div class="search-hit-content">
+            <div class="search-hit-name">
+              <a href="{{relpermalink}}">{{title}}</a>
+              <div class="article-metadata search-hit-type">{{type}}</div>
+              <p class="search-hit-description">{{snippet}}</p>
+            </div>
+          </div>
+        </div>
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    <script src="/js/bootstrap.bundle.min.6aed84840afc03ab4d5750157f69c120.js"></script>
+
+    
+    
+      
+      
+      
+      
+      
+      
+      
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+      
+      
+    
+    
+    <script src="/en/js/wowchemy.min.b61a8f62b6e5c0cd322c8158c5b5dfb6.js"></script>
+
+    
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+
+
+
+</body>
+</html>

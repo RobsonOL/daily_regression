@@ -1,5 +1,5 @@
 ---
-bio: My research interests include causality and predictive modelling.
+bio: Data analysis and modelling with a focus on Economics.
 education:
   courses:
   - course: Doc in Economics
