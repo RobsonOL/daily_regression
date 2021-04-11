@@ -351,23 +351,46 @@ Para nosso exemplo, o novo $\beta_1$ é positivo e igual a $\beta_1 = 471$, um r
 
 Quando movimentos em outras variáveis confundem o efeito do preço sobre a quantidade, a correlação entre preço e quantidade não tem nenhuma interpretação causal. Para garantir que nossos resultados representam o efeito de $X$ em $Y$ podemos fazer uso de experimentos aleatorizados. 
 
-Um método comum de experimentos aleatórios é o chamado teste AB, em que um conjunto de usuários é aleatoriamente escolhido para participar de um grupo de **tratamento**, onde alguma intervenção é realizada. Por outro lado, um outro conjunto de usuários são atribuidos aleatoriamente a um grupo de **controle**. A importância dos dois grupos está na possibilidade de realizar comparações entre um grupo de indivíduos que sofreu um tratamento e outro que não. Já a atribuição aleatória garante que estamos eliminando a possibilidade de que fatores confundidores estejam prejudicando nossas estimativas da intervenção sobre a nossa métrica de interesse. 
+Um método comum de experimentos aleatórios é o chamado teste AB, em que um conjunto de usuários é aleatoriamente escolhido para participar de um grupo de **tratamento**, onde alguma intervenção é realizada. Por outro lado, um outro conjunto de usuários são atribuidos aleatoriamente a um grupo de **controle**. A importância dos dois grupos está na possibilidade de realizar comparações entre um grupo de indivíduos que sofreu um tratamento e outro que não. 
 
-Por exemplo, ao incluir uma característica nova ao nosso site fictício, podemos estar interessados em aumentar o engajamento dos usuários. Para testar o efeito desta mudança sobre nossa métrica, podemos permitir que apenas um sub-conjunto de usuários interaja com o novo site. Mas como esses usuários são escolhidos para o tratamento? poderiamos incluir um botão que leva o cliente para o novo site. Mas este modelo de seleção poderia viesar nossas estimativas do efeito da mudança sobre o engajamento, dado que usuários mais curiosos podem ser naturalmente mais engajados. A diferença entre os usuários tratados e não tratados pareceria maior do que de fato é.
+Já a atribuição aleatória garante que estamos eliminando a possibilidade de que fatores confundidores estejam prejudicando nossas estimativas da intervenção sobre a nossa métrica de interesse. Por exemplo, ao incluir uma característica nova ao nosso site fictício, podemos estar interessados em aumentar o engajamento dos usuários. Para testar o efeito desta mudança sobre nossa métrica, podemos permitir que apenas um sub-conjunto de usuários interaja com o novo site. Mas como esses usuários são escolhidos para o tratamento? poderiamos incluir um botão que leva o cliente para o novo site. Mas este modelo de seleção poderia viesar nossas estimativas do efeito da mudança sobre o engajamento, dado que usuários mais curiosos podem ser naturalmente mais engajados. O efeito da mudança no site sobre o engajamento pareceria maior do que realmente é.
 
 Assim, o processo aleatório elimina o problema de **viés de seleção**, e garante que os indivíduos tratados e não tratados venham da mesma população e sejam estatísticamente semelhantes em todas as suas características. A probabilidade de alguém que gosta muito do nosso produto estar no grupo de tratamento é muito parecida com a probabilidade de estar no grupo de controle. Da mesma forma, a proporção de clientes homens e mulheres deve refletir o que é observado na população, etc.
 
-Em relação à experimentos envolvendo mudanças de preços, a empresa pode gerar mudanças de preço em ponto específico no tempo; pode testar diferenças de preços entre diferentes produtos; ou diferentes subgrupos de clientes. Estas são formas de testar o efeito de variação no preço sem se preocupar com o efeito de fatores confundidores. Nosso resultado de $\beta_1 = -1917,5$ foi o resultado de uma mudança exógena do preço, de modo que metade dos usuários foram tratados, e a outra metade não. 
+Em relação à experimentos envolvendo mudanças de preços, a empresa pode gerar mudanças de preço em ponto específico no tempo; pode testar diferenças de preços entre diferentes produtos; ou diferentes subgrupos de clientes. Estas são formas de testar o efeito de variação no preço sem se preocupar com o efeito de fatores confundidores.
 
-Contudo, nem sempre experimentos são possíveis. Muitas vezes eles podem impactar negativamente a experiência dos clientes, já que ele pode representar um desvio da sua experiência habitual. Experimentos aleatorizados também podem ser caros de ser implementados. E em relação à experimentos envolvendo mudanças de preço, eles podem ser percebidos como anti-éticos pelos consumidores, e podem produzir perda de confiança.
+Contudo, nem sempre experimentos são possíveis. Muitas vezes eles podem impactar negativamente a experiência dos clientes, já que ele pode representar um desvio da sua experiência habitual. Experimentos aleatorizados também podem ser caros de ser implementados. E em relação à experimentos envolvendo mudanças de preço, eles podem ser percebidos como anti-éticos pelos consumidores, podendo até mesmo produzir perda de confiança.
 
 ## Regressão com Controles
 
 Quando experimentos aleatorizados não são possíveis, o uso de dados históricos (chamados **dados observacionais**) podem ser utilizados para recuperar coeficientes causais utilizando algumas ferramentas, sob certas condições. 
 
-A ferramenta mais básica é o uso da regressão com controles. Com ela podemos realizar comparações envolvendo observações do tratamento e controle que possuem as mesmas características. No segundo caso, em que discutimos o efeito da qualidade e do preço sobre a quantidade vendida, podemos comparar os grupos de controle (preço menor) e de tratamento (preço maior) mantendo a qualidade do produto constante. Como são 9 níveis de qualidade ($u_1, u_2, ..., u_9$), devemos mensurar o efeito do aumento de preço dentro de cada categoria. 
+A ferramenta mais básica é o uso da regressão com controles. Com ela podemos realizar comparações envolvendo observações do tratamento e controle que possuam as mesmas características. No segundo caso, em que discutimos o efeito da qualidade e do preço sobre a quantidade vendida, podemos comparar os grupos de controle (preço menor) e de tratamento (preço maior) mantendo a qualidade do produto constante. Como são 10 níveis de qualidade ($u_1, u_2, ..., u_10$), devemos mensurar o efeito do aumento de preço dentro de cada categoria. 
 
-Para tanto, podemos realizar uma regressão linear que além de incluir o preço como um preditor, também inclui uma variável que captura a qualidade do produto. Como nossos dados foram construídos de modo sintético, temos a certeza de que apenas estes dois fatores influenciam a decisão de compra, de modo que uma regressão com `preços` e `qualidade` consegue separar bem os efeitos do preço sobre a quantidade ($\frac{\delta q}{\delta p}$) do o efeito da qualidade sobre a quantidade ($\frac{\delta q}{\delta u}$). 
+Para tanto, podemos realizar uma regressão para cada grupo de qualidade. Como temos 10 grupos, realizamos 10 regressões, com cada grupo tendo um nível de qualidade constante. A tabela abaixo mostra que para todos as 10 regressões, o efeito do preço é negativo, como esperado.
+
+```{r}
+regressao_por_qualidade <- df_diario_2 %>% 
+  group_by(qualidade) %>% 
+  # nest permite criar 10 dataframes a partir da nossa base de dados.
+  nest() %>% 
+  # aqui rodamos o modelo lm() e salvamos o resultado para cada grupo.
+  mutate(fit = map(data, ~lm(quantidade ~ precos, data = .)),
+         results = map(fit, broom::tidy)) %>% 
+  unnest(results) %>%
+  filter(term == 'precos') %>% 
+  select(-data, -fit, -term) %>% 
+  rename(Efeito_Preco = estimate) %>% 
+  ungroup() %>% 
+  mutate_if(is.numeric, round, 2)
+  
+regressao_por_qualidade %>% 
+  kableExtra::kable()
+```
+
+
+
+A forma de estimar acima é apenas ilustrativa. De modo muito mais simples, podemos realizar uma regressão linear que além de incluir o preço como um preditor, também inclui a variável `qualidade`. Como nossos dados foram construídos de modo sintético, temos a certeza de que apenas estes dois fatores influenciam a decisão de compra, de modo que uma regressão de `quantidade` com  `preços` e `qualidade` como regressores consegue separar bem os efeitos do preço sobre a quantidade ($\frac{\delta q}{\delta p}$) do o efeito da qualidade sobre a quantidade ($\frac{\delta q}{\delta u}$). 
 
 
 ```{r}

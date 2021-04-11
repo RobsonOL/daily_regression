@@ -422,16 +422,226 @@ precos
 <div id="técnicas-de-inferência-causal" class="section level1">
 <h1>Técnicas de Inferência Causal</h1>
 <p>Quando movimentos em outras variáveis confundem o efeito do preço sobre a quantidade, a correlação entre preço e quantidade não tem nenhuma interpretação causal. Para garantir que nossos resultados representam o efeito de <span class="math inline">\(X\)</span> em <span class="math inline">\(Y\)</span> podemos fazer uso de experimentos aleatorizados.</p>
-<p>Um método comum de experimentos aleatórios é o chamado teste AB, em que um conjunto de usuários é aleatoriamente escolhido para participar de um grupo de <strong>tratamento</strong>, onde alguma intervenção é realizada. Por outro lado, um outro conjunto de usuários são atribuidos aleatoriamente a um grupo de <strong>controle</strong>. A importância dos dois grupos está na possibilidade de realizar comparações entre um grupo de indivíduos que sofreu um tratamento e outro que não. Já a atribuição aleatória garante que estamos eliminando a possibilidade de que fatores confundidores estejam prejudicando nossas estimativas da intervenção sobre a nossa métrica de interesse.</p>
-<p>Por exemplo, ao incluir uma característica nova ao nosso site fictício, podemos estar interessados em aumentar o engajamento dos usuários. Para testar o efeito desta mudança sobre nossa métrica, podemos permitir que apenas um sub-conjunto de usuários interaja com o novo site. Mas como esses usuários são escolhidos para o tratamento? poderiamos incluir um botão que leva o cliente para o novo site. Mas este modelo de seleção poderia viesar nossas estimativas do efeito da mudança sobre o engajamento, dado que usuários mais curiosos podem ser naturalmente mais engajados. A diferença entre os usuários tratados e não tratados pareceria maior do que de fato é.</p>
+<p>Um método comum de experimentos aleatórios é o chamado teste AB, em que um conjunto de usuários é aleatoriamente escolhido para participar de um grupo de <strong>tratamento</strong>, onde alguma intervenção é realizada. Por outro lado, um outro conjunto de usuários são atribuidos aleatoriamente a um grupo de <strong>controle</strong>. A importância dos dois grupos está na possibilidade de realizar comparações entre um grupo de indivíduos que sofreu um tratamento e outro que não.</p>
+<p>Já a atribuição aleatória garante que estamos eliminando a possibilidade de que fatores confundidores estejam prejudicando nossas estimativas da intervenção sobre a nossa métrica de interesse. Por exemplo, ao incluir uma característica nova ao nosso site fictício, podemos estar interessados em aumentar o engajamento dos usuários. Para testar o efeito desta mudança sobre nossa métrica, podemos permitir que apenas um sub-conjunto de usuários interaja com o novo site. Mas como esses usuários são escolhidos para o tratamento? poderiamos incluir um botão que leva o cliente para o novo site. Mas este modelo de seleção poderia viesar nossas estimativas do efeito da mudança sobre o engajamento, dado que usuários mais curiosos podem ser naturalmente mais engajados. O efeito da mudança no site sobre o engajamento pareceria maior do que realmente é.</p>
 <p>Assim, o processo aleatório elimina o problema de <strong>viés de seleção</strong>, e garante que os indivíduos tratados e não tratados venham da mesma população e sejam estatísticamente semelhantes em todas as suas características. A probabilidade de alguém que gosta muito do nosso produto estar no grupo de tratamento é muito parecida com a probabilidade de estar no grupo de controle. Da mesma forma, a proporção de clientes homens e mulheres deve refletir o que é observado na população, etc.</p>
-<p>Em relação à experimentos envolvendo mudanças de preços, a empresa pode gerar mudanças de preço em ponto específico no tempo; pode testar diferenças de preços entre diferentes produtos; ou diferentes subgrupos de clientes. Estas são formas de testar o efeito de variação no preço sem se preocupar com o efeito de fatores confundidores. Nosso resultado de <span class="math inline">\(\beta_1 = -1917,5\)</span> foi o resultado de uma mudança exógena do preço, de modo que metade dos usuários foram tratados, e a outra metade não.</p>
-<p>Contudo, nem sempre experimentos são possíveis. Muitas vezes eles podem impactar negativamente a experiência dos clientes, já que ele pode representar um desvio da sua experiência habitual. Experimentos aleatorizados também podem ser caros de ser implementados. E em relação à experimentos envolvendo mudanças de preço, eles podem ser percebidos como anti-éticos pelos consumidores, e podem produzir perda de confiança.</p>
+<p>Em relação à experimentos envolvendo mudanças de preços, a empresa pode gerar mudanças de preço em ponto específico no tempo; pode testar diferenças de preços entre diferentes produtos; ou diferentes subgrupos de clientes. Estas são formas de testar o efeito de variação no preço sem se preocupar com o efeito de fatores confundidores.</p>
+<p>Contudo, nem sempre experimentos são possíveis. Muitas vezes eles podem impactar negativamente a experiência dos clientes, já que ele pode representar um desvio da sua experiência habitual. Experimentos aleatorizados também podem ser caros de ser implementados. E em relação à experimentos envolvendo mudanças de preço, eles podem ser percebidos como anti-éticos pelos consumidores, podendo até mesmo produzir perda de confiança.</p>
 <div id="regressão-com-controles" class="section level2">
 <h2>Regressão com Controles</h2>
 <p>Quando experimentos aleatorizados não são possíveis, o uso de dados históricos (chamados <strong>dados observacionais</strong>) podem ser utilizados para recuperar coeficientes causais utilizando algumas ferramentas, sob certas condições.</p>
-<p>A ferramenta mais básica é o uso da regressão com controles. Com ela podemos realizar comparações envolvendo observações do tratamento e controle que possuem as mesmas características. No segundo caso, em que discutimos o efeito da qualidade e do preço sobre a quantidade vendida, podemos comparar os grupos de controle (preço menor) e de tratamento (preço maior) mantendo a qualidade do produto constante. Como são 9 níveis de qualidade (<span class="math inline">\(u_1, u_2, ..., u_9\)</span>), devemos mensurar o efeito do aumento de preço dentro de cada categoria.</p>
-<p>Para tanto, podemos realizar uma regressão linear que além de incluir o preço como um preditor, também inclui uma variável que captura a qualidade do produto. Como nossos dados foram construídos de modo sintético, temos a certeza de que apenas estes dois fatores influenciam a decisão de compra, de modo que uma regressão com <code>preços</code> e <code>qualidade</code> consegue separar bem os efeitos do preço sobre a quantidade (<span class="math inline">\(\frac{\delta q}{\delta p}\)</span>) do o efeito da qualidade sobre a quantidade (<span class="math inline">\(\frac{\delta q}{\delta u}\)</span>).</p>
+<p>A ferramenta mais básica é o uso da regressão com controles. Com ela podemos realizar comparações envolvendo observações do tratamento e controle que possuam as mesmas características. No segundo caso, em que discutimos o efeito da qualidade e do preço sobre a quantidade vendida, podemos comparar os grupos de controle (preço menor) e de tratamento (preço maior) mantendo a qualidade do produto constante. Como são 10 níveis de qualidade (<span class="math inline">\(u_1, u_2, ..., u_10\)</span>), devemos mensurar o efeito do aumento de preço dentro de cada categoria.</p>
+<p>Para tanto, podemos realizar uma regressão para cada grupo de qualidade. Como temos 10 grupos, realizamos 10 regressões, com cada grupo tendo um nível de qualidade constante. A tabela abaixo mostra que para todos as 10 regressões, o efeito do preço é negativo, como esperado.</p>
+<pre class="r"><code>regressao_por_qualidade &lt;- df_diario_2 %&gt;% 
+  group_by(qualidade) %&gt;% 
+  # nest permite criar 10 dataframes a partir da nossa base de dados.
+  nest() %&gt;% 
+  # aqui rodamos o modelo lm() e salvamos o resultado para cada grupo.
+  mutate(fit = map(data, ~lm(quantidade ~ precos, data = .)),
+         results = map(fit, broom::tidy)) %&gt;% 
+  unnest(results) %&gt;%
+  filter(term == &#39;precos&#39;) %&gt;% 
+  select(-data, -fit, -term) %&gt;% 
+  rename(Efeito_Preco = estimate) %&gt;% 
+  ungroup() %&gt;% 
+  mutate_if(is.numeric, round, 2)
+  
+regressao_por_qualidade %&gt;% 
+  kableExtra::kable()</code></pre>
+<table>
+<thead>
+<tr>
+<th style="text-align:right;">
+qualidade
+</th>
+<th style="text-align:right;">
+Efeito_Preco
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0.10
+</td>
+<td style="text-align:right;">
+-825.37
+</td>
+<td style="text-align:right;">
+335.89
+</td>
+<td style="text-align:right;">
+-2.46
+</td>
+<td style="text-align:right;">
+0.04
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+0.19
+</td>
+<td style="text-align:right;">
+-1706.89
+</td>
+<td style="text-align:right;">
+345.66
+</td>
+<td style="text-align:right;">
+-4.94
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+0.28
+</td>
+<td style="text-align:right;">
+-1872.18
+</td>
+<td style="text-align:right;">
+634.29
+</td>
+<td style="text-align:right;">
+-2.95
+</td>
+<td style="text-align:right;">
+0.02
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+0.37
+</td>
+<td style="text-align:right;">
+-2054.42
+</td>
+<td style="text-align:right;">
+470.70
+</td>
+<td style="text-align:right;">
+-4.36
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+0.46
+</td>
+<td style="text-align:right;">
+-1875.36
+</td>
+<td style="text-align:right;">
+422.33
+</td>
+<td style="text-align:right;">
+-4.44
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+0.54
+</td>
+<td style="text-align:right;">
+-1279.90
+</td>
+<td style="text-align:right;">
+342.33
+</td>
+<td style="text-align:right;">
+-3.74
+</td>
+<td style="text-align:right;">
+0.01
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+0.63
+</td>
+<td style="text-align:right;">
+-2523.79
+</td>
+<td style="text-align:right;">
+329.76
+</td>
+<td style="text-align:right;">
+-7.65
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+0.72
+</td>
+<td style="text-align:right;">
+-1991.90
+</td>
+<td style="text-align:right;">
+577.36
+</td>
+<td style="text-align:right;">
+-3.45
+</td>
+<td style="text-align:right;">
+0.01
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+0.81
+</td>
+<td style="text-align:right;">
+-1897.61
+</td>
+<td style="text-align:right;">
+485.31
+</td>
+<td style="text-align:right;">
+-3.91
+</td>
+<td style="text-align:right;">
+0.01
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+0.90
+</td>
+<td style="text-align:right;">
+-2013.10
+</td>
+<td style="text-align:right;">
+207.37
+</td>
+<td style="text-align:right;">
+-9.71
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+</tr>
+</tbody>
+</table>
+<p>A forma de estimar acima é apenas ilustrativa. De modo muito mais simples, podemos realizar uma regressão linear que além de incluir o preço como um preditor, também inclui a variável <code>qualidade</code>. Como nossos dados foram construídos de modo sintético, temos a certeza de que apenas estes dois fatores influenciam a decisão de compra, de modo que uma regressão de <code>quantidade</code> com <code>preços</code> e <code>qualidade</code> como regressores consegue separar bem os efeitos do preço sobre a quantidade (<span class="math inline">\(\frac{\delta q}{\delta p}\)</span>) do o efeito da qualidade sobre a quantidade (<span class="math inline">\(\frac{\delta q}{\delta u}\)</span>).</p>
 <pre class="r"><code>df_diario_2 %&gt;% 
   # lm() estima um modelo de regressão linear
   lm(quantidade ~ precos + qualidade, .) %&gt;% 
