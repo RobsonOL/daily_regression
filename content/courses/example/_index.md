@@ -1,41 +1,42 @@
 ---
 date: "2021-01-24"
-linkTitle: Data Science
-summary: An example of using Wowchemy's Book layout for publishing online courses.
-title: "\U0001F4CA Learn Data Science"
+linkTitle: Introdução à Ciências de Dados com R
+summary: Curso introdutório sobre o pacote tidyverse.
+title: "\U0001F4CA Introdução à Ciências de Dados com R"
 type: book
 ---
 
-{{< figure src="featured.jpg" >}}
+{{< figure src="tidyverse-packages.png" >}}
+
+<a href="slides/Aula01/Aula01_Intro.html">HomeHost</a></p>
 
 {{< toc hide_on="xl" >}}
 
-## What you will learn
+## O que você vai aprender
 
-- Fundamental {{<hl>}}Python programming skills{{</hl>}}
-- {{<hl>}}Statistical concepts{{</hl>}} and how to apply them in practice
-- Gain experience with the {{<hl>}}Scikit{{</hl>}}, including data visualization with {{<hl>}}Plotly{{</hl>}} and data wrangling with {{<hl>}}Pandas{{</hl>}}
+- Habilidades básicas {{<hl>}}de programação em R{{</hl>}}
+- Adquirir experiência com {{<hl>}}Tidyverse{{</hl>}}, incluindo visualização com {{<hl>}}ggplot{{</hl>}} e transformação de dados com {{<hl>}}dplyr{{</hl>}}.
 
-## Program overview
+## Resumo do Programa
 
-The demand for skilled data science practitioners is rapidly growing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis posuere tellus ac convallis placerat. Proin tincidunt magna sed ex sollicitudin condimentum. Sed ac faucibus dolor, scelerisque sollicitudin nisi.
+A demanda por praticamentes de ciências de dados está em rápido crescimento. Nesse curso você será introduzido aos conceitos básicos de importação de dados, transformação, visualização, modelagem e comunicação de informações.
 
-## Courses in this program
+## Material deste Curso
 
 {{< list_children >}}
 
-## Meet your instructor
+## Instrutor
 
 {{< mention "admin" >}}
 
-## FAQs
+## Perguntas Frequentes
 
-{{< spoiler text="Are there prerequisites?" >}}
-There are no prerequisites for the first course.
+{{< spoiler text="Existem pré-requisitos?" >}}
+Sem pré-requisitos. Este é um curso introdutório.
 {{< /spoiler >}}
 
-{{< spoiler text="How often do the courses run?" >}}
-Continuously, at your own pace.
+{{< spoiler text="Qual a duração do curso?" >}}
+O curso tem uma duração de 4 meses.
 {{< /spoiler >}}
 
-{{< cta cta_text="Begin the course" cta_link="python" >}}
+{{< cta cta_text="Comece o curso" cta_link="intro" >}}

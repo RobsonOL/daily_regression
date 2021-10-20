@@ -1,0 +1,394 @@
+---
+title: "R for Data Science"
+author: Dr. Robson Oliveira
+output:
+  revealjs::revealjs_presentation:
+    theme: white
+    incremental: true
+    highlight: kate
+    reveal_plugins: ["notes", "menu", "chalkboard", "zoom"]
+    center: true
+    transition: fade
+    background_transition: slide
+    self_contained: false
+    reveal_options:
+      slideNumber: true
+      previewLinks: true
+
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
+</style>
+
+
+
+```{css css-settings, echo=FALSE}
+
+.reveal section img { background:none; border:none; box-shadow:none; }
+
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  font-family: 'Roboto', sans-serif;
+}
+
+.reveal .slide {
+  font-family: 'Roboto', sans-serif;
+}
+```
+
+---
+
+```{r, out.width = "400px"}
+library(png)
+knitr::include_graphics("imagem/dscience.png")
+
+```
+---
+
+## Por que R?
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+data.frame(linguagem = c("Python", "SQL", "Java", "R", "Visual Basic", "JavaScript", "C++", "C#"), posts = c(70497, 69033, 59369, 55978, 54253, 49724, 35034, 27525)) %>% 
+  ggplot(aes(x = fct_reorder(linguagem, desc(posts)), y = posts, fill = linguagem)) +
+  geom_col() + 
+  theme_minimal() +
+  labs(x = "", y = "", title = "Postagens de Emprego por linguagem de programação", subtitle = "Popularidade de Python e R") +
+  theme(legend.position = 'none')
+```
+
+# O que você vai aprender
+
+```{r, out.width = "600px"}
+library(png)
+knitr::include_graphics("imagem/data-science.png")
+
+```
+
+
+## Importar
+
+```{r, out.width = "600px"}
+library(png)
+knitr::include_graphics("imagem/import_r.png")
+
+```
+
+## Tidy
+
+```{r, out.width = "600px"}
+library(png)
+knitr::include_graphics("imagem/tidy-1.png")
+
+```
+
+* **Variáveis** nas colunas
+
+* **Observações** nas linhas
+
+* **Valores** nas celulas
+
+## Transformar
+
+```{r, eval=F, echo=T}
+dados %>% 
+  filter(...) %>% # Ex.: Filtrar apenas funcionários do setor A
+  select(...) %>% # Ex.: Selecionar variável nome e salário
+  mutate(...) %>% # Ex.: Criar salário com reajuste
+  summarise(...)  # Ex.: Calcular a média salarial daquele setor
+```
+
+
+## Visualizar
+
+
+```{r echo=FALSE, fig.height=4, fig.width=5, message=FALSE, warning=FALSE}
+library(tidyverse, gridExtra)
+
+bp <- ggplot(ggplot2::diamonds, aes(y=price, x=cut, color=cut)) +
+  geom_boxplot() + 
+  theme_minimal() +
+  labs(y = "Preço", x = "Qualidade do Corte", title = "Diamantes", subtitle = "Preço x qualidade do corte") +
+  theme(legend.position = "none")
+# Create a dot plot
+# Add the mean point and the standard deviation
+dp <- ggplot(ggplot2::diamonds, aes(x=price, y=carat, color=cut)) +
+  geom_point() +
+  labs(y = "Quilate", x = "Preço", title = "Diamantes", subtitle = "Quilate x preço") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+# Create a violin plot
+vp <- ggplot2::diamonds %>% 
+  group_by(cut) %>% summarise(media_preco = mean(price)) %>%
+  ggplot(aes(x=cut, y=media_preco, fill = as.factor(media_preco))) +
+  geom_col() +
+  labs(y = "Preço médio", x = "Qualidade do Corte", title = "Diamantes", subtitle = "Corte x Preço médio") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+p5 <- ggplot2::diamonds %>%
+  ggplot(aes(x = price)) +
+  geom_density() +
+  labs(y = "Densidade", x = "Preço", title = "Diamantes", subtitle = "Distribuição de Preços") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+gridExtra::grid.arrange(bp, dp, vp, p5, ncol=2, nrow =2, padding = 2)
+
+```
+
+
+---
+
+## Modelo
+
+```{r echo=FALSE, fig.height=4, fig.width=5, message=FALSE, warning=FALSE}
+library(ggpmisc)
+df <- data.frame(x = c(1:100))
+df$y <- 20 * c(0, 1) + 3 * df$x + rnorm(100, sd = 40)
+df$group <- factor(rep(c("A", "B"), 50))
+my.formula <- y ~ x
+
+p <- ggplot(data = df, aes(x = x, y = y, color = group)) +
+  geom_smooth(method = "lm", se=FALSE, formula = my.formula) +
+  stat_poly_eq(formula = my.formula, 
+               aes(label = paste(..eq.label.., ..rr.label.., sep = "~~~")), 
+               parse = TRUE) +         
+  geom_point() +
+  facet_wrap(~group)
+p
+
+
+```
+
+## Comunicação
+
+```{r, out.width = "400px"}
+library(png)
+knitr::include_graphics("imagem/storytelling.png")
+
+```
+
+## Tidyverse
+
+
+```{r, out.width = "500px"}
+library(png)
+knitr::include_graphics("imagem/tidyverse.png")
+
+```
+
+---
+
+# R & RStudio
+
+* **R** é a linguagem de programação utilizada para realizar as computações.
+
+* **RStudio** é a IDE, que oferece um ambiente de desenvolvimento mais amigável para o R.
+---
+
+
+```{r, out.width = "300px"}
+library(png)
+knitr::include_graphics("imagem/rstudio.png")
+
+```
+
+O RStudio é dividido em 4 sub janelas: 
+
+* (1) **Script**: onde ficarão os códigos.
+
+* (2) **Console**: onde o código é executado.
+
+* (3) **Enviroment/outros**: exibe os objetos criados.
+
+* (4) **Files/Plots/etc**: Exibe os arquivos da pasta de trabalho e os gráficos.
+
+
+
+---
+
+### Básico de código
+
+Você pode usar o R como uma calculadora:
+
+```{r echo=TRUE}
+(59 + 73 + 2) / 3
+```
+```{r echo=TRUE}
+1 / 200 * 30
+```
+
+---
+
+### Básico de código
+
+
+Pode criar novos objetos com `<-`:
+
+```{r echo=TRUE}
+# Olhe pra janela `Environment` depois de executar:
+x <- 3 * 4
+```
+
+Toda criação de objeto segue a mesma forma:
+
+```{r, eval=F, echo=T}
+# nome_objeto assume o valor específico.
+nome_objeto <- valor
+```
+
+Para inspecionar o objeto, execute seu nome precisamente
+
+```{r echo=TRUE}
+x
+```
+
+---
+
+### Nome dos objetos
+
+Nome de objetos precisam:
+
+* Começar com letras
+
+* Conter apenas letras, números, underline e ponto.
+
+* Existem várias convenções sobre a melhor forma de dar nome aos objetos.
+
+* Eles precisam ser descritivos. 
+
+---
+
+### Nome dos objetos
+
+Recomendo o sistema **snake_case**: palavras em minúsculo separados por `_`.
+
+```{r, eval =F, echo=TRUE}
+nome_da_variavel
+dados_funcionario
+pib_municipal
+```
+
+
+---
+
+### Chamando funções
+
+Funções tomam argumentos e retornam um resultado:
+
+```{r, eval=F, echo=T}
+nome_funcao(arg1 = valor1, arg2 = valor2, ...)
+```
+
+Podemos usar `seq()` para criar uma sequência de números. Essa função precisa do valor inicial e final:
+
+```{r echo=TRUE}
+seq(1, 10)
+```
+
+---
+
+### Chamando funções
+
+As funções podem ter argumentos padrão (default), como `seq` que determina o espaçamento entre números para 1. Podemos modificar isso se quisermos:
+
+```{r}
+seq(1, 10, by = 2)
+```
+Ou podemos determinar o tamanho da sequência:
+
+```{r}
+seq(1, 10, length.out = 5)
+```
+
+---
+
+### Pedindo ajuda
+
+Mas como descobrir o nome desses argumentos?
+
+```{r, eval=F, echo=T}
+?seq
+
+# ou
+
+help("seq")
+```
+
+Alternativamente, você pode selecionar o nome da função e clicar F1 no RStudio.
+
+---
+
+### Fluxo de Trabalho: Scripts
+
+* É sempre uma boa ideia usar scripts. Nele você pode salvar seu código para reutilizar novamente
+
+* Clique em `File`, selecione `New File`, então `R script`. 
+
+* Você pode rodar uma linha de código e executar com `Ctrl + Enter`.
+
+
+* Selecionando várias linhas é possível executar várias linhas de código de uma vez.
+
+* Salve o código com `Ctrl + S` para reutiliza-lo.
+
+---
+
+* **Dica:** sempre comece o código carregando os pacotes (library) importantes: `library(tidyverse)`.
+
+* Caso contrário, as funções não ficam a sua disposição.
+
+
+
+---
+
+### Fluxo de trabalho: Projetos
+
+* Crie um projeto RStudio para cada projeto de análise de dados.
+
+* Assim, você mantem todos os arquivos associados a um projeto em um lugar só: dados, scripts, figuras, resultados.
+
+
+---
+
+
+```{r, out.width = "400px"}
+library(png)
+knitr::include_graphics("imagem/new_project1.png")
+
+```
+
+
+```{r, out.width = "400px"}
+library(png)
+knitr::include_graphics("imagem/new_project2.png")
+
+```
+
+```{r, out.width = "400px"}
+library(png)
+knitr::include_graphics("imagem/new_project3.png")
+
+```
+---
+
+# Referências
+
+http://electionsbr.com/livro/introducao-ao-r.html
+
+https://danmrc.github.io/R-para-Economistas/
+
+https://r4ds.had.co.nz/
+

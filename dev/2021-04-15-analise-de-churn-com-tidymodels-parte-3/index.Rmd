@@ -1,0 +1,189 @@
+---
+title: Analise de Churn com Tidymodels - Parte 3
+author: ''
+date: '2021-04-15'
+slug: analise-de-churn-com-tidymodels-parte-3
+categories: []
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2021-04-15T11:36:37-03:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+
+
+
+```{r include = FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      message = FALSE, 
+                      warning = FALSE)
+options(kableExtra.html.bsTable = TRUE)
+
+```
+
+```{r}
+library(tidyverse)
+library(tidymodels)
+library(skimr)
+library(knitr)
+library(doFuture)
+library(discrim)
+library(workflowsets)
+library(ranger)
+library(kknn)
+library(glmnet)
+
+data(wa_churn, package = "modeldata")
+
+set.seed(123)
+
+# base de treinamento e teste
+tbl_treinamento_teste <- initial_split(data = wa_churn, prop = 0.8)
+
+# Conjunto de cross validation
+reamostagens_treinamento <- vfold_cv(training(tbl_treinamento_teste), v = 10)
+
+# pré-processamento
+receita_simples <- recipe(churn ~ ., data = training(tbl_treinamento_teste)) %>% 
+  step_medianimpute(all_numeric()) %>% 
+  step_normalize(all_numeric()) %>% 
+  step_dummy(all_nominal(), -all_outcomes()) %>% 
+  step_nzv(all_predictors()) %>% 
+  step_lincomb(all_predictors())
+
+x <- receita_simples %>% prep() %>% juice() 
+#x %>% View()
+#library(mctest)
+#model <- glm(churn ~ ., data = x, family = 'binomial')
+#model %>% summary()
+#omcdiag(model)
+```
+
+
+```{r}
+### modelos
+
+# Analise de decriminante linear
+modelo_lda <- 
+  discrim_linear(penalty = tune()) %>% 
+  set_engine("mda")
+
+# regressão logistica
+modelo_logit <- 
+  logistic_reg(penalty = tune(), mixture = tune()) %>% 
+  set_engine("glmnet") %>% 
+  set_mode("classification")
+  
+# knn
+modelo_knn <- 
+  nearest_neighbor(neighbors = tune()) %>% 
+  set_mode("classification") %>% 
+  set_engine("kknn") 
+  
+# decision tree
+modelo_tree <- 
+  decision_tree(cost_complexity = tune(), min_n = tune()) %>% 
+  set_mode("classification") %>% 
+  set_engine("rpart")
+
+# random forest
+modelo_rf <-
+  rand_forest(mtry = tune(), trees = tune(), min_n = tune()) %>% 
+  set_mode("classification") %>% 
+  set_engine("ranger")
+
+```
+
+
+```{r}
+# todos os workflows
+
+conjunto_workflow <- 
+  workflow_set(
+    preproc = list(base = receita_simples),
+    models = list(lda = modelo_lda, 
+                  logit = modelo_logit,
+                  knn = modelo_knn,
+                  tree = modelo_tree,
+                  randomF = modelo_rf)
+  )
+conjunto_workflow
+```
+
+
+```{r}
+conjunto_workflow <-
+  conjunto_workflow %>% 
+  workflow_map(resamples = reamostagens_treinamento,
+               grid = 20,
+               verbose = TRUE)
+```
+
+
+```{r}
+conjunto_workflow %>% rank_results(rank_metric = "roc_auc")
+```
+
+```{r}
+conjunto_workflow %>% autoplot(metric = 'roc_auc')
+```
+
+```{r}
+melhor_modelo <- conjunto_workflow %>% 
+  rank_results(rank_metric = "roc_auc") %>% 
+  filter(rank == 1) %>% 
+  filter(.metric == "roc_auc") %>% 
+  pull(wflow_id)
+
+conjunto_workflow %>% autoplot(metric = 'roc_auc', id = melhor_modelo)
+```
+
+```{r}
+workflow_best <-
+  conjunto_workflow %>% 
+  pull_workflow(melhor_modelo)
+
+workflow_best
+```
+```{r}
+param_final <-
+  conjunto_workflow %>% 
+  pull_workflow_set_result(melhor_modelo) %>% 
+  select_best(metric = "roc_auc")
+
+param_final %>% kable()
+```
+
+
+
+```{r}
+wflow_final_fit <- 
+  conjunto_workflow %>% 
+  pull_workflow(melhor_modelo) %>% 
+  finalize_workflow(param_final) %>% 
+  fit(training(tbl_treinamento_teste))
+wflow_final_fit
+
+```
+
+```{r}
+wflow_final_fit %>% 
+   predict(new_data = testing(tbl_treinamento_teste)) %>% 
+  bind_cols(testing(tbl_treinamento_teste) %>% select(churn)) %>% 
+  mutate_all(as.factor) %>% 
+  conf_mat(churn, .pred_class) %>% 
+  summary() %>% 
+  select(-.estimator) %>% 
+  filter(.metric %in% c('precision', 'recall', 'f_meas',
+                        'accuracy', 'spec', 'sens')) %>% 
+  kable()
+
+```
+

@@ -1,15 +1,17 @@
 ---
 date: "2021-01-01"
-title: Python basics
+title: Introdução ao R
 type: book
 weight: 20
 ---
 
-Build a foundation in Python.
+Entendendo o básico.
 
 <!--more-->
 
 {{< icon name="clock" pack="fas" >}} 1-2 hours per week, for 8 weeks
+
+
 
 ## Learn
 
