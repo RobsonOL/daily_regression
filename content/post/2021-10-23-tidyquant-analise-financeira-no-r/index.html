@@ -1,0 +1,1192 @@
+---
+title: TidyQuant - Analise financeira no R
+author: 'Robson Oliveira Lima'
+date: '2021-10-23'
+slug: tidyquant-analise-financeira-no-r
+categories: []
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2021-10-23T13:57:07-03:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+
+
+<div id="pacotes" class="section level1">
+<h1>Pacotes</h1>
+<p>Para realizar as análises de performance das ações negociadas na B3 vamos utilizar o pacote <code>tidyquant</code>.</p>
+</div>
+<div id="dados" class="section level1">
+<h1>Dados</h1>
+<p>Os dados abaixo possuem uma série de informações sobre as empresas negociadas no B3, com atributos de <em>valor de abertura</em>, <em>fechamento</em>, <em>fechamento ajustado e volume negociado</em> para cada dia do período entre Janeiro de 2019 e Março de 2021. Temos ainda informações sobre o setor e subsetor da economia que a empresa atua.</p>
+<p>Para nossa análise, vamos trabalhar apenas com o valor de fechamento ajustado das ações.</p>
+<p>O pacote <code>TidyQuant</code> fornece uma função bastante conveniente para baixar dados de ações com apenas o nome do <em>ticker</em>. A função é a <code>tq_get</code> e poderiamos baixar as ações da Vale, Itaú e Petrobras com o seguinte código:</p>
+<pre class="r"><code>tickers &lt;- c(&quot;ITSA3.SA&quot;, &quot;PETR3.SA&quot;, &quot;VALE3.SA&quot;)
+
+tickers %&gt;% 
+  tq_get(get  = &quot;stock.prices&quot;,
+         from = &quot;2021-01-02&quot;,
+         to   = &quot;2021-3-01&quot;) %&gt;% 
+  head(10) %&gt;% 
+  knitr::kable()</code></pre>
+<pre><code>## Registered S3 method overwritten by &#39;tune&#39;:
+##   method                   from   
+##   required_pkgs.model_spec parsnip</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">symbol</th>
+<th align="left">date</th>
+<th align="right">open</th>
+<th align="right">high</th>
+<th align="right">low</th>
+<th align="right">close</th>
+<th align="right">volume</th>
+<th align="right">adjusted</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ITSA3.SA</td>
+<td align="left">2021-01-04</td>
+<td align="right">12.35</td>
+<td align="right">12.43</td>
+<td align="right">12.08</td>
+<td align="right">12.24</td>
+<td align="right">131500</td>
+<td align="right">11.99251</td>
+</tr>
+<tr class="even">
+<td align="left">ITSA3.SA</td>
+<td align="left">2021-01-05</td>
+<td align="right">12.24</td>
+<td align="right">12.24</td>
+<td align="right">11.60</td>
+<td align="right">12.14</td>
+<td align="right">522600</td>
+<td align="right">11.89453</td>
+</tr>
+<tr class="odd">
+<td align="left">ITSA3.SA</td>
+<td align="left">2021-01-06</td>
+<td align="right">12.13</td>
+<td align="right">12.43</td>
+<td align="right">12.00</td>
+<td align="right">12.23</td>
+<td align="right">400500</td>
+<td align="right">11.98271</td>
+</tr>
+<tr class="even">
+<td align="left">ITSA3.SA</td>
+<td align="left">2021-01-07</td>
+<td align="right">12.31</td>
+<td align="right">12.73</td>
+<td align="right">12.24</td>
+<td align="right">12.61</td>
+<td align="right">278500</td>
+<td align="right">12.35503</td>
+</tr>
+<tr class="odd">
+<td align="left">ITSA3.SA</td>
+<td align="left">2021-01-08</td>
+<td align="right">12.60</td>
+<td align="right">12.77</td>
+<td align="right">12.24</td>
+<td align="right">12.50</td>
+<td align="right">233900</td>
+<td align="right">12.24725</td>
+</tr>
+<tr class="even">
+<td align="left">ITSA3.SA</td>
+<td align="left">2021-01-11</td>
+<td align="right">12.50</td>
+<td align="right">12.50</td>
+<td align="right">12.02</td>
+<td align="right">12.09</td>
+<td align="right">247600</td>
+<td align="right">11.84554</td>
+</tr>
+<tr class="odd">
+<td align="left">ITSA3.SA</td>
+<td align="left">2021-01-12</td>
+<td align="right">12.09</td>
+<td align="right">12.54</td>
+<td align="right">11.85</td>
+<td align="right">12.22</td>
+<td align="right">302200</td>
+<td align="right">11.97292</td>
+</tr>
+<tr class="even">
+<td align="left">ITSA3.SA</td>
+<td align="left">2021-01-13</td>
+<td align="right">12.22</td>
+<td align="right">12.38</td>
+<td align="right">12.06</td>
+<td align="right">12.17</td>
+<td align="right">117400</td>
+<td align="right">11.92393</td>
+</tr>
+<tr class="odd">
+<td align="left">ITSA3.SA</td>
+<td align="left">2021-01-14</td>
+<td align="right">12.25</td>
+<td align="right">12.55</td>
+<td align="right">12.17</td>
+<td align="right">12.55</td>
+<td align="right">223500</td>
+<td align="right">12.29625</td>
+</tr>
+<tr class="even">
+<td align="left">ITSA3.SA</td>
+<td align="left">2021-01-15</td>
+<td align="right">12.43</td>
+<td align="right">12.44</td>
+<td align="right">12.07</td>
+<td align="right">12.07</td>
+<td align="right">127700</td>
+<td align="right">11.82595</td>
+</tr>
+</tbody>
+</table>
+<p>Contudo, como o objetivo é analisar todas as ações que fazem parte da B3 durante o período entre 2019 e março de 2021 (o que é um procedimento bastante lento), vou importar manualmente estes dados, que foram previamente baixados utilizando a própria função <code>tq_get</code>, e tratados a fim de informar o setor e subsetor de atuação da empresa.</p>
+<pre class="r"><code>df &lt;- read_csv(&quot;empresas_b3_2019_2021.zip&quot;) %&gt;% 
+  mutate(Data = as.Date(Data)) %&gt;% 
+  filter(Atributo == &quot;Adj Close&quot;) %&gt;% 
+  filter(!is.na(Valor)) %&gt;% 
+  select(-Incluir)</code></pre>
+<pre><code>## 
+## -- Column specification --------------------------------------------------------
+## cols(
+##   Data = col_date(format = &quot;&quot;),
+##   Atributo = col_character(),
+##   Empresa = col_character(),
+##   Valor = col_double(),
+##   Setor = col_character(),
+##   Subsetor = col_character(),
+##   Segmento = col_character(),
+##   Nome = col_character(),
+##   Ticker = col_character(),
+##   Incluir = col_double()
+## )</code></pre>
+<pre class="r"><code>df %&gt;% 
+  head() %&gt;% 
+  knitr::kable()</code></pre>
+<table>
+<colgroup>
+<col width="7%" />
+<col width="6%" />
+<col width="5%" />
+<col width="5%" />
+<col width="21%" />
+<col width="21%" />
+<col width="22%" />
+<col width="3%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Data</th>
+<th align="left">Atributo</th>
+<th align="left">Empresa</th>
+<th align="right">Valor</th>
+<th align="left">Setor</th>
+<th align="left">Subsetor</th>
+<th align="left">Segmento</th>
+<th align="left">Nome</th>
+<th align="left">Ticker</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2019-01-02</td>
+<td align="left">Adj Close</td>
+<td align="left">CSAN3.SA</td>
+<td align="right">34.20791</td>
+<td align="left">Petróleo, Gás e Biocombustíveis</td>
+<td align="left">Petróleo, Gás e Biocombustíveis</td>
+<td align="left">Exploração, Refino e Distribuição</td>
+<td align="left">COSAN</td>
+<td align="left">CSAN3.SA</td>
+</tr>
+<tr class="even">
+<td align="left">2019-01-03</td>
+<td align="left">Adj Close</td>
+<td align="left">CSAN3.SA</td>
+<td align="right">34.72534</td>
+<td align="left">Petróleo, Gás e Biocombustíveis</td>
+<td align="left">Petróleo, Gás e Biocombustíveis</td>
+<td align="left">Exploração, Refino e Distribuição</td>
+<td align="left">COSAN</td>
+<td align="left">CSAN3.SA</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-01-04</td>
+<td align="left">Adj Close</td>
+<td align="left">CSAN3.SA</td>
+<td align="right">34.52411</td>
+<td align="left">Petróleo, Gás e Biocombustíveis</td>
+<td align="left">Petróleo, Gás e Biocombustíveis</td>
+<td align="left">Exploração, Refino e Distribuição</td>
+<td align="left">COSAN</td>
+<td align="left">CSAN3.SA</td>
+</tr>
+<tr class="even">
+<td align="left">2019-01-07</td>
+<td align="left">Adj Close</td>
+<td align="left">CSAN3.SA</td>
+<td align="right">34.01627</td>
+<td align="left">Petróleo, Gás e Biocombustíveis</td>
+<td align="left">Petróleo, Gás e Biocombustíveis</td>
+<td align="left">Exploração, Refino e Distribuição</td>
+<td align="left">COSAN</td>
+<td align="left">CSAN3.SA</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-01-08</td>
+<td align="left">Adj Close</td>
+<td align="left">CSAN3.SA</td>
+<td align="right">34.38997</td>
+<td align="left">Petróleo, Gás e Biocombustíveis</td>
+<td align="left">Petróleo, Gás e Biocombustíveis</td>
+<td align="left">Exploração, Refino e Distribuição</td>
+<td align="left">COSAN</td>
+<td align="left">CSAN3.SA</td>
+</tr>
+<tr class="even">
+<td align="left">2019-01-09</td>
+<td align="left">Adj Close</td>
+<td align="left">CSAN3.SA</td>
+<td align="right">37.19751</td>
+<td align="left">Petróleo, Gás e Biocombustíveis</td>
+<td align="left">Petróleo, Gás e Biocombustíveis</td>
+<td align="left">Exploração, Refino e Distribuição</td>
+<td align="left">COSAN</td>
+<td align="left">CSAN3.SA</td>
+</tr>
+</tbody>
+</table>
+<p>A base de dados possui informações para 286 empresas, divididas em 11 setores e 42 subsetores. Temos informações de janeiro de 2019 a março de 2021.</p>
+<pre class="r"><code>df %&gt;% summarise(`Total de Empresas` = n_distinct(Nome),
+                 `Total de Setores` = n_distinct(Setor),
+                 `Total de Subsetores` = n_distinct(Subsetor),
+                 `Data de Início` = min(Data),
+                 `Data Final` = max(Data)) %&gt;% 
+  mutate(across(everything(), as.character)) %&gt;% 
+  pivot_longer(everything()) %&gt;% 
+  rename(&quot;Atributo&quot; = 1, &quot;Valor&quot; = 2) %&gt;% 
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Atributo</th>
+<th align="left">Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Total de Empresas</td>
+<td align="left">286</td>
+</tr>
+<tr class="even">
+<td align="left">Total de Setores</td>
+<td align="left">11</td>
+</tr>
+<tr class="odd">
+<td align="left">Total de Subsetores</td>
+<td align="left">42</td>
+</tr>
+<tr class="even">
+<td align="left">Data de Início</td>
+<td align="left">2019-01-02</td>
+</tr>
+<tr class="odd">
+<td align="left">Data Final</td>
+<td align="left">2021-03-01</td>
+</tr>
+</tbody>
+</table>
+<div id="retorno-mensal" class="section level2">
+<h2>Retorno Mensal</h2>
+<p>Para realizar as comparações propostas, precisamos transformar os preços de fechamento em retornos.</p>
+<p>A função <code>tq_transmute</code> permite calcular o retorno mensal para o valor de fechamento ajustado da ação. Para isto, precisamos indicar qual a variável que sofrerá a transformação (<code>Valor</code>), qual a transformação utilizada (<code>mutate_fun = periodReturn</code>) e qual a periodicidade do cálculo (<code>period = "monthly"</code>).</p>
+<p>Vamos guardar as informações de retorno das ações no objeto <code>Ra</code>.</p>
+<pre class="r"><code>Ra &lt;- df %&gt;% 
+  select(Data, Empresa, Valor) %&gt;% 
+  group_by(Empresa) %&gt;% 
+  tq_transmute(select = Valor,
+               mutate_fun = periodReturn,
+               period = &quot;monthly&quot;,
+               col_rename = &quot;Ra&quot;)
+Ra %&gt;% 
+  head() %&gt;% 
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Empresa</th>
+<th align="left">Data</th>
+<th align="right">Ra</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">CSAN3.SA</td>
+<td align="left">2019-01-31</td>
+<td align="right">0.2434172</td>
+</tr>
+<tr class="even">
+<td align="left">CSAN3.SA</td>
+<td align="left">2019-02-28</td>
+<td align="right">-0.0155440</td>
+</tr>
+<tr class="odd">
+<td align="left">CSAN3.SA</td>
+<td align="left">2019-03-29</td>
+<td align="right">-0.0240274</td>
+</tr>
+<tr class="even">
+<td align="left">CSAN3.SA</td>
+<td align="left">2019-04-30</td>
+<td align="right">0.0989447</td>
+</tr>
+<tr class="odd">
+<td align="left">CSAN3.SA</td>
+<td align="left">2019-05-31</td>
+<td align="right">0.0277442</td>
+</tr>
+<tr class="even">
+<td align="left">CSAN3.SA</td>
+<td align="left">2019-06-28</td>
+<td align="right">-0.0210013</td>
+</tr>
+</tbody>
+</table>
+<p>Essa base de dados possui três colunas: <code>Data</code>, que representa o último dia do mês, a coluna <code>Ra</code>, que exibe o retorno mensal e <code>Empresa</code>, o ticker de cada empresa.</p>
+<p>Como os retornos normalizam os valores, podemos realizar comparações entre diferentes setores, apenas para entender como as empresas foram afetadas pela Covid-19:</p>
+<pre class="r"><code>Ra %&gt;% 
+  left_join(df %&gt;% select(Empresa, Setor), by = &quot;Empresa&quot;) %&gt;% 
+  group_by(Setor, Data) %&gt;% 
+  summarise(Ra = mean(Ra)) %&gt;% 
+  ggplot(aes(x = Data, y = Ra, color = Setor)) + 
+  geom_line() + 
+  geom_vline(xintercept = as.Date(&quot;2020-03-01&quot;), linetype = 2,
+             color = &quot;grey20&quot;) +
+  labs(y = &quot;Retorno Mensal Médio&quot;, y = &quot;data&quot;,
+       title = &quot;Retorno Mensal Médio por Setor da B3, 2019 - 2021&quot;) + 
+  facet_wrap(~Setor, nrow = 3) + 
+  theme_minimal() +
+  theme(legend.position = &quot;none&quot;, 
+        axis.text.x = element_text(angle = 45))</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;Setor&#39;. You can override using the `.groups` argument.</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+<div id="retorno-livre-de-risco" class="section level2">
+<h2>Retorno Livre de Risco</h2>
+<p>A fim de comparar o comportamento dos retornos de cada ação, precisamos de um grupo de comparação, também chamado de <em>baseline</em>. Como grupo de comparação, vamos utilizar o valor negociado do Índice Bovespa (<code>BVSP</code>).</p>
+<p>Podemos utilizar a função <code>tq_get</code> para obter os dados do ticker <code>^BVSP</code> para o mesmo período de análise e transformar as informações de fechamento em retorno mensal, e unir com as informações de <code>Ra</code>:</p>
+<pre class="r"><code>Rb &lt;- &quot;^BVSP&quot; %&gt;%
+  tq_get(get  = &quot;stock.prices&quot;,
+         from = &quot;2019-01-02&quot;,
+         to   = &quot;2021-03-01&quot;) %&gt;%
+  tq_transmute(select     = adjusted, 
+               mutate_fun = periodReturn, 
+               period     = &quot;monthly&quot;, 
+               col_rename = &quot;Rb&quot;)
+
+RaRb &lt;- 
+  left_join(Ra, 
+            Rb, 
+            by = c(&quot;Data&quot; = &quot;date&quot;))
+
+RaRb %&gt;% 
+  head() %&gt;% 
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Empresa</th>
+<th align="left">Data</th>
+<th align="right">Ra</th>
+<th align="right">Rb</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">CSAN3.SA</td>
+<td align="left">2019-01-31</td>
+<td align="right">0.2434172</td>
+<td align="right">0.0701226</td>
+</tr>
+<tr class="even">
+<td align="left">CSAN3.SA</td>
+<td align="left">2019-02-28</td>
+<td align="right">-0.0155440</td>
+<td align="right">-0.0185843</td>
+</tr>
+<tr class="odd">
+<td align="left">CSAN3.SA</td>
+<td align="left">2019-03-29</td>
+<td align="right">-0.0240274</td>
+<td align="right">-0.0017681</td>
+</tr>
+<tr class="even">
+<td align="left">CSAN3.SA</td>
+<td align="left">2019-04-30</td>
+<td align="right">0.0989447</td>
+<td align="right">0.0098307</td>
+</tr>
+<tr class="odd">
+<td align="left">CSAN3.SA</td>
+<td align="left">2019-05-31</td>
+<td align="right">0.0277442</td>
+<td align="right">0.0070262</td>
+</tr>
+<tr class="even">
+<td align="left">CSAN3.SA</td>
+<td align="left">2019-06-28</td>
+<td align="right">-0.0210013</td>
+<td align="right">0.0405751</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="razões-de-risco" class="section level1">
+<h1>Razões de Risco</h1>
+<p>Aqui vamos apresentar cinco razões de risco bastante populares: <strong>Alpha</strong>, <strong>Beta</strong>, <strong>o Desvio-padrão</strong>, <strong>R-squared</strong> e a <strong>Razão de Sharpe</strong>.</p>
+<div id="razão-de-sharpe" class="section level2">
+<h2>Razão de Sharpe</h2>
+<p>A Razão de Sharpe é comumente utilizada como uma medida de retorno por unidade de risco, e tem a seguinte fórmula</p>
+<p><span class="math display">\[\frac{r_P - r_F}{\sigma_P}\]</span></p>
+<p>onde <span class="math inline">\(r_p\)</span> é o retorno do portfólio, <span class="math inline">\(r_F\)</span> é a taxa livre de risco e <span class="math inline">\(\sigma_P\)</span> é o risco do portfólio (desvio-padrão do retorno) normalizada e anualizada.</p>
+<p><strong>Quando maior a razão Sharpe, melhor é a combinação de risco e retorno.</strong></p>
+<p>Abaixo, um exemplo de como funciona a Razão de Sharp:</p>
+<table>
+<colgroup>
+<col width="28%" />
+<col width="45%" />
+<col width="25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Portfólio A</th>
+<th>Portfólio B</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Retorno</td>
+<td>7,9%</td>
+<td>6,9%</td>
+</tr>
+<tr class="even">
+<td>Risco</td>
+<td>5,5%</td>
+<td>3,2%</td>
+</tr>
+<tr class="odd">
+<td>Taxa livre de risco</td>
+<td>2,0%</td>
+<td>2,0%</td>
+</tr>
+<tr class="even">
+<td>Razão de Sharpe</td>
+<td><span class="math inline">\(\frac{7,9\% - 2,0\%}{5,5\%} = 1,07\)</span></td>
+<td><span class="math inline">\(\frac{6,9\% - 2,0\%}{3,2\%} = 1,53\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Portanto, o portifólio B possui uma melhor performance ajustada ao risco do que o portfólio A.</p>
+<p>Agora podemos calcular para nosso banco de dados. Vamos utilizar a função <code>tq_performance</code>, que toma os seguintes argumentos: o conjunto de retornos <code>Ra</code>; <code>Rf</code>, que é a taxa livre de risco, <code>p</code>, que é o intervalo de confiança (de 95% no nosso caso) e <code>FUN</code>, que é o valor do denominador (onde utilizaremos o desvio-padrão). Por simplificação vamos usar uma taxa livre de risco de zero.</p>
+<pre class="r"><code>Ra_Sharpe &lt;- RaRb %&gt;% 
+  filter(!Empresa %in% c(&#39;JSLG3.SA&#39;, &quot;TIMS3.SA&quot;,&quot;MGEL3.SA&quot;)) %&gt;% 
+  tq_performance(Ra = Ra,
+                 Rb = NULL,
+                 performance_fun = SharpeRatio,
+                 Rf = 0,
+                 p = 0.95,
+                 FUN = &quot;StdDev&quot;)
+
+Ra_Sharpe %&gt;% 
+  head() %&gt;% 
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Empresa</th>
+<th align="right">StdDevSharpe(Rf=0%,p=95%)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">CSAN3.SA</td>
+<td align="right">0.3373760</td>
+</tr>
+<tr class="even">
+<td align="left">DMMO3.SA</td>
+<td align="right">-0.0493056</td>
+</tr>
+<tr class="odd">
+<td align="left">ENAT3.SA</td>
+<td align="right">0.2675225</td>
+</tr>
+<tr class="even">
+<td align="left">RPMG3.SA</td>
+<td align="right">0.1077110</td>
+</tr>
+<tr class="odd">
+<td align="left">PETR3.SA</td>
+<td align="right">0.0503555</td>
+</tr>
+<tr class="even">
+<td align="left">BRDT3.SA</td>
+<td align="right">0.0333009</td>
+</tr>
+</tbody>
+</table>
+<p>Podemos filtrar para os 10 ativos com maior valor da razão de Sharpe.</p>
+<pre class="r"><code>Ra_Sharpe %&gt;% 
+  rename(Razao_Sharpe = 2) %&gt;% 
+  arrange(desc(Razao_Sharpe)) %&gt;% 
+  head(10) %&gt;% 
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Empresa</th>
+<th align="right">Razao_Sharpe</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">REDE3.SA</td>
+<td align="right">0.9270783</td>
+</tr>
+<tr class="even">
+<td align="left">ENEV3.SA</td>
+<td align="right">0.7157285</td>
+</tr>
+<tr class="odd">
+<td align="left">BAUH4.SA</td>
+<td align="right">0.6367148</td>
+</tr>
+<tr class="even">
+<td align="left">WEGE3.SA</td>
+<td align="right">0.5623846</td>
+</tr>
+<tr class="odd">
+<td align="left">MGLU3.SA</td>
+<td align="right">0.5230350</td>
+</tr>
+<tr class="even">
+<td align="left">GPCP3.SA</td>
+<td align="right">0.5103846</td>
+</tr>
+<tr class="odd">
+<td align="left">BMEB3.SA</td>
+<td align="right">0.4654880</td>
+</tr>
+<tr class="even">
+<td align="left">PRIO3.SA</td>
+<td align="right">0.4576669</td>
+</tr>
+<tr class="odd">
+<td align="left">KEPL3.SA</td>
+<td align="right">0.4574844</td>
+</tr>
+<tr class="even">
+<td align="left">RSUL4.SA</td>
+<td align="right">0.4483069</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="capm" class="section level2">
+<h2>CAPM</h2>
+<p>O pacote <code>TidyQuant</code> também permite estimar o modelo CAPM para as ações. No modelo CAPM podemos fatorar a taxa livre de risco e calcular a seguinte equação:</p>
+<p><span class="math display">\[r_p - r_F = \alpha + \beta \times (b - r_F) + \epsilon\]</span></p>
+<p>Para estimar o modelo CAPM, vamos utilizar a função <code>tq_performance</code> novamente, mas agora passando o argumento <code>performance_fun = table.CAPM</code>. Como visto na equação acima, ela apresenta uma série de novos parâmetros: como beta e alpha.</p>
+<p>Mas primeiro, vamos gerar as informações da tabela CAPM:</p>
+<pre class="r"><code>RaRb_capm &lt;- RaRb %&gt;% 
+  # essas empresas possuem informações faltantes e serão excluídas
+  filter(!Empresa %in% c(&#39;JSLG3.SA&#39;, &quot;TIMS3.SA&quot;,&quot;MGEL3.SA&quot;)) %&gt;% 
+  tq_performance(Ra = Ra,
+                 Rb = Rb,
+                 performance_fun = table.CAPM)
+RaRb_capm %&gt;% 
+  head(10) %&gt;% 
+  knitr::kable()</code></pre>
+<table>
+<colgroup>
+<col width="5%" />
+<col width="9%" />
+<col width="5%" />
+<col width="10%" />
+<col width="4%" />
+<col width="4%" />
+<col width="5%" />
+<col width="7%" />
+<col width="12%" />
+<col width="11%" />
+<col width="6%" />
+<col width="9%" />
+<col width="8%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Empresa</th>
+<th align="right">ActivePremium</th>
+<th align="right">Alpha</th>
+<th align="right">AnnualizedAlpha</th>
+<th align="right">Beta</th>
+<th align="right">Beta-</th>
+<th align="right">Beta+</th>
+<th align="right">Correlation</th>
+<th align="right">Correlationp-value</th>
+<th align="right">InformationRatio</th>
+<th align="right">R-squared</th>
+<th align="right">TrackingError</th>
+<th align="right">TreynorRatio</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">CSAN3.SA</td>
+<td align="right">0.4004</td>
+<td align="right">0.0291</td>
+<td align="right">0.4112</td>
+<td align="right">1.0559</td>
+<td align="right">0.9035</td>
+<td align="right">0.7168</td>
+<td align="right">0.7470</td>
+<td align="right">0.0000</td>
+<td align="right">1.4645</td>
+<td align="right">0.5580</td>
+<td align="right">0.2734</td>
+<td align="right">0.4527</td>
+</tr>
+<tr class="even">
+<td align="left">DMMO3.SA</td>
+<td align="right">-0.7680</td>
+<td align="right">-0.0386</td>
+<td align="right">-0.3761</td>
+<td align="right">1.7924</td>
+<td align="right">1.7276</td>
+<td align="right">1.8920</td>
+<td align="right">0.3784</td>
+<td align="right">0.0567</td>
+<td align="right">-0.5953</td>
+<td align="right">0.1432</td>
+<td align="right">1.2901</td>
+<td align="right">-0.3737</td>
+</tr>
+<tr class="odd">
+<td align="left">ENAT3.SA</td>
+<td align="right">0.2178</td>
+<td align="right">0.0191</td>
+<td align="right">0.2556</td>
+<td align="right">1.0081</td>
+<td align="right">1.1774</td>
+<td align="right">0.4574</td>
+<td align="right">0.7035</td>
+<td align="right">0.0001</td>
+<td align="right">0.7179</td>
+<td align="right">0.4949</td>
+<td align="right">0.3034</td>
+<td align="right">0.3362</td>
+</tr>
+<tr class="even">
+<td align="left">RPMG3.SA</td>
+<td align="right">-0.1134</td>
+<td align="right">0.0455</td>
+<td align="right">0.7049</td>
+<td align="right">0.9500</td>
+<td align="right">1.0682</td>
+<td align="right">-3.3047</td>
+<td align="right">0.1583</td>
+<td align="right">0.4400</td>
+<td align="right">-0.0661</td>
+<td align="right">0.0251</td>
+<td align="right">1.7155</td>
+<td align="right">-0.0222</td>
+</tr>
+<tr class="odd">
+<td align="left">PETR3.SA</td>
+<td align="right">-0.1499</td>
+<td align="right">-0.0106</td>
+<td align="right">-0.1196</td>
+<td align="right">1.6813</td>
+<td align="right">1.6147</td>
+<td align="right">2.3237</td>
+<td align="right">0.9135</td>
+<td align="right">0.0000</td>
+<td align="right">-0.5085</td>
+<td align="right">0.8344</td>
+<td align="right">0.2948</td>
+<td align="right">-0.0350</td>
+</tr>
+<tr class="even">
+<td align="left">BRDT3.SA</td>
+<td align="right">-0.1319</td>
+<td align="right">-0.0085</td>
+<td align="right">-0.0970</td>
+<td align="right">1.1569</td>
+<td align="right">1.3428</td>
+<td align="right">0.4957</td>
+<td align="right">0.8242</td>
+<td align="right">0.0000</td>
+<td align="right">-0.5573</td>
+<td align="right">0.6792</td>
+<td align="right">0.2366</td>
+<td align="right">-0.0379</td>
+</tr>
+<tr class="odd">
+<td align="left">PRIO3.SA</td>
+<td align="right">1.5305</td>
+<td align="right">0.0917</td>
+<td align="right">1.8663</td>
+<td align="right">2.1954</td>
+<td align="right">2.5173</td>
+<td align="right">3.4174</td>
+<td align="right">0.7369</td>
+<td align="right">0.0000</td>
+<td align="right">2.2576</td>
+<td align="right">0.5430</td>
+<td align="right">0.6780</td>
+<td align="right">0.7249</td>
+</tr>
+<tr class="even">
+<td align="left">UGPA3.SA</td>
+<td align="right">-0.2222</td>
+<td align="right">-0.0169</td>
+<td align="right">-0.1851</td>
+<td align="right">1.3715</td>
+<td align="right">0.9149</td>
+<td align="right">1.5346</td>
+<td align="right">0.8320</td>
+<td align="right">0.0000</td>
+<td align="right">-0.7752</td>
+<td align="right">0.6922</td>
+<td align="right">0.2867</td>
+<td align="right">-0.1004</td>
+</tr>
+<tr class="odd">
+<td align="left">LUPA3.SA</td>
+<td align="right">-0.0058</td>
+<td align="right">0.0071</td>
+<td align="right">0.0881</td>
+<td align="right">1.4102</td>
+<td align="right">1.6683</td>
+<td align="right">1.4490</td>
+<td align="right">0.6870</td>
+<td align="right">0.0001</td>
+<td align="right">-0.0129</td>
+<td align="right">0.4720</td>
+<td align="right">0.4488</td>
+<td align="right">0.0601</td>
+</tr>
+<tr class="even">
+<td align="left">OSXB3.SA</td>
+<td align="right">0.9830</td>
+<td align="right">0.1097</td>
+<td align="right">2.4882</td>
+<td align="right">1.3732</td>
+<td align="right">1.6842</td>
+<td align="right">4.5573</td>
+<td align="right">0.2529</td>
+<td align="right">0.2125</td>
+<td align="right">0.6445</td>
+<td align="right">0.0640</td>
+<td align="right">1.5253</td>
+<td align="right">0.7275</td>
+</tr>
+</tbody>
+</table>
+<p>Agora vamos entender cada um dos parâmetros do modelo CAPM, a começar pelo Beta.</p>
+<div id="beta-beta" class="section level3">
+<h3><strong>Beta</strong> (<span class="math inline">\(\beta\)</span>)</h3>
+<p>Ele representa o risco sistêmico ou a volatilidade de uma ação específica comparada com o risco sistêmico do mercado como um todo. De maneira geral, um Beta igual a 1 representa uma atividade bastante correlacionada com o mercado. Adicionar uma ação com beta igual a 1 a um portfólio não adiciona nenhum risco a ele. Um beta menor que a unidade significa que a ação é menos volátil que a média do mercado, de modo que sua inclusão reduz o risco médio do porfólio. Por exemplo, ações de empresas de utilidades públicas tendem a ter um beta baixo.</p>
+<p>Já empresas com beta maior que a unidade indicam que o preço da ação é teoricamente mais volátil que o mercado. Se uma ação possui beta igual a 1,2 podemos assumir que ele é 20% mais volátil que o mecado. Ações de tecnologia tendem a ter maiores betas que o <em>benchmark</em> de mercado. Isto indica que sua adição ao portfólio aumenta o risco (mas também pode aumentar o retorno esperado).</p>
+<p>Vamos observar os maiores valores de Beta:</p>
+<pre class="r"><code>RaRb_capm %&gt;% 
+  select(Empresa, Beta) %&gt;% 
+  arrange(desc(Beta)) %&gt;%
+  head(10) %&gt;% 
+  left_join(df %&gt;% select(Empresa, Setor), by = &quot;Empresa&quot;) %&gt;% 
+  distinct()</code></pre>
+<pre><code>## # A tibble: 10 x 3
+## # Groups:   Empresa [10]
+##    Empresa   Beta Setor                          
+##    &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                          
+##  1 TXRX3.SA  6.06 Consumo Cíclico                
+##  2 TCSA3.SA  5.16 Consumo Cíclico                
+##  3 MWET3.SA  3.43 Bens Industriais               
+##  4 CEPE3.SA  2.86 Utilidade Pública              
+##  5 TEKA3.SA  2.78 Consumo Cíclico                
+##  6 RCSL3.SA  2.51 Bens Industriais               
+##  7 EUCA3.SA  2.49 Materiais Básicos              
+##  8 PRIO3.SA  2.20 Petróleo, Gás e Biocombustíveis
+##  9 CVCB3.SA  2.13 Consumo Cíclico                
+## 10 VVAR3.SA  2.11 Consumo Cíclico</code></pre>
+<p>Podemos ver que entre as empresas com maior volatilidade, temos empresas de Petróleo, Consumo Cíclico e até mesmo uma de Utilidade Pública.</p>
+<p>Algumas ações possuem <strong>beta negativo</strong>, isso reflete o fato de que estas empresas são espelhos do mercado. Quando o mercado está em alta, ela está em baixa, e vice-versa. Alguns exemplos:</p>
+<pre class="r"><code>RaRb_capm %&gt;% 
+  select(Empresa, Beta) %&gt;% 
+  arrange(Beta) %&gt;% 
+  head(10) %&gt;% 
+  left_join(df %&gt;% select(Empresa, Setor), by = &quot;Empresa&quot;) %&gt;% 
+  distinct()</code></pre>
+<pre><code>## # A tibble: 10 x 3
+## # Groups:   Empresa [10]
+##    Empresa     Beta Setor              
+##    &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt;              
+##  1 ODER4.SA -3.09   Consumo não Cíclico
+##  2 NORD3.SA -0.989  Bens Industriais   
+##  3 CEGR3.SA -0.386  Utilidade Pública  
+##  4 CEED3.SA -0.313  Utilidade Pública  
+##  5 JOPA3.SA -0.301  Consumo não Cíclico
+##  6 LUXM3.SA -0.265  Bens Industriais   
+##  7 BMIN3.SA -0.230  Financeiro         
+##  8 AHEB3.SA -0.196  Consumo Cíclico    
+##  9 SLCE3.SA -0.0809 Consumo não Cíclico
+## 10 REDE3.SA -0.0638 Utilidade Pública</code></pre>
+<p>Contudo, um valor pequeno de beta apenas informa que a volatilidade do preço é baixa. Mas uma empresa pode ter pequenas variações de preço e estar em uma tendência de longo prazo de baixa. Assim, adicionar uma ação com tendência de baixa com um beta pequeno diminui o risco do portfólio apenas se o investidor define risco estritamente em termos de volatilidade, em vez de potencial para perdas. Da mesma foram, uma ação com beta elevado mas que está em um tendência de alta vai aumentar o risco do portfólio, mas também irá adicionar valor.</p>
+<p>Portanto é preciso utilizar o beta com cuidado, sempre em conjunto com outras medidas. Assim, o beta pode ser util para avaliar o risco de curto prazo de uma ação, não sendo muito útil quando se deseja fazer investimentos de longo prazo, uma vez que a volatilidade da ação pode mudar bastante no longo prazo.</p>
+<p>Temos ainda:</p>
+<ul>
+<li><p>O <strong>Beta Bull</strong> ou <span class="math inline">\(\beta^+\)</span> calcula a regressão apenas para retornos de mercado positivos, de modo que trás informações no comportamento do portfólio de mercados positivos.</p></li>
+<li><p>O <strong>Beta Bear</strong> ou <span class="math inline">\(\beta^-\)</span> calcula a regressão apenas para retornos de mercado negativos.</p></li>
+</ul>
+</div>
+<div id="alpha-ou-alpha-de-jenson" class="section level3">
+<h3><strong>Alpha</strong> ou <strong>Alpha de Jenson</strong></h3>
+<p>Alpha representa o intercepto da equação de regressão no CAPM, e reflete o grau com que o retorno de uma ação está em linha (ou excede) o retorno gerado pelo mercado. Assim, o alpha representa os retornos sobre o investimento que não são o resultado de um movimento geral de mercado. O <strong>alpha de Jensen</strong> especificamente, inclui um componente de risco ajustado nas suas contas.</p>
+<p>Uma ação com alpha igual a zero possui retornos em linha com o presente no mercado. Por outro lado, um alpha negativo indica que a ação não gera retornos na mesma taxa que o setor como um todo.</p>
+<pre class="r"><code>RaRb_capm %&gt;% 
+  select(Empresa, Alpha) %&gt;% 
+  arrange(desc(Alpha)) %&gt;% 
+  head(10) %&gt;% 
+  left_join(df %&gt;% select(Empresa, Setor), by = &quot;Empresa&quot;) %&gt;% 
+  distinct() %&gt;% 
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Empresa</th>
+<th align="right">Alpha</th>
+<th align="left">Setor</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ODER4.SA</td>
+<td align="right">0.5959</td>
+<td align="left">Consumo não Cíclico</td>
+</tr>
+<tr class="even">
+<td align="left">TXRX3.SA</td>
+<td align="right">0.5785</td>
+<td align="left">Consumo Cíclico</td>
+</tr>
+<tr class="odd">
+<td align="left">GPAR3.SA</td>
+<td align="right">0.4351</td>
+<td align="left">Utilidade Pública</td>
+</tr>
+<tr class="even">
+<td align="left">MWET3.SA</td>
+<td align="right">0.2814</td>
+<td align="left">Bens Industriais</td>
+</tr>
+<tr class="odd">
+<td align="left">NORD3.SA</td>
+<td align="right">0.2795</td>
+<td align="left">Bens Industriais</td>
+</tr>
+<tr class="even">
+<td align="left">TCSA3.SA</td>
+<td align="right">0.2692</td>
+<td align="left">Consumo Cíclico</td>
+</tr>
+<tr class="odd">
+<td align="left">MMXM3.SA</td>
+<td align="right">0.2243</td>
+<td align="left">Materiais Básicos</td>
+</tr>
+<tr class="even">
+<td align="left">CEPE3.SA</td>
+<td align="right">0.1966</td>
+<td align="left">Utilidade Pública</td>
+</tr>
+<tr class="odd">
+<td align="left">TEKA3.SA</td>
+<td align="right">0.1922</td>
+<td align="left">Consumo Cíclico</td>
+</tr>
+<tr class="even">
+<td align="left">TELB3.SA</td>
+<td align="right">0.1709</td>
+<td align="left">Comunicações</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="tracking-error" class="section level3">
+<h3>Tracking Error</h3>
+<p>Medidas de risco absoluto como analisadadas anteriormente calculam o risco do portfólio e do <em>benchmarking</em> calculados separadamente, para posterior comparação. O tracking error é um exemplo de uma medida de risco relativa, cujo foco é no retorno em excesso do portfólio contra o benchmarking. A variabilidade de retorno em excesso é calculada usando o desvio-padrão, e é chamada de tracking error.</p>
+<p>Sua fórmula é dada por</p>
+<p><span class="math display">\[TE = \sqrt{\frac{\sum_{i=1}^{n}(a_i - \bar{a})^2}{n}}\]</span>
+onde <span class="math inline">\(a_i\)</span> é o retorno em excesso no mês <span class="math inline">\(i\)</span> e <span class="math inline">\(\bar{a}\)</span> é a média aritmética do excesso de retorno.</p>
+<p>Ele representa a diferença entre a performance observada entre uma posição (ação ou porfólio) e do seu benchmarking. Assim, mede a consistência de um porfólio contra um benchmarking ao longo de um dado período. Mesmo portfólios que são perfeitamente indexados contra um benchmarking se comportam diferentemente de um benchmarking. Assim, o tracking error é utilizado para quantificar essas diferenças.</p>
+<p>Se o retorno do investimento for baixo mas possui um valor alto de <em>tracking error</em>, este é um sinal de que uma mudança de portfólio é necessária.</p>
+<p>Se o tracking error for elevado significa que o retorno do portfólio é mais volátil ao longo do tempo e não tão consiste em bater o benchmarking.</p>
+<pre class="r"><code>RaRb_capm %&gt;% 
+  select(Empresa, TrackingError) %&gt;% 
+  arrange(desc(TrackingError)) %&gt;% 
+  head(10) %&gt;% 
+  left_join(df %&gt;% select(Empresa, Setor), by = &quot;Empresa&quot;) %&gt;% 
+  distinct() %&gt;% 
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Empresa</th>
+<th align="right">TrackingError</th>
+<th align="left">Setor</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">TXRX3.SA</td>
+<td align="right">10.0619</td>
+<td align="left">Consumo Cíclico</td>
+</tr>
+<tr class="even">
+<td align="left">ODER4.SA</td>
+<td align="right">9.5899</td>
+<td align="left">Consumo não Cíclico</td>
+</tr>
+<tr class="odd">
+<td align="left">GPAR3.SA</td>
+<td align="right">7.4202</td>
+<td align="left">Utilidade Pública</td>
+</tr>
+<tr class="even">
+<td align="left">TCSA3.SA</td>
+<td align="right">5.7209</td>
+<td align="left">Consumo Cíclico</td>
+</tr>
+<tr class="odd">
+<td align="left">MWET3.SA</td>
+<td align="right">5.5682</td>
+<td align="left">Bens Industriais</td>
+</tr>
+<tr class="even">
+<td align="left">CEPE3.SA</td>
+<td align="right">3.9775</td>
+<td align="left">Utilidade Pública</td>
+</tr>
+<tr class="odd">
+<td align="left">MMXM3.SA</td>
+<td align="right">3.6660</td>
+<td align="left">Materiais Básicos</td>
+</tr>
+<tr class="even">
+<td align="left">TELB3.SA</td>
+<td align="right">3.3057</td>
+<td align="left">Comunicações</td>
+</tr>
+<tr class="odd">
+<td align="left">TEKA3.SA</td>
+<td align="right">3.2550</td>
+<td align="left">Consumo Cíclico</td>
+</tr>
+<tr class="even">
+<td align="left">NORD3.SA</td>
+<td align="right">3.1530</td>
+<td align="left">Bens Industriais</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="razão-de-informação" class="section level3">
+<h3>Razão de Informação</h3>
+<p>A razão de informação é similar a Razão de Sharpe, só que ao invés de comparar retornos absolutos, temos retornos em excesso, e em vez de risco absoluto, temos risco relativo (tracking error). Geralmente são calculados utilizados retornos anuais. Assim, a Razão de Informação mostra o quanto um portfólio excedeu um benchmarking.</p>
+<p>Abaixo, um exemplo hipotético em que o índice tenha retorno anualizado de -1,5%:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Portfólio</th>
+<th>Retorno anualizado</th>
+<th>Tracking Error</th>
+<th>Razão de Informação</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A</td>
+<td>13%</td>
+<td>8%</td>
+<td><span class="math inline">\((13-(-1,5))/8) = 1,81\)</span></td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>8%</td>
+<td>4,5%</td>
+<td><span class="math inline">\((8 - (-1,5))/4,5) = 2,11\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Assim, apesar do portfólio B tem retornos menores que A, ele tem melhor RI, em parte, porque ele tem menor desvio padrão ou tracking error, que significa menos risco e mais consistência do portfólio relativo ao benchmarking.</p>
+<pre class="r"><code>RaRb_capm %&gt;% 
+  select(Empresa, InformationRatio) %&gt;% 
+  arrange(desc(InformationRatio)) %&gt;% 
+  head(10) %&gt;% 
+  left_join(df %&gt;% select(Empresa, Setor), by = &quot;Empresa&quot;) %&gt;% 
+  distinct() %&gt;% 
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Empresa</th>
+<th align="right">InformationRatio</th>
+<th align="left">Setor</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ENEV3.SA</td>
+<td align="right">4.2181</td>
+<td align="left">Utilidade Pública</td>
+</tr>
+<tr class="even">
+<td align="left">BAUH4.SA</td>
+<td align="right">2.7556</td>
+<td align="left">Consumo não Cíclico</td>
+</tr>
+<tr class="odd">
+<td align="left">GPCP3.SA</td>
+<td align="right">2.7504</td>
+<td align="left">Materiais Básicos</td>
+</tr>
+<tr class="even">
+<td align="left">WEGE3.SA</td>
+<td align="right">2.7054</td>
+<td align="left">Bens Industriais</td>
+</tr>
+<tr class="odd">
+<td align="left">MGLU3.SA</td>
+<td align="right">2.4541</td>
+<td align="left">Consumo Cíclico</td>
+</tr>
+<tr class="even">
+<td align="left">PRIO3.SA</td>
+<td align="right">2.2576</td>
+<td align="left">Petróleo, Gás e Biocombustíveis</td>
+</tr>
+<tr class="odd">
+<td align="left">CSNA3.SA</td>
+<td align="right">1.7580</td>
+<td align="left">Materiais Básicos</td>
+</tr>
+<tr class="even">
+<td align="left">HAPV3.SA</td>
+<td align="right">1.7489</td>
+<td align="left">Saúde</td>
+</tr>
+<tr class="odd">
+<td align="left">IGBR3.SA</td>
+<td align="right">1.7337</td>
+<td align="left">Financeiro</td>
+</tr>
+<tr class="even">
+<td align="left">KEPL3.SA</td>
+<td align="right">1.6978</td>
+<td align="left">Bens Industriais</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="r-quadrado" class="section level3">
+<h3>R Quadrado</h3>
+<p>O R quadrado informa o quão correlacionado um ativo ou portfólio está com o benchmarking. R-squared mede o grau com que a performance de um portfólio pode ser atribuida a performance de um índice de benchmarking.</p>
+<pre class="r"><code>RaRb_capm %&gt;% 
+  select(Empresa, `R-squared`) %&gt;% 
+  arrange(desc(`R-squared`)) %&gt;% 
+  head(10) %&gt;% 
+  left_join(df %&gt;% select(Empresa, Setor), by = &quot;Empresa&quot;) %&gt;% 
+  distinct() %&gt;% 
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Empresa</th>
+<th align="right">R-squared</th>
+<th align="left">Setor</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">PETR3.SA</td>
+<td align="right">0.8344</td>
+<td align="left">Petróleo, Gás e Biocombustíveis</td>
+</tr>
+<tr class="even">
+<td align="left">BBAS3.SA</td>
+<td align="right">0.8130</td>
+<td align="left">Financeiro</td>
+</tr>
+<tr class="odd">
+<td align="left">SMLS3.SA</td>
+<td align="right">0.8095</td>
+<td align="left">Consumo Cíclico</td>
+</tr>
+<tr class="even">
+<td align="left">CVCB3.SA</td>
+<td align="right">0.8068</td>
+<td align="left">Consumo Cíclico</td>
+</tr>
+<tr class="odd">
+<td align="left">VIVA3.SA</td>
+<td align="right">0.7947</td>
+<td align="left">Consumo Cíclico</td>
+</tr>
+<tr class="even">
+<td align="left">IGTA3.SA</td>
+<td align="right">0.7832</td>
+<td align="left">Financeiro</td>
+</tr>
+<tr class="odd">
+<td align="left">JPSA3.SA</td>
+<td align="right">0.7800</td>
+<td align="left">Financeiro</td>
+</tr>
+<tr class="even">
+<td align="left">MULT3.SA</td>
+<td align="right">0.7759</td>
+<td align="left">Financeiro</td>
+</tr>
+<tr class="odd">
+<td align="left">BBDC3.SA</td>
+<td align="right">0.7630</td>
+<td align="left">Financeiro</td>
+</tr>
+<tr class="even">
+<td align="left">CYRE3.SA</td>
+<td align="right">0.7475</td>
+<td align="left">Consumo Cíclico</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>

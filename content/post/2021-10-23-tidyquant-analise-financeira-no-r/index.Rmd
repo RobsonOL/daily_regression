@@ -1,0 +1,362 @@
+---
+title: TidyQuant - Analise financeira no R
+author: 'Robson Oliveira Lima'
+date: '2021-10-23'
+slug: tidyquant-analise-financeira-no-r
+categories: []
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2021-10-23T13:57:07-03:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+
+
+# Pacotes
+
+Para realizar as análises de performance das ações negociadas na B3 vamos utilizar o pacote `tidyquant`.
+
+```{r include=FALSE}
+needs::needs(tidyverse, tidyquant)
+```
+
+# Dados
+
+Os dados abaixo possuem uma série de informações sobre as empresas negociadas no B3, com atributos de *valor de abertura*, *fechamento*, *fechamento ajustado e volume negociado* para cada dia do período entre Janeiro de 2019 e Março de 2021. Temos ainda informações sobre o setor e subsetor da economia que a empresa atua. 
+
+Para nossa análise, vamos trabalhar apenas com o valor de fechamento ajustado das ações. 
+
+O pacote `TidyQuant` fornece uma função bastante conveniente para baixar dados de ações com apenas o nome do *ticker*. A função é a `tq_get` e poderiamos baixar as ações da Vale, Itaú e Petrobras com o seguinte código:
+
+```{r}
+tickers <- c("ITSA3.SA", "PETR3.SA", "VALE3.SA")
+
+tickers %>% 
+  tq_get(get  = "stock.prices",
+         from = "2021-01-02",
+         to   = "2021-3-01") %>% 
+  head(10) %>% 
+  knitr::kable()
+```
+
+Contudo, como o objetivo é analisar todas as ações que fazem parte da B3 durante o período entre 2019 e março de 2021 (o que é um procedimento bastante lento), vou importar manualmente estes dados, que foram previamente baixados utilizando a própria função `tq_get`, e tratados a fim de informar o setor e subsetor de atuação da empresa. 
+
+
+```{r}
+df <- read_csv("empresas_b3_2019_2021.zip") %>% 
+  mutate(Data = as.Date(Data)) %>% 
+  filter(Atributo == "Adj Close") %>% 
+  filter(!is.na(Valor)) %>% 
+  select(-Incluir)
+
+df %>% 
+  head() %>% 
+  knitr::kable()
+```
+
+A base de dados possui informações para 286 empresas, divididas em 11 setores e 42 subsetores. Temos informações de janeiro de 2019 a março de 2021. 
+
+```{r}
+df %>% summarise(`Total de Empresas` = n_distinct(Nome),
+                 `Total de Setores` = n_distinct(Setor),
+                 `Total de Subsetores` = n_distinct(Subsetor),
+                 `Data de Início` = min(Data),
+                 `Data Final` = max(Data)) %>% 
+  mutate(across(everything(), as.character)) %>% 
+  pivot_longer(everything()) %>% 
+  rename("Atributo" = 1, "Valor" = 2) %>% 
+  knitr::kable()
+```
+
+
+## Retorno Mensal
+
+Para realizar as comparações propostas, precisamos transformar os preços de fechamento em retornos. 
+
+A função `tq_transmute` permite calcular o retorno mensal para o valor de fechamento ajustado da ação. Para isto, precisamos indicar qual a variável que sofrerá a transformação (`Valor`), qual a transformação utilizada (`mutate_fun = periodReturn`) e qual a periodicidade do cálculo (`period = "monthly"`).
+
+Vamos guardar as informações de retorno das ações no objeto `Ra`. 
+
+```{r}
+Ra <- df %>% 
+  select(Data, Empresa, Valor) %>% 
+  group_by(Empresa) %>% 
+  tq_transmute(select = Valor,
+               mutate_fun = periodReturn,
+               period = "monthly",
+               col_rename = "Ra")
+Ra %>% 
+  head() %>% 
+  knitr::kable()
+```
+
+Essa base de dados possui três colunas: `Data`, que representa o último dia do mês, a coluna `Ra`, que exibe o retorno mensal e `Empresa`, o ticker de cada empresa. 
+
+Como os retornos normalizam os valores, podemos realizar comparações entre diferentes setores, apenas para entender como as empresas foram afetadas pela Covid-19:
+
+
+```{r}
+Ra %>% 
+  left_join(df %>% select(Empresa, Setor), by = "Empresa") %>% 
+  group_by(Setor, Data) %>% 
+  summarise(Ra = mean(Ra)) %>% 
+  ggplot(aes(x = Data, y = Ra, color = Setor)) + 
+  geom_line() + 
+  geom_vline(xintercept = as.Date("2020-03-01"), linetype = 2,
+             color = "grey20") +
+  labs(y = "Retorno Mensal Médio", y = "data",
+       title = "Retorno Mensal Médio por Setor da B3, 2019 - 2021") + 
+  facet_wrap(~Setor, nrow = 3) + 
+  theme_minimal() +
+  theme(legend.position = "none", 
+        axis.text.x = element_text(angle = 45))
+
+```
+
+## Retorno Livre de Risco
+
+A fim de comparar o comportamento dos retornos de cada ação, precisamos de um grupo de comparação, também chamado de *baseline*. Como grupo de comparação, vamos utilizar o valor negociado do Índice Bovespa (`BVSP`). 
+
+Podemos utilizar a função `tq_get` para obter os dados do ticker `^BVSP` para o mesmo período de análise e transformar as informações de fechamento em retorno mensal, e unir com as informações de `Ra`:
+
+
+```{r message=FALSE, warning=FALSE}
+Rb <- "^BVSP" %>%
+  tq_get(get  = "stock.prices",
+         from = "2019-01-02",
+         to   = "2021-03-01") %>%
+  tq_transmute(select     = adjusted, 
+               mutate_fun = periodReturn, 
+               period     = "monthly", 
+               col_rename = "Rb")
+
+RaRb <- 
+  left_join(Ra, 
+            Rb, 
+            by = c("Data" = "date"))
+
+RaRb %>% 
+  head() %>% 
+  knitr::kable()
+
+```
+
+
+# Razões de Risco
+
+Aqui vamos apresentar cinco razões de risco bastante populares: **Alpha**, **Beta**, **o Desvio-padrão**, **R-squared** e a **Razão de Sharpe**. 
+
+## Razão de Sharpe
+
+A Razão de Sharpe é comumente utilizada como uma medida de retorno por unidade de risco, e tem a seguinte fórmula
+
+$$\frac{r_P - r_F}{\sigma_P}$$
+
+onde $r_p$ é o retorno do portfólio, $r_F$ é a taxa livre de risco e $\sigma_P$ é o risco do portfólio (desvio-padrão do retorno) normalizada e anualizada. 
+
+**Quando maior a razão Sharpe, melhor é a combinação de risco e retorno.**
+
+Abaixo, um exemplo de como funciona a Razão de Sharp:
+
+|                     | Portfólio A                      | Portfólio B
+|---------------------|----------------------------------|-------------------
+| Retorno             | 7,9%                             | 6,9%
+| Risco               | 5,5%                             | 3,2%
+| Taxa livre de risco | 2,0%                             | 2,0%
+| Razão de Sharpe     | $\frac{7,9\% - 2,0\%}{5,5\%} = 1,07$| $\frac{6,9\% - 2,0\%}{3,2\%} = 1,53$
+
+
+Portanto, o portifólio B possui uma melhor performance ajustada ao risco do que o portfólio A.
+
+Agora podemos calcular para nosso banco de dados. Vamos utilizar a função `tq_performance`, que toma os seguintes argumentos: o conjunto de retornos `Ra`; `Rf`, que é a taxa livre de risco, `p`, que é o intervalo de confiança (de 95\% no nosso caso) e `FUN`, que é o valor do denominador (onde utilizaremos o desvio-padrão). Por simplificação vamos usar uma taxa livre de risco de zero.
+
+
+```{r}
+Ra_Sharpe <- RaRb %>% 
+  filter(!Empresa %in% c('JSLG3.SA', "TIMS3.SA","MGEL3.SA")) %>% 
+  tq_performance(Ra = Ra,
+                 Rb = NULL,
+                 performance_fun = SharpeRatio,
+                 Rf = 0,
+                 p = 0.95,
+                 FUN = "StdDev")
+
+Ra_Sharpe %>% 
+  head() %>% 
+  knitr::kable()
+```
+
+Podemos filtrar para os 10 ativos com maior valor da razão de Sharpe. 
+
+```{r}
+Ra_Sharpe %>% 
+  rename(Razao_Sharpe = 2) %>% 
+  arrange(desc(Razao_Sharpe)) %>% 
+  head(10) %>% 
+  knitr::kable()
+```
+
+## CAPM
+
+O pacote `TidyQuant` também permite estimar o modelo CAPM para as ações. No modelo CAPM podemos fatorar a taxa livre de risco e calcular a seguinte equação:
+
+$$r_p - r_F = \alpha + \beta \times (b - r_F) + \epsilon$$
+
+Para estimar o modelo CAPM, vamos utilizar a função `tq_performance` novamente, mas agora passando o argumento `performance_fun = table.CAPM`. Como visto na equação acima, ela apresenta uma série de novos parâmetros: como beta e alpha. 
+
+Mas primeiro, vamos gerar as informações da tabela CAPM:
+
+```{r}
+RaRb_capm <- RaRb %>% 
+  # essas empresas possuem informações faltantes e serão excluídas
+  filter(!Empresa %in% c('JSLG3.SA', "TIMS3.SA","MGEL3.SA")) %>% 
+  tq_performance(Ra = Ra,
+                 Rb = Rb,
+                 performance_fun = table.CAPM)
+RaRb_capm %>% 
+  head(10) %>% 
+  knitr::kable()
+```
+
+Agora vamos entender cada um dos parâmetros do modelo CAPM, a começar pelo Beta.
+
+### **Beta** ($\beta$) 
+
+Ele representa o risco sistêmico ou a volatilidade de uma ação específica comparada com o risco sistêmico do mercado como um todo. De maneira geral, um Beta igual a 1 representa uma atividade bastante correlacionada com o mercado. Adicionar uma ação com beta igual a 1 a um portfólio não adiciona nenhum risco a ele. Um beta menor que a unidade significa que a ação é menos volátil que a média do mercado, de modo que sua inclusão reduz o risco médio do porfólio. Por exemplo, ações de empresas de utilidades públicas tendem a ter um beta baixo. 
+
+Já empresas com beta maior que a unidade indicam que o preço da ação é teoricamente mais volátil que o mercado. Se uma ação possui beta igual a 1,2 podemos assumir que ele é 20\% mais volátil que o mecado. Ações de tecnologia tendem a ter maiores betas que o *benchmark* de mercado. Isto indica que sua adição ao portfólio aumenta o risco (mas também pode aumentar o retorno esperado).
+
+
+Vamos observar os maiores valores de Beta:
+
+```{r}
+RaRb_capm %>% 
+  select(Empresa, Beta) %>% 
+  arrange(desc(Beta)) %>%
+  head(10) %>% 
+  left_join(df %>% select(Empresa, Setor), by = "Empresa") %>% 
+  distinct()
+```
+
+Podemos ver que entre as empresas com maior volatilidade, temos empresas de Petróleo, Consumo Cíclico e até mesmo uma de Utilidade Pública.
+
+Algumas ações possuem **beta negativo**, isso reflete o fato de que estas empresas são espelhos do mercado. Quando o mercado está em alta, ela está em baixa, e vice-versa. Alguns exemplos:
+
+```{r}
+RaRb_capm %>% 
+  select(Empresa, Beta) %>% 
+  arrange(Beta) %>% 
+  head(10) %>% 
+  left_join(df %>% select(Empresa, Setor), by = "Empresa") %>% 
+  distinct()
+```
+
+Contudo, um valor pequeno de beta apenas informa que a volatilidade do preço é baixa. Mas uma empresa pode ter pequenas variações de preço e estar em uma tendência de longo prazo de baixa. Assim, adicionar uma ação com tendência de baixa com um beta pequeno diminui o risco do portfólio apenas se o investidor define risco estritamente em termos de volatilidade, em vez de potencial para perdas. Da mesma foram, uma ação com beta elevado mas que está em um tendência de alta vai aumentar o risco do portfólio, mas também irá adicionar valor. 
+
+Portanto é preciso utilizar o beta com cuidado, sempre em conjunto com outras medidas. Assim, o beta pode ser util para avaliar o risco de curto prazo de uma ação, não sendo muito útil quando se deseja fazer investimentos de longo prazo, uma vez que a volatilidade da ação pode mudar bastante no longo prazo.
+
+Temos ainda:
+
+* O **Beta Bull** ou $\beta^+$ calcula a regressão apenas para retornos de mercado positivos, de modo que trás informações no comportamento do portfólio de mercados positivos. 
+
+* O **Beta Bear** ou $\beta^-$ calcula a regressão apenas para retornos de mercado negativos.
+
+
+
+### **Alpha** ou **Alpha de Jenson** 
+
+Alpha representa o intercepto da equação de regressão no CAPM, e reflete o grau com que o retorno de uma ação está em linha (ou excede) o retorno gerado pelo mercado. Assim, o alpha representa os retornos sobre o investimento que não são o resultado de um movimento geral de mercado. O **alpha de Jensen** especificamente, inclui um componente de risco ajustado nas suas contas.  
+
+Uma ação com alpha igual a zero possui retornos em linha com o presente no mercado. Por outro lado, um alpha negativo indica que a ação não gera retornos na mesma taxa que o setor como um todo. 
+
+
+```{r}
+RaRb_capm %>% 
+  select(Empresa, Alpha) %>% 
+  arrange(desc(Alpha)) %>% 
+  head(10) %>% 
+  left_join(df %>% select(Empresa, Setor), by = "Empresa") %>% 
+  distinct() %>% 
+  knitr::kable()
+
+```
+
+
+### Tracking Error
+
+Medidas de risco absoluto como analisadadas anteriormente calculam o risco do portfólio e do *benchmarking* calculados separadamente, para posterior comparação. O tracking error é um exemplo de uma medida de risco relativa, cujo foco é no retorno em excesso do portfólio contra o benchmarking. A variabilidade de retorno em excesso é calculada usando o desvio-padrão, e é chamada de tracking error. 
+
+Sua fórmula é dada por
+
+$$TE = \sqrt{\frac{\sum_{i=1}^{n}(a_i - \bar{a})^2}{n}}$$
+onde $a_i$ é o retorno em excesso no mês $i$ e $\bar{a}$ é a média aritmética do excesso de retorno. 
+
+Ele representa a diferença entre a performance observada entre uma posição (ação ou porfólio) e do seu benchmarking. Assim, mede a consistência de um porfólio contra um benchmarking ao longo de um dado período. Mesmo portfólios que são perfeitamente indexados contra um benchmarking se comportam diferentemente de um benchmarking. Assim, o tracking error é utilizado para quantificar essas diferenças. 
+
+Se o retorno do investimento for baixo mas possui um valor alto de *tracking error*, este é um sinal de que uma mudança de portfólio é necessária. 
+
+Se o tracking error for elevado significa que o retorno do portfólio é mais volátil ao longo do tempo e não tão consiste em bater o benchmarking.
+
+```{r}
+RaRb_capm %>% 
+  select(Empresa, TrackingError) %>% 
+  arrange(desc(TrackingError)) %>% 
+  head(10) %>% 
+  left_join(df %>% select(Empresa, Setor), by = "Empresa") %>% 
+  distinct() %>% 
+  knitr::kable()
+
+```
+
+
+
+### Razão de Informação
+
+A razão de informação é similar a Razão de Sharpe, só que ao invés de comparar retornos absolutos, temos retornos em excesso, e em vez de risco absoluto, temos risco relativo (tracking error). Geralmente são calculados utilizados retornos anuais. Assim, a Razão de Informação mostra o quanto um portfólio excedeu um benchmarking. 
+
+Abaixo, um exemplo hipotético em que o índice tenha retorno anualizado de -1,5%:
+
+
+| Portfólio | Retorno anualizado | Tracking Error | Razão de Informação
+|-----------|--------------------|----------------|--------------------
+| A         | 13%                | 8%             | $(13-(-1,5))/8) = 1,81$
+| B         | 8%                 | 4,5%           | $(8 - (-1,5))/4,5) = 2,11$
+
+Assim, apesar do portfólio B tem retornos menores que A, ele tem melhor RI, em parte, porque ele tem menor desvio padrão ou tracking error, que significa menos risco e mais consistência do portfólio relativo ao benchmarking. 
+
+
+
+```{r}
+RaRb_capm %>% 
+  select(Empresa, InformationRatio) %>% 
+  arrange(desc(InformationRatio)) %>% 
+  head(10) %>% 
+  left_join(df %>% select(Empresa, Setor), by = "Empresa") %>% 
+  distinct() %>% 
+  knitr::kable()
+
+```
+
+
+### R Quadrado
+
+O R quadrado informa o quão correlacionado um ativo ou portfólio está com o benchmarking. R-squared mede o grau com que a performance de um portfólio pode ser atribuida a performance de um índice de benchmarking. 
+
+```{r}
+RaRb_capm %>% 
+  select(Empresa, `R-squared`) %>% 
+  arrange(desc(`R-squared`)) %>% 
+  head(10) %>% 
+  left_join(df %>% select(Empresa, Setor), by = "Empresa") %>% 
+  distinct() %>% 
+  knitr::kable()
+
+```
+
