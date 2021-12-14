@@ -38,5 +38,5 @@ superuser: true
 title: Robson Oliveira 
 ---
 
-Robson Oliveira is a professor of Economics at Instituto de Educação Tecnológica da Paraíba. His research interests include causality and predictive modelling.
+Robson Oliveira Lima is a professor of Economics at Instituto de Educação Tecnológica da Paraíba. His research interests include causality and predictive modelling.
 

@@ -648,7 +648,7 @@ extractWeights(otimizacao_retorno_rebalance) %>%
 Nenhuma surpresa que uma estratégia que maximiza retorno deixa o portfólio exposto a Magazine Luiza.
 
 ## Função Objetiva com Aversão ao Risco
-
+ 
 Por fim, vamos tentar um portfólio diferente. Vamos estimar um portfólio que maximizar uma função utilidade quadrática. Neste caso, a função objetivo tem dois termos: um para o retorno médio do portfólio, e outro para a variância do portfólio, de modo muito semelhante ao Risco de Sharpe. Contudo, vamos incluir um parâmetro de aversão ao risco, $\lambda > 0$ no termo de minimização de risco. Um investidor tomador de riscos teria um valor de $\lambda$ baixo, enquanto que um investidor averso ao risco teria um $\lambda$ elevado. Se $\lambda = 0$, o termo de risco é ignorado e voltamos para o caso de maximização de retorno. Assim, $\lambda$ representa um trade-off entre risco e retorno esperado.
 
 A figura \@ref(fig:plot-rebalance-aversao) mostra os pesos para um portfólio com $\lambda=10$.
