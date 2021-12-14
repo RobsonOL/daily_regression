@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Dr. Robson Oliveira" />
+  <title>R for Data Science</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="Aula01_Intro_files/reveal.js-3.3.0.1/css/reveal.css"/>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #ffffff;
+    color: #a0a0a0;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-left: 4px; }
+div.sourceCode
+  { color: #1f1c1b; background-color: #ffffff; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span { color: #1f1c1b; } /* Normal */
+code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
+code span.an { color: #ca60ca; } /* Annotation */
+code span.at { color: #0057ae; } /* Attribute */
+code span.bn { color: #b08000; } /* BaseN */
+code span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+code span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #924c9d; } /* Char */
+code span.cn { color: #aa5500; } /* Constant */
+code span.co { color: #898887; } /* Comment */
+code span.cv { color: #0095ff; } /* CommentVar */
+code span.do { color: #607880; } /* Documentation */
+code span.dt { color: #0057ae; } /* DataType */
+code span.dv { color: #b08000; } /* DecVal */
+code span.er { color: #bf0303; text-decoration: underline; } /* Error */
+code span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+code span.fl { color: #b08000; } /* Float */
+code span.fu { color: #644a9b; } /* Function */
+code span.im { color: #ff5500; } /* Import */
+code span.in { color: #b08000; } /* Information */
+code span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+code span.op { color: #1f1c1b; } /* Operator */
+code span.ot { color: #006e28; } /* Other */
+code span.pp { color: #006e28; } /* Preprocessor */
+code span.re { color: #0057ae; background-color: #e0e9f8; } /* RegionMarker */
+code span.sc { color: #3daee9; } /* SpecialChar */
+code span.ss { color: #ff5500; } /* SpecialString */
+code span.st { color: #bf0303; } /* String */
+code span.va { color: #0057ae; } /* Variable */
+code span.vs { color: #bf0303; } /* VerbatimString */
+code span.wa { color: #bf0303; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="Aula01_Intro_files/reveal.js-3.3.0.1/css/theme/white.css" id="theme">
+
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal .slide-menu-button {
+      left: 105px !important;
+    }
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+    <script src="Aula01_Intro_files/header-attrs-2.9/header-attrs.js"></script>
+    <link href="Aula01_Intro_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="Aula01_Intro_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section>
+    <h1 class="title">R for Data Science</h1>
+    <h2 class="author">Dr. Robson Oliveira</h2>
+</section>
+
+<section class="slide level2">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
+</style>
+<style type="text/css">
+
+.reveal section img { background:none; border:none; box-shadow:none; }
+
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  font-family: 'Roboto', sans-serif;
+}
+
+.reveal .slide {
+  font-family: 'Roboto', sans-serif;
+}
+</style>
+</section>
+<section id="section" class="slide level2">
+<h2><img src="imagem/dscience.png" width="400px" /></h2>
+</section>
+<section id="por-que-r" class="slide level2">
+<h2>Por que R?</h2>
+<p><img src="Aula01_Intro_files/figure-revealjs/unnamed-chunk-2-1.png" width="768" /></p>
+</section>
+<section>
+<section id="o-que-você-vai-aprender" class="title-slide slide level1">
+<h1>O que você vai aprender</h1>
+<p><img src="imagem/data-science.png" width="600px" /></p>
+</section>
+<section id="importar" class="slide level2">
+<h2>Importar</h2>
+<p><img src="imagem/import_r.png" width="600px" /></p>
+</section>
+<section id="tidy" class="slide level2">
+<h2>Tidy</h2>
+<p><img src="imagem/tidy-1.png" width="600px" /></p>
+<ul>
+<li class="fragment"><p><strong>Variáveis</strong> nas colunas</p></li>
+<li class="fragment"><p><strong>Observações</strong> nas linhas</p></li>
+<li class="fragment"><p><strong>Valores</strong> nas celulas</p></li>
+</ul>
+</section>
+<section id="transformar" class="slide level2">
+<h2>Transformar</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>dados <span class="sc">%&gt;%</span> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(...) <span class="sc">%&gt;%</span> <span class="co"># Ex.: Filtrar apenas funcionários do setor A</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(...) <span class="sc">%&gt;%</span> <span class="co"># Ex.: Selecionar variável nome e salário</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(...) <span class="sc">%&gt;%</span> <span class="co"># Ex.: Criar salário com reajuste</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(...)  <span class="co"># Ex.: Calcular a média salarial daquele setor</span></span></code></pre></div>
+</section>
+<section id="visualizar" class="slide level2">
+<h2>Visualizar</h2>
+<p><img src="Aula01_Intro_files/figure-revealjs/unnamed-chunk-7-1.png" width="480" /></p>
+</section>
+<section id="modelo" class="slide level2">
+<h2>Modelo</h2>
+<p><img src="Aula01_Intro_files/figure-revealjs/unnamed-chunk-8-1.png" width="480" /></p>
+</section>
+<section id="comunicação" class="slide level2">
+<h2>Comunicação</h2>
+<p><img src="imagem/storytelling.png" width="400px" /></p>
+</section>
+<section id="tidyverse" class="slide level2">
+<h2>Tidyverse</h2>
+<p><img src="imagem/tidyverse.png" width="500px" /></p>
+</section>
+<section class="slide level2">
+
+</section></section>
+<section>
+<section id="r-rstudio" class="title-slide slide level1">
+<h1>R &amp; RStudio</h1>
+<ul>
+<li class="fragment"><p><strong>R</strong> é a linguagem de programação utilizada para realizar as computações.</p></li>
+<li class="fragment"><h2 id="rstudio-é-a-ide-que-oferece-um-ambiente-de-desenvolvimento-mais-amigável-para-o-r."><strong>RStudio</strong> é a IDE, que oferece um ambiente de desenvolvimento mais amigável para o R.</h2></li>
+</ul>
+<p><img src="imagem/rstudio.png" width="300px" /></p>
+<p>O RStudio é dividido em 4 sub janelas:</p>
+<ul>
+<li class="fragment"><ol type="1">
+<li class="fragment"><strong>Script</strong>: onde ficarão os códigos.</li>
+</ol></li>
+<li class="fragment"><ol start="2" type="1">
+<li class="fragment"><strong>Console</strong>: onde o código é executado.</li>
+</ol></li>
+<li class="fragment"><ol start="3" type="1">
+<li class="fragment"><strong>Enviroment/outros</strong>: exibe os objetos criados.</li>
+</ol></li>
+<li class="fragment"><ol start="4" type="1">
+<li class="fragment"><strong>Files/Plots/etc</strong>: Exibe os arquivos da pasta de trabalho e os gráficos.</li>
+</ol></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<h3 id="básico-de-código">Básico de código</h3>
+<p>Você pode usar o R como uma calculadora:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>(<span class="dv">59</span> <span class="sc">+</span> <span class="dv">73</span> <span class="sc">+</span> <span class="dv">2</span>) <span class="sc">/</span> <span class="dv">3</span></span></code></pre></div>
+<pre><code>## [1] 44.66667</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">/</span> <span class="dv">200</span> <span class="sc">*</span> <span class="dv">30</span></span></code></pre></div>
+<pre><code>## [1] 0.15</code></pre>
+</section>
+<section class="slide level2">
+
+<h3 id="básico-de-código-1">Básico de código</h3>
+<p>Pode criar novos objetos com <code>&lt;-</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Olhe pra janela `Environment` depois de executar:</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">*</span> <span class="dv">4</span></span></code></pre></div>
+<p>Toda criação de objeto segue a mesma forma:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># nome_objeto assume o valor específico.</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>nome_objeto <span class="ot">&lt;-</span> valor</span></code></pre></div>
+<p>Para inspecionar o objeto, execute seu nome precisamente</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div>
+<pre><code>## [1] 12</code></pre>
+</section>
+<section class="slide level2">
+
+<h3 id="nome-dos-objetos">Nome dos objetos</h3>
+<p>Nome de objetos precisam:</p>
+<ul>
+<li class="fragment"><p>Começar com letras</p></li>
+<li class="fragment"><p>Conter apenas letras, números, underline e ponto.</p></li>
+<li class="fragment"><p>Existem várias convenções sobre a melhor forma de dar nome aos objetos.</p></li>
+<li class="fragment"><p>Eles precisam ser descritivos.</p></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<h3 id="nome-dos-objetos-1">Nome dos objetos</h3>
+<p>Recomendo o sistema <strong>snake_case</strong>: palavras em minúsculo separados por <code>_</code>.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>nome_da_variavel</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>dados_funcionario</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>pib_municipal</span></code></pre></div>
+</section>
+<section class="slide level2">
+
+<h3 id="chamando-funções">Chamando funções</h3>
+<p>Funções tomam argumentos e retornam um resultado:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nome_funcao</span>(<span class="at">arg1 =</span> valor1, <span class="at">arg2 =</span> valor2, ...)</span></code></pre></div>
+<p>Podemos usar <code>seq()</code> para criar uma sequência de números. Essa função precisa do valor inicial e final:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">10</span>)</span></code></pre></div>
+<pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
+</section>
+<section class="slide level2">
+
+<h3 id="chamando-funções-1">Chamando funções</h3>
+<p>As funções podem ter argumentos padrão (default), como <code>seq</code> que determina o espaçamento entre números para 1. Podemos modificar isso se quisermos:</p>
+<pre><code>## [1] 1 3 5 7 9</code></pre>
+<p>Ou podemos determinar o tamanho da sequência:</p>
+<pre><code>## [1]  1.00  3.25  5.50  7.75 10.00</code></pre>
+</section>
+<section class="slide level2">
+
+<h3 id="pedindo-ajuda">Pedindo ajuda</h3>
+<p>Mas como descobrir o nome desses argumentos?</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>?seq</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ou</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">help</span>(<span class="st">&quot;seq&quot;</span>)</span></code></pre></div>
+<p>Alternativamente, você pode selecionar o nome da função e clicar F1 no RStudio.</p>
+</section>
+<section class="slide level2">
+
+<h3 id="fluxo-de-trabalho-scripts">Fluxo de Trabalho: Scripts</h3>
+<ul>
+<li class="fragment"><p>É sempre uma boa ideia usar scripts. Nele você pode salvar seu código para reutilizar novamente</p></li>
+<li class="fragment"><p>Clique em <code>File</code>, selecione <code>New File</code>, então <code>R script</code>.</p></li>
+<li class="fragment"><p>Você pode rodar uma linha de código e executar com <code>Ctrl + Enter</code>.</p></li>
+<li class="fragment"><p>Selecionando várias linhas é possível executar várias linhas de código de uma vez.</p></li>
+<li class="fragment"><p>Salve o código com <code>Ctrl + S</code> para reutiliza-lo.</p></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<ul>
+<li class="fragment"><p><strong>Dica:</strong> sempre comece o código carregando os pacotes (library) importantes: <code>library(tidyverse)</code>.</p></li>
+<li class="fragment"><p>Caso contrário, as funções não ficam a sua disposição.</p></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<h3 id="fluxo-de-trabalho-projetos">Fluxo de trabalho: Projetos</h3>
+<ul>
+<li class="fragment"><p>Crie um projeto RStudio para cada projeto de análise de dados.</p></li>
+<li class="fragment"><p>Assim, você mantem todos os arquivos associados a um projeto em um lugar só: dados, scripts, figuras, resultados.</p></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<p><img src="imagem/new_project1.png" width="400px" /></p>
+<p><img src="imagem/new_project2.png" width="400px" /></p>
+</section>
+<section id="section-1" class="slide level2">
+<h2><img src="imagem/new_project3.png" width="400px" /></h2>
+</section></section>
+<section id="referências" class="title-slide slide level1">
+<h1>Referências</h1>
+<p><a href="http://electionsbr.com/livro/introducao-ao-r.html" class="uri">http://electionsbr.com/livro/introducao-ao-r.html</a></p>
+<p><a href="https://danmrc.github.io/R-para-Economistas/" class="uri">https://danmrc.github.io/R-para-Economistas/</a></p>
+<p><a href="https://r4ds.had.co.nz/" class="uri">https://r4ds.had.co.nz/</a></p>
+</section>
+    </div>
+  </div>
+
+  <script src="Aula01_Intro_files/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="Aula01_Intro_files/reveal.js-3.3.0.1/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: true,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'slide', // none/fade/slide/convex/concave/zoom
+
+        menu: {
+   
+    
+    
+    
+    
+    
+    
+ 
+          custom: false,
+          themes: false,
+          transitions: false
+        },
+
+
+
+        chalkboard: {
+        },
+
+        keyboard: {
+          67: function() { RevealChalkboard.toggleNotesCanvas() },    // toggle notes canvas when 'c' is pressed
+          66: function() { RevealChalkboard.toggleChalkboard() }, // toggle chalkboard when 'b' is pressed
+          46: function() { RevealChalkboard.clear() },    // clear chalkboard when 'DEL' is pressed
+           8: function() { RevealChalkboard.reset() },    // reset chalkboard data on current slide when 'BACKSPACE' is pressed
+          68: function() { RevealChalkboard.download() }, // downlad recorded chalkboard drawing when 'd' is pressed
+        },
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'Aula01_Intro_files/reveal.js-3.3.0.1/plugin/notes/notes.js', async: true },
+          { src: 'Aula01_Intro_files/reveal.js-3.3.0.1/plugin/zoom-js/zoom.js', async: true },
+          { src: 'Aula01_Intro_files/reveal.js-3.3.0.1/plugin/chalkboard/chalkboard.js', async: true },
+          { src: 'Aula01_Intro_files/reveal.js-3.3.0.1/plugin/menu/menu.js', async: true },
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>

@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>📊 Learn Data Science | Daily Regression</title>
+    <title>📊 Introdução à Ciências de Dados com R | Daily Regression</title>
     <link>/courses/example/</link>
       <atom:link href="/courses/example/index.xml" rel="self" type="application/rss+xml" />
-    <description>📊 Learn Data Science</description>
+    <description>📊 Introdução à Ciências de Dados com R</description>
     <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2021 Robson Oliveira</copyright><lastBuildDate>Sun, 24 Jan 2021 00:00:00 +0000</lastBuildDate>
     <image>
       <url>/courses/example/featured.jpg</url>
-      <title>📊 Learn Data Science</title>
+      <title>📊 Introdução à Ciências de Dados com R</title>
       <link>/courses/example/</link>
     </image>
     
     <item>
-      <title>Python basics</title>
-      <link>/courses/example/python/</link>
+      <title>Introdução ao R</title>
+      <link>/courses/example/intro/</link>
       <pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate>
-      <guid>/courses/example/python/</guid>
-      <description>&lt;p&gt;Build a foundation in Python.&lt;/p&gt;
+      <guid>/courses/example/intro/</guid>
+      <description>&lt;p&gt;Entendendo o básico.&lt;/p&gt;
 &lt;p&gt;
   &lt;i class=&#34;fas fa-clock  pr-1 fa-fw&#34;&gt;&lt;/i&gt; 1-2 hours per week, for 8 weeks&lt;/p&gt;
 &lt;h2 id=&#34;learn&#34;&gt;Learn&lt;/h2&gt;
@@ -104,6 +104,264 @@ The variance of the distribution is $\sigma^{2}$.
   &lt;summary&gt;What is the parameter $\mu$?&lt;/summary&gt;
   &lt;p&gt;The parameter $\mu$ is the mean or expectation of the distribution.&lt;/p&gt;
 &lt;/details&gt;</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>/courses/example/aula01_intro_files/reveal.js-3.3.0.1/contributing/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/courses/example/aula01_intro_files/reveal.js-3.3.0.1/contributing/</guid>
+      <description>&lt;h2 id=&#34;contributing&#34;&gt;Contributing&lt;/h2&gt;
+&lt;p&gt;Please keep the &lt;a href=&#34;http://github.com/hakimel/reveal.js/issues&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;issue tracker&lt;/a&gt; limited to &lt;strong&gt;bug reports&lt;/strong&gt;, &lt;strong&gt;feature requests&lt;/strong&gt; and &lt;strong&gt;pull requests&lt;/strong&gt;.&lt;/p&gt;
+&lt;h3 id=&#34;personal-support&#34;&gt;Personal Support&lt;/h3&gt;
+&lt;p&gt;If you have personal support or setup questions the best place to ask those are &lt;a href=&#34;http://stackoverflow.com/questions/tagged/reveal.js&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;StackOverflow&lt;/a&gt;.&lt;/p&gt;
+&lt;h3 id=&#34;bug-reports&#34;&gt;Bug Reports&lt;/h3&gt;
+&lt;p&gt;When reporting a bug make sure to include information about which browser and operating system you are on as well as the necessary steps to reproduce the issue. If possible please include a link to a sample presentation where the bug can be tested.&lt;/p&gt;
+&lt;h3 id=&#34;pull-requests&#34;&gt;Pull Requests&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Should follow the coding style of the file you work in, most importantly:
+&lt;ul&gt;
+&lt;li&gt;Tabs to indent&lt;/li&gt;
+&lt;li&gt;Single-quoted strings&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Should be made towards the &lt;strong&gt;dev branch&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Should be submitted from a feature/topic branch (not your master)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;plugins&#34;&gt;Plugins&lt;/h3&gt;
+&lt;p&gt;Please do not submit plugins as pull requests. They should be maintained in their own separate repository. More information here: &lt;a href=&#34;https://github.com/hakimel/reveal.js/wiki/Plugin-Guidelines&#34;&gt;https://github.com/hakimel/reveal.js/wiki/Plugin-Guidelines&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>/courses/example/aula01_intro_files/reveal.js-3.3.0.1/plugin/markdown/example/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/courses/example/aula01_intro_files/reveal.js-3.3.0.1/plugin/markdown/example/</guid>
+      <description>&lt;h1 id=&#34;markdown-demo&#34;&gt;Markdown Demo&lt;/h1&gt;
+&lt;h2 id=&#34;external-11&#34;&gt;External 1.1&lt;/h2&gt;
+&lt;p&gt;Content 1.1&lt;/p&gt;
+&lt;p&gt;Note: This will only appear in the speaker notes window.&lt;/p&gt;
+&lt;h2 id=&#34;external-12&#34;&gt;External 1.2&lt;/h2&gt;
+&lt;p&gt;Content 1.2&lt;/p&gt;
+&lt;h2 id=&#34;external-2&#34;&gt;External 2&lt;/h2&gt;
+&lt;p&gt;Content 2.1&lt;/p&gt;
+&lt;h2 id=&#34;external-31&#34;&gt;External 3.1&lt;/h2&gt;
+&lt;p&gt;Content 3.1&lt;/p&gt;
+&lt;h2 id=&#34;external-32&#34;&gt;External 3.2&lt;/h2&gt;
+&lt;p&gt;Content 3.2&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>R for Data Science</title>
+      <link>/courses/example/slides/aula01/aula01_intro/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/courses/example/slides/aula01/aula01_intro/</guid>
+      <description>
+&lt;script src=&#34;/rmarkdown-libs/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+
+
+&lt;style&gt;
+@import url(&#39;https://fonts.googleapis.com/css2?family=Roboto:wght@100&amp;display=swap&#39;);
+&lt;/style&gt;
+&lt;style type=&#34;text/css&#34;&gt;
+
+.reveal section img { background:none; border:none; box-shadow:none; }
+
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  font-family: &#39;Roboto&#39;, sans-serif;
+}
+
+.reveal .slide {
+  font-family: &#39;Roboto&#39;, sans-serif;
+}
+&lt;/style&gt;
+&lt;hr /&gt;
+&lt;div id=&#34;section&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;&lt;img src=&#34;imagem/dscience.png&#34; width=&#34;400px&#34; /&gt;&lt;/h2&gt;
+&lt;/div&gt;
+&lt;div id=&#34;por-que-r&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Por que R?&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;/courses/example/slides/Aula01/Aula01_Intro_files/figure-html/unnamed-chunk-2-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;o-que-você-vai-aprender&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;O que você vai aprender&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&#34;imagem/data-science.png&#34; width=&#34;600px&#34; /&gt;&lt;/p&gt;
+&lt;div id=&#34;importar&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Importar&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;imagem/import_r.png&#34; width=&#34;600px&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;tidy&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Tidy&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;imagem/tidy-1.png&#34; width=&#34;600px&#34; /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Variáveis&lt;/strong&gt; nas colunas&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Observações&lt;/strong&gt; nas linhas&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Valores&lt;/strong&gt; nas celulas&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div id=&#34;transformar&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Transformar&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;dados %&amp;gt;% 
+  filter(...) %&amp;gt;% # Ex.: Filtrar apenas funcionários do setor A
+  select(...) %&amp;gt;% # Ex.: Selecionar variável nome e salário
+  mutate(...) %&amp;gt;% # Ex.: Criar salário com reajuste
+  summarise(...)  # Ex.: Calcular a média salarial daquele setor&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;visualizar&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Visualizar&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;/courses/example/slides/Aula01/Aula01_Intro_files/figure-html/unnamed-chunk-7-1.png&#34; width=&#34;480&#34; /&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;/div&gt;
+&lt;div id=&#34;modelo&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Modelo&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;/courses/example/slides/Aula01/Aula01_Intro_files/figure-html/unnamed-chunk-8-1.png&#34; width=&#34;480&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;comunicação&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Comunicação&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;imagem/storytelling.png&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;tidyverse&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Tidyverse&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;imagem/tidyverse.png&#34; width=&#34;500px&#34; /&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;r-rstudio&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;R &amp;amp; RStudio&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;R&lt;/strong&gt; é a linguagem de programação utilizada para realizar as computações.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;h2 id=&#34;rstudio-é-a-ide-que-oferece-um-ambiente-de-desenvolvimento-mais-amigável-para-o-r.&#34;&gt;&lt;strong&gt;RStudio&lt;/strong&gt; é a IDE, que oferece um ambiente de desenvolvimento mais amigável para o R.&lt;/h2&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;imagem/rstudio.png&#34; width=&#34;300px&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;O RStudio é dividido em 4 sub janelas:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;&lt;strong&gt;Script&lt;/strong&gt;: onde ficarão os códigos.&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
+&lt;li&gt;&lt;ol start=&#34;2&#34; style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;&lt;strong&gt;Console&lt;/strong&gt;: onde o código é executado.&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
+&lt;li&gt;&lt;ol start=&#34;3&#34; style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;&lt;strong&gt;Enviroment/outros&lt;/strong&gt;: exibe os objetos criados.&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
+&lt;li&gt;&lt;ol start=&#34;4&#34; style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;&lt;strong&gt;Files/Plots/etc&lt;/strong&gt;: Exibe os arquivos da pasta de trabalho e os gráficos.&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr /&gt;
+&lt;div id=&#34;básico-de-código&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Básico de código&lt;/h3&gt;
+&lt;p&gt;Você pode usar o R como uma calculadora:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;(59 + 73 + 2) / 3&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 44.66667&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;1 / 200 * 30&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 0.15&lt;/code&gt;&lt;/pre&gt;
+&lt;hr /&gt;
+&lt;/div&gt;
+&lt;div id=&#34;básico-de-código-1&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Básico de código&lt;/h3&gt;
+&lt;p&gt;Pode criar novos objetos com &lt;code&gt;&amp;lt;-&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Olhe pra janela `Environment` depois de executar:
+x &amp;lt;- 3 * 4&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Toda criação de objeto segue a mesma forma:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# nome_objeto assume o valor específico.
+nome_objeto &amp;lt;- valor&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Para inspecionar o objeto, execute seu nome precisamente&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;x&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 12&lt;/code&gt;&lt;/pre&gt;
+&lt;hr /&gt;
+&lt;/div&gt;
+&lt;div id=&#34;nome-dos-objetos&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Nome dos objetos&lt;/h3&gt;
+&lt;p&gt;Nome de objetos precisam:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Começar com letras&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Conter apenas letras, números, underline e ponto.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Existem várias convenções sobre a melhor forma de dar nome aos objetos.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Eles precisam ser descritivos.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr /&gt;
+&lt;/div&gt;
+&lt;div id=&#34;nome-dos-objetos-1&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Nome dos objetos&lt;/h3&gt;
+&lt;p&gt;Recomendo o sistema &lt;strong&gt;snake_case&lt;/strong&gt;: palavras em minúsculo separados por &lt;code&gt;_&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;nome_da_variavel
+dados_funcionario
+pib_municipal&lt;/code&gt;&lt;/pre&gt;
+&lt;hr /&gt;
+&lt;/div&gt;
+&lt;div id=&#34;chamando-funções&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Chamando funções&lt;/h3&gt;
+&lt;p&gt;Funções tomam argumentos e retornam um resultado:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;nome_funcao(arg1 = valor1, arg2 = valor2, ...)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Podemos usar &lt;code&gt;seq()&lt;/code&gt; para criar uma sequência de números. Essa função precisa do valor inicial e final:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;seq(1, 10)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##  [1]  1  2  3  4  5  6  7  8  9 10&lt;/code&gt;&lt;/pre&gt;
+&lt;hr /&gt;
+&lt;/div&gt;
+&lt;div id=&#34;chamando-funções-1&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Chamando funções&lt;/h3&gt;
+&lt;p&gt;As funções podem ter argumentos padrão (default), como &lt;code&gt;seq&lt;/code&gt; que determina o espaçamento entre números para 1. Podemos modificar isso se quisermos:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 1 3 5 7 9&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Ou podemos determinar o tamanho da sequência:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;## [1]  1.00  3.25  5.50  7.75 10.00&lt;/code&gt;&lt;/pre&gt;
+&lt;hr /&gt;
+&lt;/div&gt;
+&lt;div id=&#34;pedindo-ajuda&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Pedindo ajuda&lt;/h3&gt;
+&lt;p&gt;Mas como descobrir o nome desses argumentos?&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;?seq
+
+# ou
+
+help(&amp;quot;seq&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Alternativamente, você pode selecionar o nome da função e clicar F1 no RStudio.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;/div&gt;
+&lt;div id=&#34;fluxo-de-trabalho-scripts&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Fluxo de Trabalho: Scripts&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;É sempre uma boa ideia usar scripts. Nele você pode salvar seu código para reutilizar novamente&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Clique em &lt;code&gt;File&lt;/code&gt;, selecione &lt;code&gt;New File&lt;/code&gt;, então &lt;code&gt;R script&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Você pode rodar uma linha de código e executar com &lt;code&gt;Ctrl + Enter&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Selecionando várias linhas é possível executar várias linhas de código de uma vez.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Salve o código com &lt;code&gt;Ctrl + S&lt;/code&gt; para reutiliza-lo.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr /&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Dica:&lt;/strong&gt; sempre comece o código carregando os pacotes (library) importantes: &lt;code&gt;library(tidyverse)&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Caso contrário, as funções não ficam a sua disposição.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr /&gt;
+&lt;/div&gt;
+&lt;div id=&#34;fluxo-de-trabalho-projetos&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Fluxo de trabalho: Projetos&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Crie um projeto RStudio para cada projeto de análise de dados.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Assim, você mantem todos os arquivos associados a um projeto em um lugar só: dados, scripts, figuras, resultados.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr /&gt;
+&lt;p&gt;&lt;img src=&#34;imagem/new_project1.png&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;imagem/new_project2.png&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;section-1&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;&lt;img src=&#34;imagem/new_project3.png&#34; width=&#34;400px&#34; /&gt;&lt;/h2&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;referências&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Referências&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&#34;http://electionsbr.com/livro/introducao-ao-r.html&#34; class=&#34;uri&#34;&gt;http://electionsbr.com/livro/introducao-ao-r.html&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://danmrc.github.io/R-para-Economistas/&#34; class=&#34;uri&#34;&gt;https://danmrc.github.io/R-para-Economistas/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://r4ds.had.co.nz/&#34; class=&#34;uri&#34;&gt;https://r4ds.had.co.nz/&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
     </item>
     
   </channel>

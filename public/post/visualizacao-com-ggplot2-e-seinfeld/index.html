@@ -1,0 +1,1741 @@
+<!DOCTYPE html><html lang="en-us" >
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  
+  
+    <meta name="generator" content="Wowchemy 5.1.0 for Hugo" />
+  
+
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Robson Oliveira" />
+
+  
+  
+  
+    
+  
+  <meta name="description" content="IntroduçãoO ggplot2 é um pacote de visualização de dados open-source desenvolvido para o R. Criado por Hadley Wickham em 2005, é hoje uma das principais ferramentas de um cientista de dados." />
+
+  
+  <link rel="alternate" hreflang="en-us" href="/post/visualizacao-com-ggplot2-e-seinfeld/" />
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+
+  
+  
+  
+    <meta name="theme-color" content="#1565c0" />
+  
+
+  
+  
+    
+    <script src="/js/mathjax-config.js"></script>
+  
+
+  
+  
+  
+  
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha256-FMvZuGapsJLjouA6k7Eo2lusoAX9i0ShlWFG6qt7SLc=" crossorigin="anonymous">
+
+    
+    
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/github.min.css" crossorigin="anonymous" title="hl-light" media="print" onload="this.media='all'">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" media="print" onload="this.media='all'" disabled>
+        
+      
+    
+
+    
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css" integrity="sha512-1xoFisiGdy9nvho8EgXuXvnpR5GAMSjFwp40gSRE3NwdUdIMIKuPa7bqoUhLD0O/5tPNhteAsE5XyyMi5reQVA==" crossorigin="anonymous" media="print" onload="this.media='all'">
+    
+
+    
+
+    
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+  
+
+  
+  
+  
+    
+      
+      <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+    
+  
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/wowchemy.9a66e344a68eb664b392d406a3f80726.css" />
+
+  
+
+
+
+  
+
+  
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+    <link rel="manifest" href="/index.webmanifest" />
+  
+
+  <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_2.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_180x180_fill_lanczos_center_2.png" />
+
+  <link rel="canonical" href="/post/visualizacao-com-ggplot2-e-seinfeld/" />
+
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  <meta property="twitter:card" content="summary" />
+  
+  <meta property="og:site_name" content="Daily Regression" />
+  <meta property="og:url" content="/post/visualizacao-com-ggplot2-e-seinfeld/" />
+  <meta property="og:title" content="Visualizando Seinfeld com ggplot2 | Daily Regression" />
+  <meta property="og:description" content="IntroduçãoO ggplot2 é um pacote de visualização de dados open-source desenvolvido para o R. Criado por Hadley Wickham em 2005, é hoje uma das principais ferramentas de um cientista de dados." /><meta property="og:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" />
+    <meta property="twitter:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" /><meta property="og:locale" content="en-us" />
+  
+    
+      <meta
+        property="article:published_time"
+        content="2021-10-19T00:00:00&#43;00:00"
+      />
+    
+    <meta property="article:modified_time" content="2021-10-19T19:40:19-03:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+  
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/post/visualizacao-com-ggplot2-e-seinfeld/"
+  },
+  "headline": "Visualizando Seinfeld com ggplot2",
+  
+  "datePublished": "2021-10-19T00:00:00Z",
+  "dateModified": "2021-10-19T19:40:19-03:00",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Robson Oliveira"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "Daily Regression",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_192x192_fill_lanczos_center_2.png"
+    }
+  },
+  "description": "Introdução\rO ggplot2 é um pacote de visualização de dados open-source desenvolvido para o R. Criado por Hadley Wickham em 2005, é hoje uma das principais ferramentas de um cientista de dados."
+}
+</script>
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+  <title>Visualizando Seinfeld com ggplot2 | Daily Regression</title>
+</head>
+
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="61b895bd0706a454c10dc510c5035787" >
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <script src="/js/wowchemy-init.min.226a9011996d125bf3fe4a5f22353a49.js"></script>
+
+  
+
+
+<aside class="search-modal" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#" aria-label="Close"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search" class="form-control"
+        aria-label="Search...">
+        
+      </div>
+
+      
+      
+
+      
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+
+  <div class="page-header">
+    
+
+
+
+
+
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container-xl">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="/">Daily Regression</a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="/">Daily Regression</a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#about"><span>About</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#posts"><span>Posts</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#featured"><span>Publications</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/courses/"><span>Courses</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#contact"><span>Contact</span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+
+      
+      
+        
+          
+          <li class="nav-item d-none d-lg-inline-flex">
+            <a class="nav-link" href="https://twitter.com/robsonol" data-toggle="tooltip" data-placement="bottom" title="Twitter" target="_blank" rel="noopener" aria-label="Twitter">
+              <i class="fab fa-twitter" aria-hidden="true"></i>
+            </a>
+          </li>
+        
+      
+
+      
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+      
+      <li class="nav-item dropdown theme-dropdown">
+        <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-label="Display preferences">
+          <i class="fas fa-moon" aria-hidden="true"></i>
+        </a>
+        <div class="dropdown-menu">
+          <a href="#" class="dropdown-item js-set-theme-light">
+            <span>Light</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-dark">
+            <span>Dark</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-auto">
+            <span>Automatic</span>
+          </a>
+        </div>
+      </li>
+      
+
+      
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  </div>
+
+  <div class="page-body">
+    <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>Visualizando Seinfeld com ggplot2</h1>
+
+  
+
+  
+    
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+          Last updated on
+      
+    
+    Oct 19, 2021
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    16 min read
+  </span>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+  
+
+</div>
+
+    
+
+
+
+
+
+  
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      
+<script src="/post/visualizacao-com-ggplot2-e-seinfeld/index_files/header-attrs/header-attrs.js"></script>
+<script src="/post/visualizacao-com-ggplot2-e-seinfeld/index_files/htmlwidgets/htmlwidgets.js"></script>
+<link href="/post/visualizacao-com-ggplot2-e-seinfeld/index_files/wordcloud2/wordcloud.css" rel="stylesheet" />
+<script src="/post/visualizacao-com-ggplot2-e-seinfeld/index_files/wordcloud2/wordcloud2-all.js"></script>
+<script src="/post/visualizacao-com-ggplot2-e-seinfeld/index_files/wordcloud2/hover.js"></script>
+<script src="/post/visualizacao-com-ggplot2-e-seinfeld/index_files/wordcloud2-binding/wordcloud2.js"></script>
+
+
+<div id="introdução" class="section level1">
+<h1>Introdução</h1>
+<p>O <code>ggplot2</code> é um pacote de visualização de dados <em>open-source</em> desenvolvido para o R. Criado por Hadley Wickham em 2005, é hoje uma das principais ferramentas de um cientista de dados.</p>
+<p><img src="https://raw.githubusercontent.com/rstudio/hex-stickers/master/thumbs/ggplot2.png" /></p>
+<p>Neste artigo não tenho a pretenção de ensinar a criar visualizações com o ggplot2 (uma boa fonte é o excelente livro <a href="https://r4ds.had.co.nz/data-visualisation.html">R for Data Science</a>), mas apenas mostrar alguns dos tipos de visualizações que podem ser criadas com o pacote. Para tanto, vamos utilizar alguns dados publicamente disponíveis sobre a série de TV Seinfeld.</p>
+<p><img src="seinfeld.jpg" /></p>
+<p>Seinfeld foi uma série de comédia bastante longeva e de muito sucesso na TV americana. Tendo estreiado em julho de 1989, a série foi exibida por 9 temporadas, sem os altos e baixos típicos das séries longas.</p>
+<p>Para entender um pouco do sucesso da série, vamos analisar as notas dadas a cada episódio pelos usuários do Internet Movie Database (IMDb), o mais famoso site de informações sobre cinema, TV, jogos e outras áreas de entretenimento. Como exemplo, a <a href="https://www.imdb.com/title/tt0697679/?ref_=tt_ep_nx">página episódio 11 da quarta temporada de Seinfeld</a> mostra que cerca de 6400 usuários deram uma nota média de 9,5, uma das mais altas de todo a série.</p>
+<p><br></p>
+</div>
+<div id="dados-utilizados" class="section level1">
+<h1>Dados Utilizados</h1>
+<p>Mas antes de começarmos, vamos carregar os principais pacotes utilizados ao longo da análise:</p>
+<p>Agora podemos carregar os dados disponíveis sobre as notas de Seinfeld no IMDb. Eles estão disponíveis em vários locais da internet, mas estes dados foram baixados especificamente do Kangle <a href="https://www.kaggle.com/hod101s/seinfeld-imdb-ratings?select=SeinfeldData.csv">aqui</a>.</p>
+<p>Podemos ver abaixo que o banco de dados contém 172 linhas (episódios), com 7 variáveis: temporada, título do episódio, data da primeira transmissão na tv, nota média no IMDb, a quantidade de usuários que votaram no episódio, a sinópse do episódio e uma variável que indica o número do episódio.</p>
+<pre class="r"><code>df %&gt;% 
+  head() %&gt;% 
+  knitr::kable()</code></pre>
+<table>
+<colgroup>
+<col width="2%" />
+<col width="8%" />
+<col width="5%" />
+<col width="2%" />
+<col width="4%" />
+<col width="73%" />
+<col width="3%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">Season</th>
+<th align="left">Title</th>
+<th align="left">Airdate</th>
+<th align="right">Rating</th>
+<th align="right">Vote_count</th>
+<th align="left">Description</th>
+<th align="right">episode</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">Good News, Bad News</td>
+<td align="left">5 Jul. 1989</td>
+<td align="right">7.6</td>
+<td align="right">3431</td>
+<td align="left">Jerry and George argue whether an overnight visitor Jerry is expecting is coming with romantic intentions.</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">The Stakeout</td>
+<td align="left">31 May 1990</td>
+<td align="right">7.7</td>
+<td align="right">2749</td>
+<td align="left">Jerry and George stake out the lobby of an office building to find a woman Jerry met at a party but whose name and phone number he didn’t get.</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">The Robbery</td>
+<td align="left">7 Jun. 1990</td>
+<td align="right">7.6</td>
+<td align="right">2496</td>
+<td align="left">After Jerry’s apartment is robbed, Jerry starts to look for other apartments. But Jerry and George both want the same apartment, and Elaine wants the apartment of whoever loses out.</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">Male Unbonding</td>
+<td align="left">14 Jun. 1990</td>
+<td align="right">7.4</td>
+<td align="right">2465</td>
+<td align="left">Jerry tries various excuses to avoid meeting with an old friend with whom he no longer shares any interests.</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">The Stock Tip</td>
+<td align="left">21 Jun. 1990</td>
+<td align="right">7.5</td>
+<td align="right">2352</td>
+<td align="left">Jerry becomes apprehensive when he and George buy stock and the price falls while the person who suggested the stock is in hospital and can’t tell them when to sell.</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">The Ex-Girlfriend</td>
+<td align="left">23 Jan. 1991</td>
+<td align="right">7.7</td>
+<td align="right">2261</td>
+<td align="left">After George breaks up with his girlfriend, Jerry decides that he wants to see her.</td>
+<td align="right">6</td>
+</tr>
+</tbody>
+</table>
+<p>Abaixo, vemos algumas informações sobre a série. Mesmo permanecido por tanto tempo na TV (9 temporadas e mais de 170 episódios), a série conseguiu manter uma qualidade consistente ao longo do tempo, alcançando uma nota média de 8,4 IMDb.</p>
+<pre class="r"><code>df %&gt;% 
+  mutate(Airdate = lubridate::dmy(Airdate)) %&gt;% 
+  summarise(`Nota Média` = round(mean(Rating),1),
+            `Primeiro Episódio` = min(Airdate), 
+            `Último Episódio` = max(Airdate),
+            `Temporadas` = max(Season),
+            `Episódios` = n()) %&gt;% 
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Nota Média</th>
+<th align="left">Primeiro Episódio</th>
+<th align="left">Último Episódio</th>
+<th align="right">Temporadas</th>
+<th align="right">Episódios</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">8.4</td>
+<td align="left">1989-07-05</td>
+<td align="left">1998-05-14</td>
+<td align="right">9</td>
+<td align="right">172</td>
+</tr>
+</tbody>
+</table>
+<p>Mesmo com uma avaliação média tão elevada, é possível imaginar que a série passou por altos e baixos, tendo produzido episódios inesquecíveis, e outros nem tanto. Assim, vamos usar o <code>ggplot2</code>para analisar o desempenho da série ao longo dos seus 9 anos de exibição.</p>
+<p><br></p>
+</div>
+<div id="gráficos-de-classificação" class="section level1">
+<h1>Gráficos de Classificação</h1>
+<p>Podemos começar calculando a nota média por temporada. E se o objetivo é encontrar as temporadas com melhor temporada, podemos usar gráficos de classificação como os de barra (<code>geom_bar</code>) ou sua versão mais atraente, o lollipop.</p>
+<div id="gráfico-de-barras" class="section level2">
+<h2>Gráfico de barras</h2>
+<pre class="r"><code>df %&gt;% 
+  group_by(Season) %&gt;% 
+  summarise(nota_media = mean(Rating)) %&gt;% 
+  ggplot(aes(x = as.factor(Season), y = nota_media, color = as.factor(Season))) + 
+  geom_point(size = 8) +
+  geom_segment(aes(x=as.factor(Season), xend=as.factor(Season), y=0, yend=nota_media),
+               size = 4) +
+  #geom_hline(yintercept = mean(df$Rating), linetype = 5, color = &quot;grey10&quot;, size = 1) +
+  theme_ipsum(base_family = &quot;Roboto&quot;, base_size = 22) +
+  labs(title = &quot;Seinfeld, Nota Média por Temporada&quot;, y = &quot;Nota Média&quot;, x = &quot;Temporada&quot;,
+       caption = &quot;Fonte: IMDb&quot;) +
+  geom_label(aes(label = round(nota_media, 1)), nudge_y = 2.0) +
+  theme(legend.position = &quot;none&quot;)  + 
+  coord_flip()</code></pre>
+<p><img src="/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+A série começou bastante desacreditada, com apenas 5 episódios sendo encomendados para sua primeira temporada, e apesar de um início abaixo da média, as temporadas seguintes elevaram o nível da série, com notas médias sempre acima de 8,0.</p>
+</div>
+<div id="gráfico-de-nuvens" class="section level2">
+<h2>Gráfico de Nuvens</h2>
+<p>Outra forma de classificar informação é utilizando gráficos em nuvens. Este tipo de visualização é útil quando queremos mostrar a frequência com que palavras aparecem em textos.</p>
+<p>Aqui vamos precisar contar o número de palavras na sinopse dos episódios. Para isso, podemos utilizar a função <code>unnest_tokens</code> do pacote <code>tidytext</code>, que permite separar as colunas de textos (Description, no nosso caso) em uma tabela de palavras (uma linha por palavra).</p>
+<p>Quando trabalhamos com texto, é sempre boa prática eliminar aquelas palavras vazias, que não adicionam nenhum tipo de informação (<em>the, in, on, if, when, etc</em>). Para tanto, utilizamos o <code>anti_join(stop_words)</code>.</p>
+<pre class="r"><code>needs::needs(tidytext, wordcloud2)
+
+palavras_seinfeld &lt;- df %&gt;% 
+  unnest_tokens(word, Description) %&gt;% 
+  anti_join(stop_words) %&gt;% 
+  mutate(word = str_replace(word, &quot;\&#39;s&quot;, &quot;&quot;)) %&gt;% 
+  count(word, sort = TRUE)
+
+
+palavras_seinfeld %&gt;% head() %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">word</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">jerry</td>
+<td align="right">195</td>
+</tr>
+<tr class="even">
+<td align="left">george</td>
+<td align="right">163</td>
+</tr>
+<tr class="odd">
+<td align="left">elaine</td>
+<td align="right">138</td>
+</tr>
+<tr class="even">
+<td align="left">kramer</td>
+<td align="right">109</td>
+</tr>
+<tr class="odd">
+<td align="left">girlfriend</td>
+<td align="right">43</td>
+</tr>
+<tr class="even">
+<td align="left">decides</td>
+<td align="right">23</td>
+</tr>
+</tbody>
+</table>
+<p>Como esperado, as palavras mais comuns nas sinopses dos episódios são os nomes dos quatro personagens principais da série: Jerry, George, Elaine e Kramer. Vamos ignora-las e exibir as demais palavras mais comuns:</p>
+<pre class="r"><code>set.seed(123)
+palavras_seinfeld %&gt;% 
+  filter(!word %in% c(&quot;jerry&quot;, &quot;george&quot;,&quot;elaine&quot;, &quot;kramer&quot;)) %&gt;% 
+  wordcloud2(size = 1.6, backgroundColor = &quot;black&quot;)</code></pre>
+<div id="htmlwidget-1" style="width:672px;height:1152px;" class="wordcloud2 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1">{"x":{"word":["girlfriend","decides","susan","woman","apartment","car","dates","newman","parents","friend","boyfriend","buy","buys","time","club","job","party","building","dinner","game","makes","movie","peterman","takes","book","dating","father","gang","guy","learns","life","parking","puddy","trouble","bad","coffee","date","day","finally","friends","hot","nbc","neighbor","refuses","restaurant","secret","start","store","wear","accidentally","baby","deal","discovers","falls","fire","forced","frank","jacket","leads","leaves","leo","local","lot","office","pay","pick","pilot","president","run","set","sex","tv","uncle","wedding","women","york","begins","bette","birthday","business","cabin","crazy","expensive","figure","hair","head","hour","incident","keys","line","love","mysterious","person","play","returns","rochelle","score","spare","starts","tickets","visiting","writer","accused","advice","apartments","argument","avoid","bakery","block","board","boss","boy","breaking","breaks","breakup","call","calzones","catalog","chicken","chinese","coming","comment","company","convince","convinces","dad","doll","dry","eats","engagement","episode","florida","found","fun","girl","golf","hard","health","heart","helps","hit","horse","hospital","house","idea","jean","keith","kenny","kicked","laughs","left","loses","message","met","mistake","mom","money","morty","mother","move","named","nana","nose","paul","personal","pitt","plane","prove","quickly","records","relationship","revenge","roommate","runs","school","seat","sell","serial","series","sets","shop","shower","sign","simple","single","smell","son","spot","stealing","stolen","stop","street","stuck","table","tells","test","tim","toilet","town","visit","watch","water","whatley","wrong","yankees","12","accepts","accident","accuses","acquaintance","afraid","agrees","ahead","airport","amazing","appointment","arrested","astronaut","auction","babu","bania","bed","bit","bottle","break","broadway","bubble","charity","check","checks","cheryl","claiming","claims","class","cleaner","clothing","coat","code","comedy","comfortable","condo","consequences","convinced","cop","costanza","couple","cousin","cream","crush","curious","damage","death","decide","detector","die","directors","dirty","discount","dog","drives","driving","drove","ellen","employee","en","enjoys","envelopes","episodes","everyone","exact","executives","family","female","fired","flea","food","freaked","freaks","garage","gay","gift","glasses","glue","habit","hears","hide","hires","holds","home","hooked","hopes","hours","injured","injures","insists","interview","invites","japanese","jersey","jewish","joins","jokes","key","killer","kitchen","knocks","korean","land","lands","lawyer","learn","learning","lengths","library","likes","limo","lips","lloyd","mail","male","market","married","mechanic","meeting","meets","mickey","midler","miss","missing","mistaken","mistakenly","mixed","model","multiple","mystery","objects","opposite","outing","owner","paper","parade","past","pen","phone","physical","pitch","position","pothole","pressure","pretends","production","racket","read","receives","recently","recorder","religious","return","returning","ring","risk","romance","romantic","route","sally","scheme","seeks","seinfeld","settle","shares","shoe","sleeping","soup","space","speeding","spills","spite","stand","statue","stay","steal","steals","steinbrenner","step","stock","story","struggles","stunned","subway","sue","suit","suspects","taking","tape","telephone","television","tennis","terrible","thanksgiving","therapy","ticket","tip","tony","traffic","understudy","upset","valet","vilified","vintage","virgin","visa","wallet","wearing","weaver","wilhelm","worker","worse","writing","yada","1,500","100th","1971","1996","50","5th","9","absolutely","abstinence","abusing","accompanies","accountant","act","actress","address","adopt","adopting","adopts","ads","africa","afterward","agent","ago","agonizes","agree","airline","airs","alcoholic","allen","alternative","amassed","america","american","angeles","angered","announce","annoyed","annual","answering","answers","apologize","apology","appearing","appease","apple","appliance","application","apprehensive","argue","arm","armani","array","arrive","arrives","art","artist","assignment","assistant","associate","astros","atlantic","attack","attempt","attend","attracted","attractive","audience","avoiding","award","awkward","b.o","babs","bachelor","bag","bagels","bail","bald","baltimore","bankruptcy","banned","bar","barber","barking","baseball","based","basketball","bastard","bathroom","beach","bear","beat","beats","beautiful","beauty","begrudgingly","begs","behalf","bellybutton","belong","betrays","biggest","biologist","bitch","black","blacklisted","bladder","blamed","blind","body","bone","bookie","bootleg","borrows","bosco","bounces","bounder","bowl","box","bozo","bra","braces","braun","bread","breakfast","breasts","bringing","broke","brothers","buffer","bulimic","bumped","burning","burns","busboy","butler","butt","butter","cable","cadillac","café","cake","california","calling","callous","cancer","cap","cape","card","cards","care","career","careless","carelessness","caricature","carries","carry","cars","cartoons","cashier","cashmere","cast","cat","catalogs","catcher","catches","catching","caused","causing","cents","chagrin","chang","change","charge","charles","cheap","cheapest","checked","checkmate","cheever","child","china","chiropractor","choice","christmas","cigarette","cigars","circumstances","city","claimed","cleaners","cleaning","cleavage","clips","clown","clubs","coach","cold","colleague","colleagues","collection","college","collide","colors","coma","comeback","comedian","comments","commotion","compete","competition","completely","complies","computers","condition","confession","confusion","contact","contemplates","contest","contestant","conveniently","conversation","conversations","convert","convertible","convict","cortese","couch","courts","cover","cowardly","cracking","cramp","create","credit","creepy","crosses","cryptic","cuban","customers","cut","cute","dalrymple","dan","dancer","dateless","daughter","david","davola","dealings","debt","decided","decision","deemed","deena","deeper","defeat","defense","deliver","delivery","denial","dentist","deposits","desire","desk","destroyed","devil","devils","dice","digit","diminishes","dine","disastrous","discontinued","discourage","discuss","disfigures","disobedient","disorder","dispenser","disturbed","divorced","doctor","doctors","domain","donna","door","doorman","doubleday","dragged","drawing","dreamcoat","dress","drinking","driven","driver","drops","dryer","dude","due","dumped","duties","dying","east","eat","eatery","eating","efficiency","eggplant","el","elderly","electronic","embarrassed","embarrassment","enabling","encountering","england","english","enjoyed","ensues","entertain","entity","equipment","escape","esque","estelle","event","evicted","exchanges","excitement","excuses","executive","exes","exonerated","expecting","experience","explain","exploit","exposes","extra","eye","fake","faking","falling","false","fast","fat","fatal","fears","fed","feed","feelings","feels","feet","fellow","fight","figures","film","filmed","filming","financially","finding","firm","fleas","fledgling","fliers","flight","flirts","flock","floozy","flow","fly","flying","foolproof","force","forget","forgets","form","freaking","fresh","friar","fries","frogger","front","fungus","funny","fur","gambled","gambles","garbage","gary","generous","genius","gennison","german","germaphobe","gertz","gifted","giving","godparents","gonorrhea","grade","grandmother","grapefruit","grapples","greeted","griffin","groans","grodin","grounded","grow","growing","guest","guide","gum","guys","gymnast","haircut","hall","hamptons","hand","handicap","hands","hanging","happened","happy","hart","hat","hates","heads","heal","hear","heard","hearing","heave","held","helmet","hernandez","heterosexuality","highway","hints","hire","hiring","hitting","ho","holding","hong","honor","hopeless","host","hostile","hosts","hotel","houston","humorous","hundreds","ideal","identities","idiot","ignoring","illegal","image","imagining","immediately","immigrant","immigration","implants","improv","inappropriate","included","including","incompetent","inconvenieced","incorrect","india","infatuated","infested","inflamed","innocent","insistence","insisting","installs","insults","intentions","inter","intern","invests","invitations","invited","involved","involving","iq","issues","italian","izzy","jami","jane","jar","jealous","jeannie","jeans","jeopardy","jews","jfk","jinxed","jobless","joe","joel","john","join","jon","joseph","journalist","jr","judgment","junior","karate","kidney","kids","killers","kiss","kissing","knots","knowing","kong","label","lack","lady","landlords","larry","latvian","laugh","launched","laundry","law","leading","league","leagues","leapin","leave","leaving","lesbianism","leslie","lessons","letter","letters","librarian","license","licking","lie","liquor","list","live","lives","living","loaf","loans","lobby","locket","locks","lomez","longtime","los","lounge","low","luck","luggage","lunch","luxury","machine","macy","mad","maestro","maid","main","maintenance","maker","malignant","management","mandated","mandelbaum","manhattan","manly","mannequin","manuscript","marathon","marine","marisa","marked","mary","massachusetts","massages","masseuse","massive","masters","match","matchmaker","mattress","meal","means","meat","medicine","meet","membership","memorable","mentor","menu","mere","merv","meryl","mesmerized","messages","millenium","mind","mint","mischkie","miscommunication","misinterpreted","misunderstanding","mixer","moans","monks","movies","muffins","mugged","mulva","murder","music","musical","nabs","nail","names","naomi","nap","nationality","native","neighborhood","nervous","newborn","newspaper","nice","nicely","nickname","nightmare","note","notorious","novelist","nudity","obsessed","obsesses","occasions","odor","offended","offends","offer","offers","officials","olympics","operation","opium","organizer","orioles","orthodox","outer","overcoming","overheard","overnight","oversees","overstaying","owned","package","pact","paid","painful","painting","paints","paris","park","parked","parks","partakes","participate","parties","partner","passenger","passes","pasta","pastor","patient","paved","peek","penalty","pendant","pennies","people","perfect","perform","performance","performing","performs","permanent","personalities","pez","photo","photographer","piano","picking","picks","picture","pictures","pie","pigeons","pimp","pity","pizza","plagiarized","plan","planned","planning","plans","plates","played","player","playoff","pleads","plows","pocket","polar","police","pool","poor","popular","positive","possibly","post","posterity","postpone","potential","prank","pre","predicts","premiere","premium","preserving","presidential","pretty","previous","price","private","procedure","profession","program","promises","promotes","promotion","prop","prophylactic","proposes","prospective","prostitution","proves","provided","psychiatric","psychic","psychotherapist","public","publish","published","publishing","puerto","puffy","pulls","purchase","purchases","purpose","purposefully","pursuit","putting","questions","quick","quiet","quit","quiz","race","racist","radar","radio","reaches","reacquainted","reading","real","realize","realizes","realizing","rebuilds","rebuilt","recital","recovering","recycling","regret","regrets","reject","relative","religion","reluctant","remain","remains","remembers","remove","removed","repair","resembles","residents","resolve","resort","rest","restroom","resurrect","retire","retrospective","returned","revealed","rhymes","rican","rich","rickshaw","rid","ridiculous","rifkin","river","roasters","rob","robbed","robs","roger","rogers","role","royalty","rude","ruined","runner","running","russian","salvador","santos","sauna","save","scam","scanner","scarily","scheduled","schindler","schneider","scores","screams","screen","screening","screws","scrutinizes","sculptures","searches","secretary","seizures","sells","send","sensitive","separate","separation","serves","service","setting","settlement","sexual","shaves","shipwreck","shirt","shocked","shoes","shoplifter","shopping","short","shown","shushed","signals","silence","singles","sitcom","sitting","skank","skip","skips","sleeps","slicer","smarts","smelly","smile","smiles","smoke","smoking","snack","snickers","snowfall","society","soft","softball","solve","sooner","speaking","speaks","special","spectacular","spoken","sponge","sponges","sports","spy","square","squirts","stadium","stake","stall","standstill","star","startling","stationery","stays","steinman","steve","stinks","stone","stories","straight","stroke","strongbox","study","stumble","style","subject","subsequent","successfully","suddenly","suffering","suggested","suggesting","suggests","suicide","summer","sunscreen","super","supposed","surgery","survivor","susie","suspicious","swap","sweater","swims","switch","switches","switching","tags","talk","talker","talking","tax","team","technicolor","telling","tenacious","tests","texan","theater","theaters","theft","therapist","thinking","threatening","thrown","throws","tied","tobago","toby","tomei","tonight","tonsils","toothbrush","top","tops","touch","tour","tourists","tours","toxic","toy","tractor","trades","tragedies","trails","trainer","trash","travel","travels","treat","trinidad","trip","trips","troubles","tub","ugly","ultimately","ultra","unable","uncomfortable","uncommon","unemployed","unexpected","unfortunate","unknowingly","unknown","unsatisfactory","unstable","unusually","upcoming","upscale","upsets","urinating","utensils","utopian","vacuous","victim","video","vinny","violation","visitor","visits","voice","voight","volunteer","volunteers","vow","wagon","walks","wallets","wanes","watches","waylaid","wears","week","weekend","weight","weirded","wide","wife","win","wind","winds","wine","wing","winking","winning","wins","wipes","withholds","witness","wonders","wooden","woody","worlds","worn","worth","worthiness","yankee","yogurt","yorker","zone"],"freq":[43,23,19,19,17,17,15,14,14,13,11,10,10,10,9,9,9,8,8,8,8,8,8,8,7,7,7,7,7,7,7,7,7,7,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],"fontFamily":"Segoe UI","fontWeight":"bold","color":"random-dark","minSize":0,"weightFactor":6.69767441860465,"backgroundColor":"black","gridSize":0,"minRotation":-0.785398163397448,"maxRotation":0.785398163397448,"shuffle":true,"rotateRatio":0.4,"shape":"circle","ellipticity":0.65,"figBase64":null,"hover":null},"evals":[],"jsHooks":{"render":[{"code":"function(el,x){\n                        console.log(123);\n                        if(!iii){\n                          window.location.reload();\n                          iii = False;\n\n                        }\n  }","data":null}]}}</script>
+<p>Susan (19 menções) é uma importante personagem secundária na série, assim como Newman (14 menções). A palavra “decide” surge 23 vezes, indicando que vários episódios giram em torno de personagens tomando algum tipo de atitude. “Woman” surge 19 vezes, em razão dos vários episódios onde Jerry e George tentam encontrar o amor das suas vidas. Outra palavra bastante citada é “job”, provavelmente relacionada aos episódios onde George busca um emprego.</p>
+<p>A sinópse é bastante interessante, mas estamos perdendo informações cruciais sobre a série nos baseando apenas nelas. Vamos mais fundo na análise de Seinfeld utilizando uma base de dados de todas as falas dos personagens ao longo da série. A base de <code>scripts</code> (que pode ser encontrada <a href="https://www.kaggle.com/thec03u5/seinfeld-chronicles?select=scripts.csv">aqui</a>) ofecece cada dialogo falado por cada personagem em todos em cada episódio da série.</p>
+<pre class="r"><code>script &lt;- read_csv(&quot;scripts.csv.zip&quot;) %&gt;% select(-X1)
+script %&gt;% head(2) %&gt;% knitr::kable()</code></pre>
+<table>
+<colgroup>
+<col width="0%" />
+<col width="96%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Character</th>
+<th align="left">Dialogue</th>
+<th align="right">EpisodeNo</th>
+<th align="left">SEID</th>
+<th align="right">Season</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">JERRY</td>
+<td align="left">Do you know what this is all about? Do you know, why were here? To be out, this is out…and out is one of the single most enjoyable experiences of life. People…did you ever hear people talking about We should go out? This is what theyre talking about…this whole thing, were all out now, no one is home. Not one person here is home, were all out! There are people tryin to find us, they dont know where we are. (on an imaginary phone) Did you ring?, I cant find him. Where did he go? He didnt tell me where he was going. He must have gone out. You wanna go out you get ready, you pick out the clothes, right? You take the shower, you get all ready, get the cash, get your friends, the car, the spot, the reservation…Then youre standing around, whatta you do? You go We gotta be getting back. Once youre out, you wanna get back! You wanna go to sleep, you wanna get up, you wanna go out again tomorrow, right? Where ever you are in life, its my feeling, youve gotta go.</td>
+<td align="right">1</td>
+<td align="left">S01E01</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">JERRY</td>
+<td align="left">(pointing at Georges shirt) See, to me, that button is in the worst possible spot. The second button literally makes or breaks the shirt, look at it. Its too high! Its in no-mans-land. You look like you live with your mother.</td>
+<td align="right">1</td>
+<td align="left">S01E01</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+<p>Acima, vemos a primeira aparição de Jerry Seinfeld, no show que leva seu nome, contando alguma piada sobre roupas em dos seus shows de stand-up. O resto da base representam mais de 54 mil dialogos trocados entre os múltiplos personagens que passaram pela história da série.</p>
+<pre class="r"><code>script %&gt;% 
+  summarise(`Total de falas` = n(),
+            `Total de Personagens` = n_distinct(Character))</code></pre>
+<pre><code>## # A tibble: 1 x 2
+##   `Total de falas` `Total de Personagens`
+##              &lt;int&gt;                  &lt;int&gt;
+## 1            54616                   1629</code></pre>
+<p>Para tornar o gráfico de nuvens mais interessante, vamos gerar a núvem para um dos personagens principais: Elaine. Para tornar a visualização mais fácil, vamos limitar apenas para palavras mencionadas mais de 40 vezes.</p>
+<pre class="r"><code>nuvem_personagem &lt;- function(personagem = &quot;JERRY&quot;) {
+  palavras &lt;- script %&gt;% 
+  filter(Character == personagem) %&gt;% 
+  unnest_tokens(word, Dialogue) %&gt;% 
+  anti_join(stop_words, by = &quot;word&quot;) %&gt;% 
+  mutate(word = str_replace(word, &quot;\&#39;s&quot;, &quot;&quot;)) %&gt;% 
+  count(word, sort = TRUE) %&gt;% 
+  filter(!word %in% c(&quot;Yeah&quot;, &quot;Ah&quot;, &quot;Uh&quot;,
+                      &quot;yeah&quot;, &quot;hey&quot;, &quot;ya&quot;, &quot;gotta&quot;, &quot;gonna&quot;,&quot;didnt&quot;,
+                      &quot;alright&quot;, &quot;youre&quot;, &quot;im&quot;, &quot;ah&quot;, &quot;wanna&quot;, &quot;ive&quot;)) %&gt;% 
+  filter(n &gt; 40)
+  
+
+
+palavras %&gt;% 
+  wordcloud2(size = 1.6, backgroundColor = &quot;black&quot;)
+
+}
+
+nuvem_elaine &lt;- nuvem_personagem(&quot;ELAINE&quot;)
+
+saveWidget(nuvem_elaine,&quot;tmp.html&quot;,selfcontained = F)
+webshot::webshot(&quot;tmp.html&quot;,&quot;elaine.png&quot;, delay =5, vwidth = 480, vheight=480)</code></pre>
+<p><img src="/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>(<em>Por alguma razão <code>wordclou2</code> tem um <a href="https://github.com/Lchiffon/wordcloud2/issues/60">bug bem estranho</a> que não permite a visualização de mais que uma núvem na mesma página. Por isso, essas últimas visualizações são estáticas e exibidas como imagens.</em>)</p>
+<p>Nuvens de palavras são simples de entender e tendem a ser visualmente interessantes. Contudo elas podem ser problemáticas por várias razões: primeiro, porque o número de letras de uma palavra pode torna-la maior do que deveria; segundo, porque pode ser difícil distinguir visualmente duas palavras com frequências próximas. Compare “Car” com 17 menções, a “Newman” (com 14), onde o segundo parece muito maior que o primeiro.</p>
+<p>Em contextos mais formais, vale mais a pena o uso de gráficos de barras ou lollipop. Como, por exemplo, a quantidade de vezes que os personagens mencionam “coffee”:</p>
+<pre class="r"><code>script %&gt;% 
+  unnest_tokens(word, Dialogue) %&gt;% 
+  filter(str_detect(word, &quot;coffee|Coffee&quot;)) %&gt;% 
+  group_by(Character) %&gt;% 
+  tally() %&gt;% 
+  filter(Character %in% c(&quot;ELAINE&quot;, &quot;GEORGE&quot;,&quot;JERRY&quot;,&quot;KRAMER&quot;)) %&gt;% 
+  ggplot(aes(x = fct_reorder(Character, n), y = n, color = Character)) +
+  geom_point(size = 8) +
+  geom_segment(aes(x=as.factor(Character), xend=as.factor(Character), y=0, yend=n),
+               size = 4) +
+  #geom_hline(yintercept = mean(df$Rating), linetype = 5, color = &quot;grey10&quot;, size = 1) +
+  theme_ipsum(base_family = &quot;Roboto&quot;) +
+  labs(title = &quot;Seinfeld, Menções a Café por Personagem&quot;, y = &quot;Menções&quot;, x = &quot;Personagem&quot;,
+       caption = &quot;Fonte: IMDb&quot;) +
+  theme(legend.position = &quot;none&quot;)  + 
+  coord_flip()</code></pre>
+<p><img src="/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p><br></p>
+</div>
+</div>
+<div id="correlação" class="section level1">
+<h1>Correlação</h1>
+<p>Com os gráficos de correlação o objetivo é visualizar como duas ou mais variáveis se relacionam.</p>
+<div id="gráfico-de-dispersão-por-temporada" class="section level2">
+<h2>Gráfico de dispersão por temporada</h2>
+<p>Podemos utilizar um gráfico de dispersão de notas por temporada para verificar a relação entre temporada e notas dos episódios. Podemos observar se os epísodios se tornaram melhores com o passar do tempo.</p>
+<pre class="r"><code>df %&gt;% 
+  ggplot(aes(x = episode, y = Rating, color = as.factor(Season))) +
+  geom_point() + 
+  geom_smooth() +
+  theme_ipsum(base_family = &quot;Roboto&quot;, base_size = 24) +
+  labs(title = &quot;Seinfeld, Notas dos Por Episódio&quot;, y = &quot;Nota&quot;, x = &quot;Episódio&quot;, color = &quot;Temporada&quot;, caption = &quot;Fonte: IMDb&quot;) +
+  geom_hline(yintercept = mean(df$Rating), linetype = 5, color = &quot;grey2&quot;, size = 1) +
+  annotate(&quot;label&quot;, label = &quot;Nota média: 8.4&quot;, x = 6, y = 9) +
+  #geom_label(aes(label = as.factor(Season))) +
+  theme(legend.position = &quot;bottom&quot;)</code></pre>
+<p><img src="/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p>Acima usamos um gráfico de dispersão (<code>geom_point</code>) em conjunto com uma gráfico de tendência/ajuste (<code>geom_smooth</code>). Com eles observamos as notas dos episódios dentro de cada temporada.</p>
+<p>Para facilitar a comparação, inclui uma linha tracejada com a nota média de toda a série (de 8,4), facilitando algumas comparações. Por exemplo, a primeira temporada foi consistentemente abaixo da média; a quinta temporada teve um final arrebatador; enquanto que as temporadas 6, 7 e 8 seguraram bem a qualidade. Já a final da última temporada parece ter desapontado a maioria dos fãs, ficando abaixo da média histórica.</p>
+<p>Alternativamente, podemos estar interessados se existe uma relação entre o total de falas de cada personagem e a nota do episódio.</p>
+<p>Para tanto, vamos unir a base de dialógicos com a base de notas por episódio:</p>
+<pre class="r"><code>aparicoes_episodio &lt;- script %&gt;% 
+  group_by(SEID, Character) %&gt;% 
+  summarise(n = n()) %&gt;% 
+  filter(!is.na(Character))
+
+aparicoes_notas &lt;- df %&gt;% 
+  group_by(Season) %&gt;% 
+  mutate(Episode_Season = row_number()) %&gt;% 
+  ungroup() %&gt;% 
+  mutate(SEID = paste0(&quot;S&quot;, str_pad(Season, 2, pad = &quot;0&quot;),&quot;E&quot;, str_pad(Episode_Season, 2, pad = &quot;0&quot;))) %&gt;%
+  select(SEID, Rating, episode, Season) %&gt;% 
+  left_join(aparicoes_episodio, by = &quot;SEID&quot;)
+
+aparicoes_notas %&gt;% 
+  arrange(desc(n)) %&gt;% 
+  head() %&gt;% 
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">SEID</th>
+<th align="right">Rating</th>
+<th align="right">episode</th>
+<th align="right">Season</th>
+<th align="left">Character</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">S01E01</td>
+<td align="right">7.6</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="left">JERRY</td>
+<td align="right">250</td>
+</tr>
+<tr class="even">
+<td align="left">S04E03</td>
+<td align="right">8.6</td>
+<td align="right">42</td>
+<td align="right">4</td>
+<td align="left">JERRY</td>
+<td align="right">151</td>
+</tr>
+<tr class="odd">
+<td align="left">S05E18</td>
+<td align="right">8.5</td>
+<td align="right">80</td>
+<td align="right">5</td>
+<td align="left">JERRY</td>
+<td align="right">149</td>
+</tr>
+<tr class="even">
+<td align="left">S04E20</td>
+<td align="right">8.8</td>
+<td align="right">59</td>
+<td align="right">4</td>
+<td align="left">JERRY</td>
+<td align="right">144</td>
+</tr>
+<tr class="odd">
+<td align="left">S07E18</td>
+<td align="right">8.1</td>
+<td align="right">124</td>
+<td align="right">7</td>
+<td align="left">JERRY</td>
+<td align="right">137</td>
+</tr>
+<tr class="even">
+<td align="left">S02E09</td>
+<td align="right">8.3</td>
+<td align="right">14</td>
+<td align="right">2</td>
+<td align="left">JERRY</td>
+<td align="right">134</td>
+</tr>
+</tbody>
+</table>
+<p>Agora podemos criar um gráfico para os principais personagens da série: Jerry, George, Elaine, Kramer, Newman, e os pais de Jerry (Morty e Helen), que são os personagens com mais falas na série.</p>
+<pre class="r"><code>personagens_mais_mencionados &lt;- aparicoes_notas %&gt;% 
+  group_by(Character) %&gt;% 
+  summarise(falas = sum(n)) %&gt;% 
+  arrange(desc(falas)) %&gt;% 
+  top_n(falas, n = 7) %&gt;% 
+  pull(Character)
+
+
+aparicoes_notas %&gt;% 
+  filter(!is.na(Character)) %&gt;% 
+  filter(Character %in% personagens_mais_mencionados) %&gt;% 
+  ggplot(aes(x = n, y = Rating, color = as.factor(Character))) +
+  geom_point() +
+  geom_smooth() +
+  guides(color = FALSE) +
+  facet_wrap(~Character, scales = &quot;free_x&quot;, ncol = 2) +
+  theme_ipsum(base_family = &quot;Roboto&quot;, base_size = 24) +
+  labs(y = &quot;Nota&quot;, x = &quot;Falas durante o episódio&quot;, title = &quot;Seinfeld, Relação entre total de falas do personagem e Nota do Episódio&quot;, caption = &quot;Fonte: IMDb&quot;) +
+  theme(legend.position = &quot;none&quot;)</code></pre>
+<p><img src="/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p>Jerry, George, Elaine e Kramer aparecem na grande maioria dos episódios, de modo que é difícil enxergar uma relação entre o total de falas do personagem e a nota dos episódios. Morty, Helen e Newman são personagens que surgem esporadicamente, então a adição ou não dos personagens poderia revelar algo mais interessante, mas também não parece ser o caso. Acredito que é uma boa notícia: a série é consistemente bem avaliada independente do elenco do episódio e do personagem em foco.</p>
+</div>
+<div id="gráfico-de-calor" class="section level2">
+<h2>Gráfico de Calor</h2>
+<p>Os gráficos de anteriores são muito bons em mostrar o comportamento médio, mas se tivermos interessados em encontrar os melhores episódios individuais podemos utilizar visualizações como o gráfico de calor (ou heatmap).</p>
+<p>Gráficos de calor são uma boa alternativa para identificar <em>outliers</em>, como episódios muito acima da média. A figura abaixo mostra 4 destes episódios (em amarelo). Podemos também idenficar aqueles episódios que deixaram a desejar, buscando os pontos mais escuros do gráfico (como o final da última temporada e episódio 4 da terceira temporada).</p>
+<pre class="r"><code>df %&gt;% 
+  group_by(Season) %&gt;% 
+  mutate(Episode_Season = row_number()) %&gt;% 
+  ungroup() %&gt;% 
+  ggplot(aes(x = Episode_Season, y = as.factor(Season), fill = Rating)) +
+  geom_tile() + 
+  scale_fill_viridis() +
+  theme_ipsum(base_family = &quot;Roboto&quot;) +
+  labs(title = &quot;Seinfeld, Notas por Episódio&quot;, 
+       y = &quot;Temporada&quot;, x = &quot;Episódio&quot;, color = &quot;Temporada&quot;, caption = &quot;Fonte: IMDb&quot;, fill = &quot;Nota:&quot;) +
+  theme(legend.position = &quot;bottom&quot;)</code></pre>
+<p><img src="/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p>Se bateu a curiosidade para saber quais são os melhores episódios, segue a lista abaixo:</p>
+<pre class="r"><code>df %&gt;% 
+  group_by(Season) %&gt;% 
+  mutate(Episode_Season = row_number()) %&gt;% 
+  ungroup() %&gt;% 
+  slice_max(order_by = Rating, n = 4) %&gt;% 
+  select(Episode_Season, Season, Title, Rating) %&gt;% 
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Episode_Season</th>
+<th align="right">Season</th>
+<th align="left">Title</th>
+<th align="right">Rating</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">11</td>
+<td align="right">4</td>
+<td align="left">The Contest</td>
+<td align="right">9.6</td>
+</tr>
+<tr class="even">
+<td align="right">21</td>
+<td align="right">5</td>
+<td align="left">The Opposite</td>
+<td align="right">9.6</td>
+</tr>
+<tr class="odd">
+<td align="right">6</td>
+<td align="right">7</td>
+<td align="left">The Soup Nazi</td>
+<td align="right">9.5</td>
+</tr>
+<tr class="even">
+<td align="right">17</td>
+<td align="right">4</td>
+<td align="left">The Outing</td>
+<td align="right">9.4</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+</div>
+</div>
+<div id="gráficos-de-distribuição" class="section level1">
+<h1>Gráficos de Distribuição</h1>
+<p>Quando o objetivo é visualizar a distribuição de uma variável, podemos sempre recorrer ao bons e velhos histograma (<code>geom_histogram</code>), gráficos de densidade (<code>geom_density</code>) ou boxplot (<code>geom_boxplot</code>). Ou podemos ser mais criativos, utilizando o gráfico de violino (<code>geom_violin</code>) e o ridgeline (<code>ggridges::geom_density_ridges</code>).</p>
+<div id="histograma" class="section level2">
+<h2>Histograma</h2>
+<p>Sem muito segredos, o histograma mostra a frequência de falas ao longo dos episódios. Como as notas representam dados contínuos, podemos separar os valor por faixas de valores (<code>bins = 10</code>). Nenhuma surpresa, Jerry e George tem bem mais falas em média que Kramer e Elaine. Newman aparece esporadicamente, mas sempre com pequenas participações (no máximo 40 falas). Enquanto que Helen e Morty, por serem um casal, possuem distribuições bem próximas, mas exibindo, alguns episódios com elevada presença (100 falas no caso de Morty).</p>
+<pre class="r"><code>aparicoes_notas %&gt;% 
+  filter(Character %in% personagens_mais_mencionados) %&gt;% 
+  ggplot(aes(x = n, fill = Character)) +
+  geom_histogram() +
+  facet_wrap(~Character, scale = &quot;free_x&quot;, ncol = 2) +
+  theme_ipsum(base_family = &quot;Roboto&quot;, base_size = 24, plot_title_size = 24) +
+  labs(title = &quot;Seinfeld, Fala dos Personagens&quot;, y = &quot;&quot;, x = &quot;&quot;) +
+  theme(legend.position = &quot;none&quot;)</code></pre>
+<p><img src="/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+</div>
+<div id="gráfico-de-densidade" class="section level2">
+<h2>Gráfico de densidade</h2>
+<p>Alternativamente ao histograma, outro gráfico de densidade é a densidade kernel. Podemos exibir seu uso com uma distribuição simples de notas por temporada. Da mesma forma que no histograma acima, podemos mostrar a densidade de cada temporada como uma faceta (<code>facet_wrap</code>), ou podemos ser criativos e usar um <code>ridgeline</code>. Esta última permite exibir densidades por grupos em uma mesma visualização, com um visual bem charmoso de montanha.</p>
+<pre class="r"><code>df %&gt;% 
+  ggplot(aes(x = Rating, y = as.factor(Season), fill = ..x..)) +
+  geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01) +
+  scale_fill_viridis(name = &quot;Nota&quot;, option = &quot;C&quot;) + 
+  labs(title = &quot;Seinfeld, Nota por Temporada&quot;, y = &quot;Temporada&quot;, x = &quot;Nota&quot;, caption = &quot;Fonte: IMDb&quot;)  +
+  theme_ipsum(base_family = &quot;Roboto&quot;, base_size = 24) +
+  theme(legend.position = &quot;none&quot;,
+        panel.spacing = unit(0.1, &quot;lines&quot;))</code></pre>
+<p><img src="/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+</div>
+<div id="boxplot" class="section level2">
+<h2>Boxplot</h2>
+<p>Boxplot (ou diagrama de caixas) é um gráfico bem completo, pois exibe de uma vez só a nota mediana por temporada, a amplitude interquartil e os valores discrepantes.</p>
+<p>Como o gráfico de calor, ele permite identificar episódios que se destacaram positivamente, como os 4 discutidos acima, ou negativamente, como um dos episódios da 6ª temporada, que ficou bem abaixo da média da temporada.</p>
+<p>O boxplot ainda exibe a amplitude interquartil, o que nos permite avaliar o quão consistente uma temporada é, como a quinta e a última temporada, que teve altos e baixos.</p>
+<pre class="r"><code>df %&gt;% 
+  ggplot(aes(x = Rating, y = as.factor(Season), fill = as.factor(Season))) +
+  geom_boxplot() +
+  #facet_wrap(~Season) +
+  theme_ipsum(base_family = &quot;Roboto&quot;, base_size = 24) +
+  labs(title = &quot;Seinfeld, Notas por Temporada&quot;, y = &quot;Temporada&quot;, x = &quot;Nota&quot;,
+       caption = &quot;Fonte: IMDb&quot;) +
+  theme(legend.position = &quot;none&quot;) + 
+  coord_flip()</code></pre>
+<p><img src="/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p>A mesma visualização de boxplot pode ser usada para exibir o total de falas por episódio. Para não repetir o mesmo tipo de informação, vamos construir o total de falas por cada temporada.</p>
+<pre class="r"><code>aparicoes_notas %&gt;% 
+  filter(Character %in% c(&quot;JERRY&quot;, &quot;GEORGE&quot;, &quot;ELAINE&quot;, &quot;KRAMER&quot;)) %&gt;% 
+  ggplot(aes(x = n, y = Character, fill = Character)) +
+  geom_boxplot() +
+  theme_ipsum(base_family = &quot;Roboto&quot;, base_size = 24) +
+  labs(title = &quot;Seinfeld, Fala dos Personagens por Temporada&quot;, y = &quot;&quot;, x = &quot;&quot;) +
+  theme(legend.position = &quot;none&quot;) +
+  facet_wrap(~Season, scale = &quot;free_y&quot;) </code></pre>
+<p><img src="/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<p>É possível notar que Jerry consistentemente possui mais falas ao longo das 9 temporadas da série, enquanto que a participação dos demais é mais balanceada, principalmente a partir da sexta temporada.</p>
+<p>Podemos repetir a mesma visualização pra os personagens secundários, mas agora utilizando um gráfico de violino. A interpretação desse gráfico é a mesma do gráfico boxplot (ele exibe mediana, e o 1º e 3º quartis, além de valores discrepantes).</p>
+<p>É possível notar que apenas a partir da terceira temporada esses personagens se tornaram peça recorrente da série, com destaque para a quinta temporada.</p>
+<pre class="r"><code>aparicoes_notas %&gt;% 
+  filter(Character %in% c(&quot;MORTY&quot;, &quot;HELEN&quot;, &quot;NEWMAN&quot;)) %&gt;% 
+  ggplot(aes(x = n, y = Character, fill = Character)) +
+  geom_violin() +
+  theme_ipsum(base_family = &quot;Roboto&quot;, base_size = 24) +
+  labs(title = &quot;Seinfeld, Fala dos Personagens por Temporada&quot;, y = &quot;&quot;, x = &quot;&quot;) +
+  theme(legend.position = &quot;none&quot;) +
+  facet_wrap(~Season, scale = &quot;free_y&quot;, ncol = 2) </code></pre>
+<p><img src="/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p><br></p>
+</div>
+</div>
+<div id="conclusão" class="section level1">
+<h1>Conclusão</h1>
+<p>O <code>ggplot2</code> é um pacote de visualização bem robusto no R. Ele ainda oferece uma infinidade <a href="https://www.r-graph-gallery.com/">de outros tipos de visualizações</a>, mas aqui foquei nas principais visualizações, e aquelas que os dados permitiam produzir.</p>
+<p>Para além do ggplot2, uma série de <a href="https://exts.ggplot2.tidyverse.org/gallery/">extensões</a> foram desenvolvidas pela comunidade, o que permite a criação de praticamente qualquer visualização imaginada, o que inclui criar gráficos com temas do <a href="https://github.com/Ryo-N7/tvthemes">Bob Sponja</a>.</p>
+</div>
+
+    </div>
+
+    
+
+
+
+
+
+
+
+
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=/post/visualizacao-com-ggplot2-e-seinfeld/&amp;text=Visualizando%20Seinfeld%20com%20ggplot2" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=/post/visualizacao-com-ggplot2-e-seinfeld/&amp;t=Visualizando%20Seinfeld%20com%20ggplot2" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=Visualizando%20Seinfeld%20com%20ggplot2&amp;body=/post/visualizacao-com-ggplot2-e-seinfeld/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=/post/visualizacao-com-ggplot2-e-seinfeld/&amp;title=Visualizando%20Seinfeld%20com%20ggplot2" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=Visualizando%20Seinfeld%20com%20ggplot2%20/post/visualizacao-com-ggplot2-e-seinfeld/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=/post/visualizacao-com-ggplot2-e-seinfeld/&amp;title=Visualizando%20Seinfeld%20com%20ggplot2" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <img class="avatar mr-3 avatar-circle" src="/author/robson-oliveira/avatar_huecec962d4ebaa2f510296f512dd0906d_32502_270x270_fill_q75_lanczos_center.jpg" alt="Robson Oliveira">
+    
+
+    <div class="media-body">
+      <h5 class="card-title">Robson Oliveira</h5>
+      <h6 class="card-subtitle">Professor</h6>
+      <p class="card-text">Data analysis and modelling with a focus on Economics.</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="/robson.lima@ifpb.edu.br" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/robsonol" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/robsonol" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  </div>
+</article>
+  </div>
+
+  <div class="page-footer">
+    
+    
+    <div class="container">
+      <footer class="site-footer">
+
+  
+
+  
+
+  <p class="powered-by">
+    © 2021 Robson Oliveira
+  </p>
+
+  
+  
+
+
+
+
+
+
+  <p class="powered-by">
+    
+    
+    
+      
+      
+      
+      
+      
+      
+      Published with <a href="https://wowchemy.com/?utm_campaign=poweredby" target="_blank" rel="noopener">Wowchemy</a> — the free, <a href="https://github.com/wowchemy/wowchemy-hugo-modules" target="_blank" rel="noopener">open source</a> website builder that empowers creators.
+    
+  </p>
+</footer>
+
+    </div>
+    
+  </div>
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/instant.page/5.1.0/instantpage.min.js" integrity="sha512-1+qUtKoh9XZW7j+6LhRMAyOrgSQKenQ4mluTR+cvxXjP1Z54RxZuzstR/H9kgPXQsVB8IW7DMDFUJpzLjvhGSQ==" crossorigin="anonymous"></script>
+
+      
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      
+
+      
+      
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/highlight.min.js" integrity="sha512-TDKKr+IvoqZnPzc3l35hdjpHD0m+b2EC2SrLEgKDRWpxf2rFCxemkgvJ5kfU48ip+Y+m2XVKyOCD85ybtlZDmw==" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/r.min.js"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/python.min.js"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/latex.min.js"></script>
+        
+      
+
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.js" integrity="sha512-SeiQaaDh73yrb56sTW/RgVdi/mMqNeM2oBwubFHagc5BkixSpP1fvqF47mKzPGWYSSy4RwbBunrJBQ4Co8fRWA==" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+    
+      
+      <script id="search-hit-fuse-template" type="text/x-template">
+        <div class="search-hit" id="summary-{{key}}">
+          <div class="search-hit-content">
+            <div class="search-hit-name">
+              <a href="{{relpermalink}}">{{title}}</a>
+              <div class="article-metadata search-hit-type">{{type}}</div>
+              <p class="search-hit-description">{{snippet}}</p>
+            </div>
+          </div>
+        </div>
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    <script src="/js/bootstrap.bundle.min.6aed84840afc03ab4d5750157f69c120.js"></script>
+
+    
+    
+      
+      
+      
+      
+      
+      
+      
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+      
+      
+    
+    
+    <script src="/en/js/wowchemy.min.b61a8f62b6e5c0cd322c8158c5b5dfb6.js"></script>
+
+    
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+
+
+
+</body>
+</html>

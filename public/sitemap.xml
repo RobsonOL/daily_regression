@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>/courses/example/python/</loc>
+    <loc>/courses/example/intro/</loc>
     <lastmod>2021-01-01T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/courses/example/visualization/</loc>
@@ -20,10 +20,19 @@
     <loc>/event/</loc>
     <lastmod>2030-06-01T13:00:00+00:00</lastmod>
   </url><url>
-    <loc>/post/estimando-demanda-e-definindo-preco/</loc>
-    <lastmod>2021-04-08T21:51:53-03:00</lastmod>
+    <loc>/post/diferenca-em-diferenca-avancos-recentes/</loc>
+    <lastmod>2021-11-09T10:30:28-03:00</lastmod>
   </url><url>
     <loc>/post/</loc>
+    <lastmod>2021-11-09T10:30:28-03:00</lastmod>
+  </url><url>
+    <loc>/post/tidyquant-analise-financeira-no-r/</loc>
+    <lastmod>2021-10-23T13:57:07-03:00</lastmod>
+  </url><url>
+    <loc>/post/visualizacao-com-ggplot2-e-seinfeld/</loc>
+    <lastmod>2021-10-19T19:40:19-03:00</lastmod>
+  </url><url>
+    <loc>/post/estimando-demanda-e-definindo-preco/</loc>
     <lastmod>2021-04-08T21:51:53-03:00</lastmod>
   </url><url>
     <loc>/authors/</loc>
@@ -112,7 +121,13 @@
   </url><url>
     <loc>/admin/</loc>
   </url><url>
+    <loc>/courses/example/aula01_intro_files/reveal.js-3.3.0.1/contributing/</loc>
+  </url><url>
+    <loc>/courses/example/aula01_intro_files/reveal.js-3.3.0.1/plugin/markdown/example/</loc>
+  </url><url>
     <loc>/categories/</loc>
+  </url><url>
+    <loc>/courses/example/slides/aula01/aula01_intro/</loc>
   </url><url>
     <loc>/author/%E5%90%B3%E6%81%A9%E9%81%94/</loc>
   </url>
