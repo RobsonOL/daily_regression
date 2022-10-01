@@ -24,7 +24,7 @@ role: Professor
 social:
 - icon: envelope
   icon_pack: fas
-  link: robson.lima@ifpb.edu.br
+  link: mailto:robson.lima@ifpb.edu.br
 - display:
     header: true
   icon: twitter
@@ -38,5 +38,5 @@ superuser: true
 title: Robson Oliveira 
 ---
 
-Robson Oliveira Lima is a professor of Economics at Instituto de Educação Tecnológica da Paraíba. His research interests include causality and predictive modelling.
+Robson Oliveira Lima is a professor of Economics at Instituto de Educação Tecnológica da Paraíba (IFPB). His research interests include causality and predictive modelling.
 

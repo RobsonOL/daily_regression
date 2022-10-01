@@ -1,36 +1,1379 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts | Daily Regression</title>
-    <link>/post/</link>
-      <atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <title>Posts | Robson Lima</title>
+    <link>https://robsonolima.com.br/post/</link>
+      <atom:link href="https://robsonolima.com.br/post/index.xml" rel="self" type="application/rss+xml" />
     <description>Posts</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2021 Robson Oliveira</copyright><lastBuildDate>Tue, 09 Nov 2021 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2022 Robson Oliveira</copyright><lastBuildDate>Sat, 11 Dec 2021 00:00:00 +0000</lastBuildDate>
     <image>
-      <url>/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png</url>
+      <url>https://robsonolima.com.br/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png</url>
       <title>Posts</title>
-      <link>/post/</link>
+      <link>https://robsonolima.com.br/post/</link>
     </image>
     
     <item>
-      <title>Diferenca em diferenca - Avancos Recentes</title>
-      <link>/post/diferenca-em-diferenca-avancos-recentes/</link>
-      <pubDate>Tue, 09 Nov 2021 00:00:00 +0000</pubDate>
-      <guid>/post/diferenca-em-diferenca-avancos-recentes/</guid>
+      <title>Análise de Portfolio com R - PortfolioAnalytics</title>
+      <link>https://robsonolima.com.br/post/analise-de-portfolio-com-r/</link>
+      <pubDate>Sat, 11 Dec 2021 00:00:00 +0000</pubDate>
+      <guid>https://robsonolima.com.br/post/analise-de-portfolio-com-r/</guid>
       <description>
-&lt;script src=&#34;/post/diferenca-em-diferenca-avancos-recentes/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://robsonolima.com.br/post/analise-de-portfolio-com-r/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
 
 
+&lt;div id=&#34;introdução&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Introdução&lt;/h1&gt;
+&lt;p&gt;A teória moderna do Portfólio foi introduzida por Harry Markowitz em 1952. Em geral, esta teoria afirma que o objetivo do investidor é maximizar os retornos esperados do portfólio para um dado nível de risco.&lt;/p&gt;
+&lt;p&gt;Por exemplo, o retorno de um portfólio (&lt;span class=&#34;math inline&#34;&gt;\(r_{\text{portfolio}}\)&lt;/span&gt;) com cinco ativos é dado pela soma dos retornos dos ativos individuais ponderados por seus pesos (&lt;span class=&#34;math inline&#34;&gt;\(W_i\)&lt;/span&gt;) na carteira.&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[r_{\text{portfolio}, t} = \sum_{i=1}^5 W_i r_{i,t}\]&lt;/span&gt;
+Assim, dado cinco ativos, estamos interessados em saber o quanto deve ser alocado para cada ativo, para que tenhamos o retorno máximo para um dado nível de risco.&lt;/p&gt;
+&lt;p&gt;Este objetivo envolve maximizar uma medida de ganho por unidade de risco ou mesmo a minimização da medida de risco. Mas como definir risco? E se quisermos definir objetivos e restrições mais complexos?&lt;/p&gt;
+&lt;p&gt;Para além das formulações clássicas de Markowitz, podemos estar interessados em definir o problema de minimização de risco em outros termos. Por exemplo, podemos definir risco como a variância do portfólio (volatilidade), mas em uma circunstância específica podemos estar interessados em minimizar o risco da cauda para nos ajudar a evitar perdas extremas.&lt;/p&gt;
+&lt;p&gt;Da mesma forma, o problema de maximização de retorno pode ser visto por outras óticas, como maximizar um retorno ajustado ao risco, usando medidas como a razão de Sharpe ou a razão de informação.&lt;/p&gt;
+&lt;p&gt;Em termos de restrições, nosso problema específico pode envolver fixar um valor mínimo e máximo que será investido em cada ativo. Podemos estabelecer por exemplo, fixar que um ativo particular não pode representar mais do que 60% do valor investido. Podemos ainda tentar encontrar portfólios altamente diversificados em detrimentos de um conjunto concentrado de ativos.&lt;/p&gt;
+&lt;div id=&#34;pacote-portfolioanalytics&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Pacote PortfolioAnalytics&lt;/h2&gt;
+&lt;p&gt;Para resolver estes problemas menos convencionais, podemos nos valer do pacote &lt;code&gt;PortfolioAnalytics&lt;/code&gt;. Este pacote fornece soluções numéricas para problemas de portfólio com restrições complexas. Este tipo de generalidade das possibilidades de restrições e funções objetivas, distinguem o pacote de competidores como o pacote &lt;code&gt;fPortfolio&lt;/code&gt;, que são mais indicados para problemas padrões de Markowitz.&lt;/p&gt;
+&lt;p&gt;Assim, o pacote &lt;code&gt;PortfolioAnalytics&lt;/code&gt; pode resolver problemas genéricos do tipo&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\min_w g(w) \]&lt;/span&gt;
+&lt;span class=&#34;math display&#34;&gt;\[\text{sujeito a  } h_1(w) \leq 0\]&lt;/span&gt;
+&lt;span class=&#34;math display&#34;&gt;\[...\]&lt;/span&gt;
+&lt;span class=&#34;math display&#34;&gt;\[h_q(w) \leq 0\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Após ter o problema montado, o valor ótimo desta função é encontrado a partir de um algorítimo de &lt;em&gt;Differential Evolution (DE)&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;cursoR.png&#34; /&gt;&lt;/p&gt;
+&lt;div id=&#34;principais-funções-de-portfolioanalytics&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Principais funções de &lt;code&gt;PortfolioAnalytics&lt;/code&gt;&lt;/h3&gt;
+&lt;p&gt;As principais funções do pacote são:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;portfolio.spec(assets)&lt;/code&gt;: é a primeira função que utilizaremos. Nelas podemos especificar o portfólio inicial. O argumento &lt;code&gt;assets&lt;/code&gt; é uma lista de ativos ou um número indicando o número de ativos.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;add.objetive(portfolio, type, name)&lt;/code&gt;: cria funções objetivas para serem adicionadas ao objetivo &lt;code&gt;portfolio&lt;/code&gt;. Podemos definir funções objetivos de minimização de risco ou maximização de retornos, por exemplo.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;add.constraints(portfolio, type)&lt;/code&gt; adiciona as restrições desejadas ao objeto &lt;code&gt;portfolio&lt;/code&gt; criado acima. Por exemplo, podemos definir que a soma dos pesos deve ser igual a unidade.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;optimize.portfolio(R, portfolio)&lt;/code&gt;: com o objeto &lt;code&gt;portfolio&lt;/code&gt; definido, o algorítmo de otimização pode encontrar os pesos que resolvem o problema definido (objetivo e restrições).&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;optimize.portfolio.rebalancing(R, portfolio, rebalance_on, trailing_periods)&lt;/code&gt;: Uma forma diferente de resolver o problema de otimização. Podemos elaborar uma estratégia em que os pesos do portfólio são recalculados periodicamente (mensalmente, trimestralmente ou anualmente).&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div id=&#34;outras-funções-objetivos-e-restrições&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Outras funções objetivos e restrições&lt;/h3&gt;
+&lt;p&gt;O objetivo do &lt;em&gt;post&lt;/em&gt; será resolver três problemas simples: um portfólio que minimiza riscos, um que maximiza retornos e outro que maximiza a razão de Sharpe (uma medida que pondera o retorno pelo risco do ativo). Mas as possibilidades não se restringem a estas três opções. Entre os tipos de funções objetivos que &lt;code&gt;PortfolioAnalytics&lt;/code&gt; é capaz de resolver temos:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Minimização de risco&lt;/strong&gt;: &lt;code&gt;add.objetive(type = &#34;risk&#34;, name = &#34;var&#34;)&lt;/code&gt;: com este objetivo, podemos encontrar o portfólio com menor risco.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Maximização de retorno&lt;/strong&gt;: &lt;code&gt;add.objetive(type = &#34;return&#34;, name = &#34;mean&#34;)&lt;/code&gt;: definindo esta função objetivo, o algorítmo vai encontrar o portfólio com o maior retorno médio.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Especificação de limites na contribuição de risco&lt;/strong&gt;: &lt;code&gt;add.objetive(type = &#34;risk_budget&#34;, name = &#34;ETL&#34;, arguments = list(0.95), max_prisk=0.3)&lt;/code&gt;: Um tipo especial de objetivo, em que podemos definir um valor máximo que um ativo pode contribuir para o risco total do portfólio. Por exemplo, podemos definir que um ativo em específico não pode contribuir com mais que 30% do risco total de um portfólio.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Minimização da concentração de pesos&lt;/strong&gt;: &lt;code&gt;add.objective(portfolio=pspec, type=&#34;weight_concentration&#34;, name=&#34;HHI&#34;, conc_aversion=0.1)&lt;/code&gt;: Com esta função objetivo, podemos minimizar a concentração do portfólio em alguns ativos com o uso de um coeficiente de aversão.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Já em termos de restrições, os problemas que resolveremos no &lt;em&gt;post&lt;/em&gt; envolverão limites sobre os pesos dos ativos. Mas o pacote &lt;code&gt;PortfolioAnalysis&lt;/code&gt; permite ainda uma série de outras restrições.Alguns exemplos de restrições adicionais:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Limites de posições &lt;/strong&gt;&lt;code&gt;type = position_limit&lt;/code&gt;: com esta restrição, podemos encontrar apenas portfólios com um número máximo de ativos com peso não-zero);&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Restrições de diversificação&lt;/strong&gt; &lt;code&gt;type = &#34;diversification&lt;/code&gt;: com esta restrição, podemos definir o valor alvo de diversificação &lt;span class=&#34;math inline&#34;&gt;\(\sum_{i=1}^N w_i^2\)&lt;/span&gt;.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Alvo para o retorno:&lt;/strong&gt; &lt;code&gt;type = &#34;return&#34;&lt;/code&gt;, com esta restrição podemos estipular um alvo para a média do retorno com &lt;code&gt;return_target&lt;/code&gt;. Permitindo por exemplo, a miminização do risco sujeito a um nível de retorno.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Fator de exposição&lt;/strong&gt; &lt;code&gt;type = &#34;factor_exposure&#34;&lt;/code&gt;: podemos definir limites máximos e mínimos para fatores de exposição ao risco, como os valores de beta dos ativos.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Muitas outras funções objetivos e restrições são possíveis de serem calculadas com este pacote. Podemos, por exemplo, limitar nosso portfólio por grupo de empresas: 30% para empresas de tecnologia, 40% para empresas do setor bancário, etc. Mais informações podem ser encontradas na &lt;a href=&#34;https://rdrr.io/cran/PortfolioAnalytics/f/inst/doc/portfolio_vignette.pdf&#34;&gt;documentação do pacote&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;dados&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Dados&lt;/h1&gt;
+&lt;p&gt;Nesse post vamos selecionar algumas empresas negociadas na B3 e utilizar três estratégias de seleção de portfólio: uma que maximiza o retorno médio, outra que minimiza o risco dos ativos e outra que maximiza a razão de Sharpe. Inicialmente resolveremos um problema de único período, com a função &lt;code&gt;optimize.portfolio&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Antes de começarmos, vamos carregar os pacotes que serão utilizados ao longo da análise. É sempre boa prática carrega-los no inicio.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;rm(list = ls())
+# o código abaixo instala o pacote &amp;quot;needs&amp;quot; caso não tenha instalado na sua máquina
+# install.packages(&amp;quot;needs&amp;quot;)
+
+needs::needs(tidyverse, tidyquant, ROI.plugin.quadprog, timetk,
+             ROI.plugin.glpk, PortfolioAnalytics)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Para nossa análise de portfólio vamos escolher alguma das empresas mais negóciadas na B3. Em &lt;code&gt;tickers&lt;/code&gt; vamos guardar os tickers das empresas selecionadas. Além disto, vamos iniciar nossa análise a partir de 2012, uma data completamente arbitrária.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;data_inicial &amp;lt;- &amp;quot;2012-01-01&amp;quot;
+data_final &amp;lt;- &amp;quot;2021-12-10&amp;quot;
+tickers &amp;lt;- c(&amp;quot;MGLU3.SA&amp;quot;,
+             &amp;quot;ABEV3.SA&amp;quot;,
+             &amp;quot;BBDC3.SA&amp;quot;,
+             &amp;quot;EMBR3.SA&amp;quot;,
+             &amp;quot;JBSS3.SA&amp;quot;,
+             &amp;quot;PETR3.SA&amp;quot;,
+             &amp;quot;VALE3.SA&amp;quot;,
+             &amp;quot;WEGE3.SA&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Para obter os dados de preço das ações selecionadas vamos utilizar o pacote &lt;code&gt;TidyQuant&lt;/code&gt;. Ele fornece uma função bastante conveniente para baixar dados de ações com apenas o nome do ticker e o período: a função &lt;code&gt;tq_get()&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Os dados da tabela &lt;a href=&#34;#tab:precos-tbl&#34;&gt;1&lt;/a&gt; possuem uma série de informações sobre as empresas negociadas no B3, com atributos de valor de abertura, fechamento, fechamento ajustado e volume negociado para cada dia do período entre Janeiro de 2012 e dezembro de 2021.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;tbl_precos &amp;lt;- tidyquant::tq_get(
+  x = tickers,
+  get = &amp;quot;stock.prices&amp;quot;,
+  from = data_inicial
+) 
+
+tbl_precos %&amp;gt;% 
+  head() %&amp;gt;% 
+  knitr::kable(caption = &amp;quot;Informações sobre empresas da B3 extraídos da API Yahoo&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;caption&gt;&lt;span id=&#34;tab:precos-tbl&#34;&gt;Table 1: &lt;/span&gt;Informações sobre empresas da B3 extraídos da API Yahoo&lt;/caption&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;left&#34;&gt;symbol&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;date&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;open&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;high&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;low&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;close&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;volume&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;adjusted&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;MGLU3.SA&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;2012-01-02&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.296562&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.296562&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.290625&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.290625&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;8681600&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.261855&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;MGLU3.SA&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;2012-01-03&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.293750&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.295312&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.288750&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.288750&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;23385600&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.260165&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;MGLU3.SA&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;2012-01-04&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.289687&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.289687&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.283125&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.285937&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;19008000&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.257631&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;MGLU3.SA&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;2012-01-05&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.286250&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.286250&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.282812&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.283437&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;7024000&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.255378&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;MGLU3.SA&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;2012-01-06&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.283750&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.291250&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.279687&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.291250&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;19286400&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.262418&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;MGLU3.SA&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;2012-01-09&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.290937&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.290937&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.283437&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.288437&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;13600000&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.259883&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Para nossa análise, vamos trabalhar apenas com o valor de fechamento ajustado das ações. Mas antes precisamos converter o preço da ação em retornos.&lt;/p&gt;
+&lt;p&gt;A tabela &lt;a href=&#34;#tab:tbl-retorno&#34;&gt;2&lt;/a&gt; mostra qual é o resultado da transformação dos preços em retornos.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;tbl_retornos &amp;lt;- tbl_precos %&amp;gt;%
+  group_by(symbol) %&amp;gt;%
+  tidyquant::tq_transmute(
+    select = adjusted,
+    col_rename = &amp;quot;retorno&amp;quot;,
+    mutate_fun = periodReturn,
+    period = &amp;quot;monthly&amp;quot;,
+    type = &amp;quot;arithmetic&amp;quot;,
+    leading = FALSE,
+    indexAt = &amp;quot;lastof&amp;quot;
+    ) %&amp;gt;% 
+  rename(ativo = symbol,
+         data = date
+         ) %&amp;gt;% 
+  na.omit()
+
+tbl_retornos %&amp;gt;% 
+  head() %&amp;gt;% 
+  knitr::kable(caption = &amp;quot;Tabela de retornos das empresas selecionadas&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;caption&gt;&lt;span id=&#34;tab:tbl-retorno&#34;&gt;Table 2: &lt;/span&gt;Tabela de retornos das empresas selecionadas&lt;/caption&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;left&#34;&gt;ativo&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;data&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;retorno&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;MGLU3.SA&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;2012-02-29&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.1826341&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;MGLU3.SA&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;2012-03-31&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0092851&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;MGLU3.SA&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;2012-04-30&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.0484958&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;MGLU3.SA&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;2012-05-31&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.1790712&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;MGLU3.SA&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;2012-06-30&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0075045&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;MGLU3.SA&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;2012-07-31&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0904247&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;A função &lt;code&gt;tq_transmute()&lt;/code&gt; permite calcular o retorno mensal para o valor de fechamento ajustado da ação. Para isto, precisamos indicar qual a variável que sofrerá a transformação (&lt;code&gt;adjusted&lt;/code&gt;), qual a transformação utilizada (&lt;code&gt;mutate_fun = periodReturn&lt;/code&gt;) e qual a periodicidade do cálculo (&lt;code&gt;period = &#34;monthly&#34;&lt;/code&gt;). Por fim, &lt;code&gt;na.omit()&lt;/code&gt; é utilizado para excluir linhas que possuam retorno &lt;code&gt;NA&lt;/code&gt;. Este é o caso do primeiro mês da amostra.&lt;/p&gt;
+&lt;div id=&#34;estatísticas-descritivas&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Estatísticas descritivas&lt;/h2&gt;
+&lt;p&gt;É sempre boa prática verificar a média e desvio padrão dos retornos, que representam o retorno médio por ativo e a volatidade do ativo. A tabela @reff(tab:media-desvio) mostram estas estatísticas descritivas.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;tbl_retornos %&amp;gt;% 
+  group_by(ativo) %&amp;gt;% 
+  summarise(`Média` = mean(retorno),
+            `Desvio-padrão` = sd(retorno)) %&amp;gt;% 
+  knitr::kable(caption = &amp;quot;Média e Desvio-padrão dos ativos&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;caption&gt;&lt;span id=&#34;tab:media-desvio&#34;&gt;Table 3: &lt;/span&gt;Média e Desvio-padrão dos ativos&lt;/caption&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;left&#34;&gt;ativo&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Média&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Desvio-padrão&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;ABEV3.SA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0087075&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0674682&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;BBDC3.SA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0116825&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0916488&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;EMBR3.SA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0109486&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.1065495&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;JBSS3.SA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0224573&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.1131114&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;MGLU3.SA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0435138&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.2000139&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;PETR3.SA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0139661&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.1414935&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;VALE3.SA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0148660&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.1093709&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;WEGE3.SA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0260981&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0801259&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Já a figura &lt;a href=&#34;#fig:retorno-plotado&#34;&gt;1&lt;/a&gt; exibe o retorno acumulado para as empresas selecionadas.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;tbl_retornos %&amp;gt;% 
+  group_by(ativo) %&amp;gt;% 
+  mutate(retorno_acumulado = cumsum(retorno)) %&amp;gt;% 
+  ggplot(aes(x = data, y = retorno_acumulado, color = ativo)) +
+  geom_line() + 
+  geom_vline(xintercept = as.Date(&amp;quot;2020-03-01&amp;quot;), linetype = 2, color = &amp;quot;red&amp;quot;) +
+  geom_hline(yintercept = 0, linetype = 2) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = &amp;quot;&amp;quot;, y = &amp;quot;Retorno acumulado&amp;quot;, 
+       title = &amp;quot;Retorno acumulado por empresa selecionada, 2017-2020&amp;quot;,
+       subtitle = &amp;quot;Linha vermelha representa o início da crise de Covid-19&amp;quot;) +
+  facet_wrap(~ativo, scales = &amp;quot;free_y&amp;quot;, ncol = 2) +
+  theme(legend.position = &amp;quot;none&amp;quot;,
+        axis.text.x = element_text(angle=45, size = 8))&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;figure&#34;&gt;&lt;span style=&#34;display:block;&#34; id=&#34;fig:retorno-plotado&#34;&gt;&lt;/span&gt;
+&lt;img src=&#34;https://robsonolima.com.br/post/analise-de-portfolio-com-r/index_files/figure-html/retorno-plotado-1.png&#34; alt=&#34;Retorno acumulado por empresa selecionada, 2017-2021&#34; width=&#34;672&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;
+Figure 1: Retorno acumulado por empresa selecionada, 2017-2021
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Contudo, o pacote &lt;code&gt;PortfolioAnalytics&lt;/code&gt; não gosta deste formato dos dados. O formato original, que podemos chamar de &lt;code&gt;tidy&lt;/code&gt;, apresenta uma única coluna que indica o nome das empresas e uma única coluna que informa os retornos. Precisamos converter para o formato &lt;strong&gt;wider&lt;/strong&gt;, em que cada empresa tem sua própria coluna de retornos.&lt;/p&gt;
+&lt;p&gt;A tabela &lt;a href=&#34;#tab:retorno-wide&#34;&gt;4&lt;/a&gt; mostra o novo formato dos dados, onde cada empresa ocupa uma coluna. Também vamos criar um período de treinamento, em que o portfolio é otimizado (entre 2012 e 2020), para ser testado e comparado com um &lt;strong&gt;benchmarking&lt;/strong&gt; durante 2021.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;tbl_retornos_wide &amp;lt;- tbl_retornos %&amp;gt;% 
+  pivot_wider(names_from = ativo, 
+              values_from = retorno
+              ) %&amp;gt;% 
+  column_to_rownames(&amp;quot;data&amp;quot;) %&amp;gt;% 
+  as.xts()
+
+tbl_retornos_wide_training &amp;lt;- tbl_retornos %&amp;gt;% 
+  filter(data &amp;lt; as.Date(&amp;quot;2021-01-01&amp;quot;)) %&amp;gt;% 
+  pivot_wider(names_from = ativo, 
+              values_from = retorno
+              ) %&amp;gt;% 
+  column_to_rownames(&amp;quot;data&amp;quot;) %&amp;gt;% 
+  as.xts()
+
+tbl_retornos_wide_training %&amp;gt;% 
+  head() %&amp;gt;% 
+  knitr::kable(caption = &amp;quot;Tabela de retornos no formato wide&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;caption&gt;&lt;span id=&#34;tab:retorno-wide&#34;&gt;Table 4: &lt;/span&gt;Tabela de retornos no formato wide&lt;/caption&gt;
+&lt;colgroup&gt;
+&lt;col width=&#34;13%&#34; /&gt;
+&lt;col width=&#34;12%&#34; /&gt;
+&lt;col width=&#34;13%&#34; /&gt;
+&lt;col width=&#34;12%&#34; /&gt;
+&lt;col width=&#34;12%&#34; /&gt;
+&lt;col width=&#34;12%&#34; /&gt;
+&lt;col width=&#34;12%&#34; /&gt;
+&lt;col width=&#34;12%&#34; /&gt;
+&lt;/colgroup&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;right&#34;&gt;MGLU3.SA&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;ABEV3.SA&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;BBDC3.SA&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;EMBR3.SA&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;JBSS3.SA&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;PETR3.SA&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;VALE3.SA&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;WEGE3.SA&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;right&#34;&gt;0.182634062&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.11769176&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.027945006&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.06136012&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.14241022&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.04496462&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.02572697&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.01227134&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;right&#34;&gt;0.009285096&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.09766948&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.025695354&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.14374988&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.02739719&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.04979342&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.01492530&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.04009375&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;right&#34;&gt;-0.048495773&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.07114161&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.051420149&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.12295077&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.00000000&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.07860092&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.01799848&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.01717146&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;right&#34;&gt;-0.179071219&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.07150281&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.036454059&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.12712896&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.27333348&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.10691652&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.11760559&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.03277080&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;right&#34;&gt;0.007504505&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.01255177&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.009579797&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.06348695&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.10642209&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.04545461&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.06757121&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.05978129&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;right&#34;&gt;0.090424729&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.01804931&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.056351662&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.01646687&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.11111118&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.06084673&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.07425858&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.04497375&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Este procedimento de treinamento e teste será feito manualmente na primeira parte do &lt;em&gt;post&lt;/em&gt;, mas com a função &lt;code&gt;optimize.portfolio.rebalancing&lt;/code&gt; podemos realizar um processo de maneira mais automática.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;análise-de-portfólio-para-período-único&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Análise de Portfólio para Período Único&lt;/h1&gt;
+&lt;p&gt;Nossa tarefa agora é construir diferentes portfólios. Para tanto, iremos utilizar três estratégias de seleção de portfólios: a de minimização do risco, a de maximização do retorno e a de maximização do risco de Sharpe. Para tanto, utilizaremos os dados até dezembro de 2020 para escolher os portfólios, e depois verificaremos como estes portfólios teriam se comportamento em 2021.&lt;/p&gt;
+&lt;div id=&#34;portfólio-com-variância-mínima-global&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Portfólio com Variância Mínima Global&lt;/h2&gt;
+&lt;p&gt;Começamos com um problema de otimização que busca obter os pesos que nos forneça a menor variâcia possível (a volatilidade do portfólio). Volatilidade é uma medida de risco, e portanto, quanto menor a volatilidade, menor o risco em um portfólio.&lt;/p&gt;
+&lt;p&gt;Dito isto, nosso objetivo se torna encontrar os pesos que minimizem nossa variância sujeito a duas restrições:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;&lt;p&gt;que a soma dos pesos dos ativos seja a unidade; e&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;que cada ativo represente no mínimo 5% do total investido e no máximo 60%.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;A primeira restrição garante o investimento completo (&lt;em&gt;full investiment&lt;/em&gt;), ou seja, que utilizaremos todos os recursos disponíveis. A segunda restrição garante que todos os ativos farão parte do portfólio, ao mesmo tempo que não permite que um ativo domine todo o investimento.&lt;/p&gt;
+&lt;p&gt;Este problema pode ser anunciado matematicamente da seguinte forma:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\min \sigma^2 = W^T \sum W\]&lt;/span&gt;
+&lt;span class=&#34;math display&#34;&gt;\[\text{s.a.}\]&lt;/span&gt;
+&lt;span class=&#34;math display&#34;&gt;\[\sum_{i=1}^N W_i = 1\]&lt;/span&gt;
+&lt;span class=&#34;math display&#34;&gt;\[0.05 \leq W_i \leq 0.6\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Técnicamente, como a função objetiva é quadratica e as restrições são lineares, utilizaremos um solucionador (&lt;em&gt;solver&lt;/em&gt;) quadrático. O pacote &lt;code&gt;PortfolioAnalytics&lt;/code&gt; utiliza o plugin &lt;code&gt;ROI.plugin.quadprog&lt;/code&gt; para resolver este tipo de problema.&lt;/p&gt;
+&lt;div id=&#34;criando-o-portfólio&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Criando o Portfólio&lt;/h3&gt;
+&lt;p&gt;Para implementarmos este problema usando o pacote &lt;code&gt;PortfolioAnalytics&lt;/code&gt; precisamos primeiro construir o objeto &lt;code&gt;portfolio&lt;/code&gt; com a função &lt;code&gt;porfolio.spec()&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Na primeira linha do código abaixo, definimos o portfólio informando a lista de ativos (objeto &lt;code&gt;ticker&lt;/code&gt;).&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#### Portfólio com a variância mínima global
+min_var_portfolio &amp;lt;- portfolio.spec(assets = tickers) %&amp;gt;% 
+  add.constraint(type = &amp;quot;full_investiment&amp;quot;) %&amp;gt;% 
+  add.constraint(type = &amp;quot;box&amp;quot;, min = 0.05, max = 0.6) %&amp;gt;% 
+  add.objective(type = &amp;quot;risk&amp;quot;, name = &amp;quot;var&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Na segunda linha de código, definimos a primeira restrição. Definimos o tipo de restrição com &lt;code&gt;type = &#34;full_investiment&#34;&lt;/code&gt; (a soma dos pesos será igual a unidade). Esta restrição também pode ser especificada escrevendo &lt;code&gt;add.constraint(type = &#34;weight_sum&#34;, min_sum = 0, max_sum = 0)&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Na linha 3 escrevemos a restrição de que cada ativo deve ter peso maior que 0,05 e menor que 0,6. Este tipo de restrição é nomeado de &lt;code&gt;type = &#34;box&#34;&lt;/code&gt; pelo pacote &lt;code&gt;PortfolioAnalysis&lt;/code&gt;. Um caso especial da restrição &lt;em&gt;box&lt;/em&gt; é a &lt;em&gt;long&lt;/em&gt;. Nela, o valor mínimo é igual a zero e o máximo igual a unidade. Este tipo de restrição pode ser escrito como &lt;code&gt;add.constraint(type = &#34;long_only&#34;)&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Por fim, na linha 4, definimos o objetivo da otimização. Especificamente definimos que o otimizador deve buscar pesos que minimizem o risco do portfólio.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;rodar-a-otimização&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Rodar a otimização&lt;/h3&gt;
+&lt;p&gt;A função &lt;code&gt;optimize.portfolio()&lt;/code&gt; roda a otimização utilizando o &lt;em&gt;solver&lt;/em&gt; quadrático. Nesta função passamos os dados, o objeto portfólio criado acima e o método de otimização.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;otimizacao_risco &amp;lt;- tbl_retornos_wide_training %&amp;gt;% 
+  optimize.portfolio(
+    portfolio = min_var_portfolio,
+    optimize_method = &amp;quot;quadprog&amp;quot;,
+    trace = TRUE
+    )
+otimizacao_risco&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## ***********************************
+## PortfolioAnalytics Optimization
+## ***********************************
+## 
+## Call:
+## optimize.portfolio(R = ., portfolio = min_var_portfolio, optimize_method = &amp;quot;quadprog&amp;quot;, 
+##     trace = TRUE)
+## 
+## Optimal Weights:
+## MGLU3.SA ABEV3.SA BBDC3.SA EMBR3.SA JBSS3.SA PETR3.SA VALE3.SA WEGE3.SA 
+##   0.0500   0.3042   0.0500   0.1409   0.0789   0.0500   0.0765   0.2494 
+## 
+## Objective Measure:
+##  StdDev 
+## 0.05104&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;A saída da otimização mostra os pesos calculados e a medida de desvio-padrão do portfólio que minimiza risco (0,05104).&lt;/p&gt;
+&lt;p&gt;Para visualizar melhor os pesos, podemos extrai-los do objeto &lt;code&gt;otimizacao_risco&lt;/code&gt; com a função &lt;code&gt;extractWeights&lt;/code&gt; e observar na tabela &lt;a href=&#34;#tab:tab-pesos-1&#34;&gt;5&lt;/a&gt; que os pesos estimados são consistentes com as restrinções impostas.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;pesos_var_minima &amp;lt;- extractWeights(otimizacao_risco)
+
+tibble(ativos = tickers, pesos = pesos_var_minima) %&amp;gt;% 
+  mutate(soma_pesos = cumsum(pesos)) %&amp;gt;% 
+  knitr::kable(caption = &amp;quot;Conjunto de pesos dos ativos que minimizam o risco do porfólio&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;caption&gt;&lt;span id=&#34;tab:tab-pesos-1&#34;&gt;Table 5: &lt;/span&gt;Conjunto de pesos dos ativos que minimizam o risco do porfólio&lt;/caption&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;left&#34;&gt;ativos&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;pesos&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;soma_pesos&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;MGLU3.SA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0500000&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0500000&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;ABEV3.SA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.3042140&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.3542140&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;BBDC3.SA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0500000&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.4042140&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;EMBR3.SA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.1409229&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.5451369&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;JBSS3.SA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0789496&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.6240865&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;PETR3.SA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0500000&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.6740865&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;VALE3.SA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0764677&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.7505542&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;WEGE3.SA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.2494458&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1.0000000&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;O ativo com menor peso é o &lt;code&gt;MGLU3&lt;/code&gt;, com 5%, respeitando a primeira restrição. Enquanto que a soma dos pesos é igual a unidade, de modo que todo o recurso financeiro será utilizado para comprar os ativos acima.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;portfólio-de-retorno-máximo-esperado&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Portfólio de Retorno Máximo Esperado&lt;/h2&gt;
+&lt;p&gt;Agora o objetivo é inverso. Queremos encontrar os pesos que produzem o portfólio com maior retorno esperado. O problema se torna maximizar o retorno &lt;span class=&#34;math inline&#34;&gt;\(\mu\)&lt;/span&gt; sujeito às mesmas duas restrições anteriores:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\max \mu^T W\]&lt;/span&gt;
+&lt;span class=&#34;math display&#34;&gt;\[\text{s.a. } \sum_{i=1}^N W_i = 1\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\text{ e } \epsilon_i \leq W_i \leq \delta_i\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Como a função é linear, podemos utilizar um &lt;em&gt;solver&lt;/em&gt; de programação linear. O &lt;code&gt;PortfolioAnalytics&lt;/code&gt; fornece a plugin &lt;code&gt;glpk&lt;/code&gt; como uma solução para problemas de otimização de programação linear.&lt;/p&gt;
+&lt;div id=&#34;criando-o-portfólio-1&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Criando o Portfólio&lt;/h3&gt;
+&lt;p&gt;A criação do porfólio segue o mesmo passo-a-passo do problema de minimização da risco Portanto, a única alteração será na função objetiva &lt;code&gt;add.objetive&lt;/code&gt;, em que o tipo de otimização será pelos retornos médios (&lt;code&gt;type = &#34;return&#34;&lt;/code&gt; e &lt;code&gt;name = &#34;mean&#34;&lt;/code&gt;).&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;portfolio_retorno_maximo &amp;lt;- portfolio.spec(assets = tickers) %&amp;gt;% 
+  add.constraint(type = &amp;quot;full_investiment&amp;quot;) %&amp;gt;% 
+  add.constraint(type = &amp;quot;box&amp;quot;, min = 0.05, max = 0.6) %&amp;gt;% 
+  add.objective(type = &amp;quot;return&amp;quot;, name = &amp;quot;mean&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;rodando-a-otimização&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Rodando a otimização&lt;/h3&gt;
+&lt;p&gt;Sem muito segredo, vamos rodar a função &lt;code&gt;optimize.portfolio()&lt;/code&gt; mas alterando o método de otimização para &lt;code&gt;optimize_method = &#34;glpk&#34;&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;otimizacao_retorno &amp;lt;- tbl_retornos_wide_training %&amp;gt;% 
+  optimize.portfolio(
+    portfolio = portfolio_retorno_maximo,
+    optimize_method = &amp;quot;glpk&amp;quot;,
+    trace = TRUE
+    )
+otimizacao_retorno&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## ***********************************
+## PortfolioAnalytics Optimization
+## ***********************************
+## 
+## Call:
+## optimize.portfolio(R = ., portfolio = portfolio_retorno_maximo, 
+##     optimize_method = &amp;quot;glpk&amp;quot;, trace = TRUE)
+## 
+## Optimal Weights:
+## MGLU3.SA ABEV3.SA BBDC3.SA EMBR3.SA JBSS3.SA PETR3.SA VALE3.SA WEGE3.SA 
+##     0.60     0.05     0.05     0.05     0.05     0.05     0.05     0.10 
+## 
+## Objective Measure:
+##    mean 
+## 0.04271&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;A saída do otimizador mostra que o retorno médio foi de 4,3% para um portfólio com 60% do orçamento investido na Magazine Luiza, 10% na WEG e 5% nas demais. A tabela &lt;a href=&#34;#tab:tab-pesos-2&#34;&gt;6&lt;/a&gt; mostra que as restrições foram novamente respeitadas.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;pesos_retorno_maximo &amp;lt;- extractWeights(otimizacao_retorno)
+
+
+tibble(ativos = tickers, pesos = pesos_retorno_maximo) %&amp;gt;% 
+  mutate(soma_pesos = cumsum(pesos)) %&amp;gt;% 
+  knitr::kable(caption = &amp;quot;Conjunto de pesos dos ativos que maximizam o retorno médio do porfólio&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;caption&gt;&lt;span id=&#34;tab:tab-pesos-2&#34;&gt;Table 6: &lt;/span&gt;Conjunto de pesos dos ativos que maximizam o retorno médio do porfólio&lt;/caption&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;left&#34;&gt;ativos&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;pesos&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;soma_pesos&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;MGLU3.SA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.60&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.60&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;ABEV3.SA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.05&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.65&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;BBDC3.SA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.05&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.70&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;EMBR3.SA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.05&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.75&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;JBSS3.SA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.05&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.80&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;PETR3.SA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.05&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.85&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;VALE3.SA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.05&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.90&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;WEGE3.SA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.10&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1.00&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;portfólio-com-razão-de-sharpe-máxima&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Portfólio com Razão de Sharpe Máxima&lt;/h2&gt;
+&lt;p&gt;Por fim, podemos encontrar um portfólio que maximiza a razão de Sharpe. Mas antes, uma breve explicação sobre esta medida de risco.&lt;/p&gt;
+&lt;div id=&#34;a-razão-de-sharpe&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;A razão de Sharpe&lt;/h3&gt;
+&lt;p&gt;A Razão de Sharpe é comumente utilizada como uma medida de retorno por unidade de risco, e tem a seguinte fórmula:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\frac{r_P - r_F}{\sigma_P}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;onde &lt;span class=&#34;math inline&#34;&gt;\(r_p\)&lt;/span&gt; é o retorno do portfólio, &lt;span class=&#34;math inline&#34;&gt;\(r_F\)&lt;/span&gt; é a taxa livre de risco e &lt;span class=&#34;math inline&#34;&gt;\(\sigma_P\)&lt;/span&gt; é o risco do portfólio (desvio-padrão do retorno) normalizada e anualizada. Abaixo, um exemplo de como funciona a Razão de Sharp:&lt;/p&gt;
+&lt;table&gt;
+&lt;colgroup&gt;
+&lt;col width=&#34;28%&#34; /&gt;
+&lt;col width=&#34;45%&#34; /&gt;
+&lt;col width=&#34;25%&#34; /&gt;
+&lt;/colgroup&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;th&gt;Portfólio A&lt;/th&gt;
+&lt;th&gt;Portfólio B&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td&gt;Retorno&lt;/td&gt;
+&lt;td&gt;7,9%&lt;/td&gt;
+&lt;td&gt;6,9%&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td&gt;Risco&lt;/td&gt;
+&lt;td&gt;5,5%&lt;/td&gt;
+&lt;td&gt;3,2%&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td&gt;Taxa livre de risco&lt;/td&gt;
+&lt;td&gt;2,0%&lt;/td&gt;
+&lt;td&gt;2,0%&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td&gt;Razão de Sharpe&lt;/td&gt;
+&lt;td&gt;&lt;span class=&#34;math inline&#34;&gt;\(\frac{7,9\% - 2,0\%}{5,5\%} = 1,07\)&lt;/span&gt;&lt;/td&gt;
+&lt;td&gt;&lt;span class=&#34;math inline&#34;&gt;\(\frac{6,9\% - 2,0\%}{3,2\%} = 1,53\)&lt;/span&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;Quando maior a razão Sharpe, melhor é a combinação de risco e retorno.&lt;/strong&gt; Portanto, o portifólio B possui uma melhor performance ajustada ao risco do que o portfólio A.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;criando-o-portfólio-2&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Criando o Portfólio&lt;/h3&gt;
+&lt;p&gt;Vamos definir o portfólio com função objetiva divida em dois termos: uma para maximizar o retorno, e outra para minimizar o risco.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;portfolio_sharpe &amp;lt;- portfolio.spec(assets = tickers) %&amp;gt;% 
+  add.constraint(type = &amp;quot;full_investiment&amp;quot;) %&amp;gt;% 
+  add.constraint(type = &amp;quot;box&amp;quot;, min = 0.05, max = 0.6) %&amp;gt;% 
+  add.objective(type = &amp;quot;return&amp;quot;, name = &amp;quot;mean&amp;quot;) %&amp;gt;% 
+  add.objective(type = &amp;quot;risk&amp;quot;, name = &amp;quot;StdDev&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;rodando-a-otimização-1&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Rodando a otimização&lt;/h3&gt;
+&lt;p&gt;A maximizar a razão de Sharpe pode ser formulada como um problema de programação quadrática e resolvido rapidamente utilizando &lt;code&gt;optimize_method=&#34;ROI&#34;&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;otimizacao_sharpe &amp;lt;- tbl_retornos_wide_training %&amp;gt;% 
+  optimize.portfolio(
+    portfolio=portfolio_sharpe,
+    optimize_method=&amp;quot;ROI&amp;quot;,
+    maxSR=TRUE, 
+    trace=TRUE)
+
+otimizacao_sharpe&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## ***********************************
+## PortfolioAnalytics Optimization
+## ***********************************
+## 
+## Call:
+## optimize.portfolio(R = ., portfolio = portfolio_sharpe, optimize_method = &amp;quot;ROI&amp;quot;, 
+##     trace = TRUE, maxSR = TRUE)
+## 
+## Optimal Weights:
+## MGLU3.SA ABEV3.SA BBDC3.SA EMBR3.SA JBSS3.SA PETR3.SA VALE3.SA WEGE3.SA 
+##   0.1369   0.0500   0.0500   0.0500   0.1050   0.0500   0.0500   0.5082 
+## 
+## Objective Measure:
+## StdDev 
+##  0.063 
+## 
+## 
+##    mean 
+## 0.02789&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;A ação padrão quando definimos “mean” e “StdDev” como objetivos no &lt;code&gt;optimize_method=&#34;ROI&#34;&lt;/code&gt; é o de maximizar a utilidade quadrática. Se quisermos maximizar a Razão de Sharpe, precisamos passar o parâmetro &lt;code&gt;maxSR=TRUE&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;A tabela &lt;a href=&#34;#tab:tab-pesos-3&#34;&gt;7&lt;/a&gt; mostra os pesos para a solução do problema de maximização da razão de Sharpe.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;pesos_sharpe &amp;lt;- extractWeights(otimizacao_sharpe)
+
+tibble(ativos = tickers, pesos = pesos_sharpe) %&amp;gt;% 
+  mutate(soma_pesos = cumsum(pesos)) %&amp;gt;% 
+  knitr::kable(caption = &amp;quot;Conjunto de pesos dos ativos que maximizam a Razão de Sharpe&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;caption&gt;&lt;span id=&#34;tab:tab-pesos-3&#34;&gt;Table 7: &lt;/span&gt;Conjunto de pesos dos ativos que maximizam a Razão de Sharpe&lt;/caption&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;left&#34;&gt;ativos&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;pesos&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;soma_pesos&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;MGLU3.SA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.1368750&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.1368750&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;ABEV3.SA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0500000&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.1868750&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;BBDC3.SA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0500000&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.2368750&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;EMBR3.SA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0500000&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.2868750&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;JBSS3.SA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.1049609&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.3918359&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;PETR3.SA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0500000&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.4418359&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;VALE3.SA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0500000&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.4918359&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;WEGE3.SA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.5081641&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1.0000000&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Novamente, os pesos foram encontrados e eles respeitam as restrições impostas.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;construíndo-o-portfólio&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Construíndo o Portfólio&lt;/h2&gt;
+&lt;p&gt;A figura &lt;a href=&#34;#fig:plot-pesos&#34;&gt;2&lt;/a&gt; mostra os pesos de cada ativo em cada problema resolvido.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;tibble(ativos = tickers, 
+       pesos_sharpe = pesos_sharpe,
+       pesos_retorno = pesos_retorno_maximo,
+       pesos_risco = pesos_var_minima) %&amp;gt;% 
+  pivot_longer(cols = &amp;quot;pesos_sharpe&amp;quot;:&amp;quot;pesos_risco&amp;quot;) %&amp;gt;% 
+  ggplot(aes(x = name, y = value, fill = ativos)) +
+  geom_col() + 
+  scale_x_discrete(labels = c(&amp;quot;Maximizar retorno&amp;quot;, &amp;quot;Minimizar risco&amp;quot;, &amp;quot;Maximizar Risco de Sharpe&amp;quot;)) +
+  labs(x = &amp;quot;Estratégia&amp;quot;, y = &amp;quot;Peso no portfólio&amp;quot;,
+       title = &amp;quot;Seleção de carteiras de investimentos por estratégia&amp;quot;,
+       subtitle = &amp;quot;Empresas selecionadas, 2017-2020&amp;quot;) +
+  geom_text(aes(label = ativos),
+            position = position_stack(vjust = .6),
+            size = 2) + 
+  theme(legend.position = &amp;quot;none&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;figure&#34;&gt;&lt;span style=&#34;display:block;&#34; id=&#34;fig:plot-pesos&#34;&gt;&lt;/span&gt;
+&lt;img src=&#34;https://robsonolima.com.br/post/analise-de-portfolio-com-r/index_files/figure-html/plot-pesos-1.png&#34; alt=&#34;Seleção de carteiras de investimentos por estratégia&#34; width=&#34;672&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;
+Figure 2: Seleção de carteiras de investimentos por estratégia
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Agora podemos construir uma série no tempo dos retornos do portfólio caso tivessemos investido exatamente como sugerido pelos três problemas definidos. Por fim, vamos compara-los a uma solução de &lt;em&gt;benchmarking&lt;/em&gt;, em que investimos 12,5% em cada ativo.&lt;/p&gt;
+&lt;p&gt;Para construir esta nova série, vamos multiplicar cada retorno observado em 2021 pelo peso definido pelo otimizador. Assim, o retorno do portfólio em um mês &lt;span class=&#34;math inline&#34;&gt;\(t\)&lt;/span&gt; é dado por:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[r_{\text{portfolio}, t} = \sum_{i=1}^5 W_i r_{i,t}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;É fácil computar manualmente, ou utilizando a função &lt;code&gt;Return.portfolio&lt;/code&gt; do mesmo pacote &lt;code&gt;PortfolioAnalytics&lt;/code&gt;, mas como uma alternativa conveniente vamos utilizar o pacote &lt;code&gt;tidyquant&lt;/code&gt;, que possui a função &lt;code&gt;tq_portfolio()&lt;/code&gt;. Esta função utiliza os dados originais (no formato &lt;strong&gt;tidy&lt;/strong&gt;) e o vetor de pesos produzidos pela otimização para construir um &lt;code&gt;data.frame&lt;/code&gt; de retornos de portfólio. Abaixo fazemos o computo do retorno do portfólio para as três estratégias.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;retorno_portfolio_retorno_maximo &amp;lt;- tbl_retornos %&amp;gt;% 
+  filter(data &amp;gt; as.Date(&amp;quot;2021-01-01&amp;quot;)) %&amp;gt;% 
+  tq_portfolio(
+    assets_col = ativo,
+    returns_col = retorno,
+    weights = pesos_retorno_maximo,
+    col_rename = &amp;quot;retorno_max_retorno&amp;quot;,
+    rebalance_on = &amp;quot;months&amp;quot;
+  )
+
+retorno_portfolio_risco_minimo &amp;lt;- tbl_retornos %&amp;gt;% 
+  filter(data &amp;gt; as.Date(&amp;quot;2021-01-01&amp;quot;)) %&amp;gt;% 
+  tq_portfolio(
+    assets_col = ativo,
+    returns_col = retorno,
+    weights = pesos_var_minima,
+    col_rename = &amp;quot;retorno_minimo_risco&amp;quot;,
+    rebalance_on = &amp;quot;months&amp;quot;
+  )
+
+retorno_portfolio_sharpe &amp;lt;- tbl_retornos %&amp;gt;% 
+  filter(data &amp;gt; as.Date(&amp;quot;2021-01-01&amp;quot;)) %&amp;gt;% 
+  tq_portfolio(
+    assets_col = ativo,
+    returns_col = retorno,
+    weights = pesos_sharpe,
+    col_rename = &amp;quot;retorno_max_sharpe&amp;quot;,
+    rebalance_on = &amp;quot;months&amp;quot;
+  )&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Warning in check_weights(weights, assets_col, map, x): Sum of weights must be 1.&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Vamos definir ainda um portfólio &lt;strong&gt;benchmarking&lt;/strong&gt; de pesos iguais para os ativos. A intuição é que uma abordagem de pesos iguais não apresenta preferências para um ativo específico. A pergunta que faremos é: “os problemas de otimização de carteiras podem produzir resultados melhores do que simplesmente construir um portfólio de pesos iguais?”.&lt;/p&gt;
+&lt;p&gt;Como temos 8 empresas no nosso portfólio, vamos criar um portfólio naïve, onde o investidor aloca a mesma quantidade de recursos para as 8 empresas, ou seja, 12,5%.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;peso_naive &amp;lt;- rep(1/8, 8)
+
+retorno_portfolio_naive &amp;lt;- tbl_retornos %&amp;gt;% 
+  filter(data &amp;gt; as.Date(&amp;quot;2021-01-01&amp;quot;)) %&amp;gt;% 
+  tq_portfolio(
+    assets_col = ativo,
+    returns_col = retorno,
+    weights = peso_naive,
+    col_rename = &amp;quot;retorno_naive&amp;quot;,
+    rebalance_on = &amp;quot;months&amp;quot;
+  )&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;A tabela &lt;a href=&#34;#tab:retorno-3-portfolios&#34;&gt;8&lt;/a&gt; mostra os dados para as quatro estratégias empregadas.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;retorno_portfolio &amp;lt;- retorno_portfolio_naive %&amp;gt;% 
+  left_join(retorno_portfolio_retorno_maximo, by = &amp;quot;data&amp;quot;) %&amp;gt;% 
+  left_join(retorno_portfolio_risco_minimo, by = &amp;quot;data&amp;quot;) %&amp;gt;% 
+  left_join(retorno_portfolio_sharpe, by = &amp;quot;data&amp;quot;)
+
+retorno_portfolio %&amp;gt;% tail() %&amp;gt;% 
+  knitr::kable(caption = &amp;quot;Retorno para os quatro portfólios&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;caption&gt;&lt;span id=&#34;tab:retorno-3-portfolios&#34;&gt;Table 8: &lt;/span&gt;Retorno para os quatro portfólios&lt;/caption&gt;
+&lt;colgroup&gt;
+&lt;col width=&#34;12%&#34; /&gt;
+&lt;col width=&#34;16%&#34; /&gt;
+&lt;col width=&#34;23%&#34; /&gt;
+&lt;col width=&#34;24%&#34; /&gt;
+&lt;col width=&#34;22%&#34; /&gt;
+&lt;/colgroup&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;left&#34;&gt;data&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;retorno_naive&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;retorno_max_retorno&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;retorno_minimo_risco&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;retorno_max_sharpe&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;2021-07-31&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.0085991&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.0143558&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0026513&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0274050&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;2021-08-31&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0156670&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.0567314&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0346343&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.0033454&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;2021-09-30&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.0337014&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.1253286&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.0168419&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0310422&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;2021-10-31&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.0406964&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.1549873&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.0062129&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.0651341&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;2021-11-30&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.0729333&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.1887645&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.0827880&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.1158582&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;2021-12-31&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0281725&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.1069004&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0412393&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0392830&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Agora podemos visualizar o retorno acumulado no período caso o investidor tivesse, em janeiro de 2021, investido seus recursos empregando cada uma das estratégias.&lt;/p&gt;
+&lt;p&gt;A figura &lt;a href=&#34;#fig:plot-estrategias&#34;&gt;3&lt;/a&gt; mostra que a estratégia que produziu os maiores ganhos foi a de minimização do risco.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;retorno_portfolio_acumulado &amp;lt;- retorno_portfolio %&amp;gt;%
+  pivot_longer(cols = &amp;quot;retorno_naive&amp;quot;:&amp;quot;retorno_max_sharpe&amp;quot;,
+               names_to = &amp;quot;estrategia&amp;quot;,
+               values_to = &amp;quot;retorno&amp;quot;) %&amp;gt;% 
+  mutate(estrategia = case_when(estrategia == &amp;quot;retorno_max_retorno&amp;quot; ~ &amp;quot;Maximizar Retorno Médio&amp;quot;,
+                                estrategia == &amp;quot;retorno_minimo_risco&amp;quot; ~ &amp;quot;Minimizar o risco&amp;quot;,
+                                estrategia == &amp;quot;retorno_naive&amp;quot; ~ &amp;quot;Alocação igualitária&amp;quot;,
+                                estrategia == &amp;quot;retorno_max_sharpe&amp;quot; ~ &amp;quot;Maximizar Razão de Sharpe&amp;quot;)) %&amp;gt;% 
+  group_by(estrategia) %&amp;gt;% 
+  mutate(retorno_acumulado = cumsum(retorno)) %&amp;gt;% 
+  ungroup()
+
+retorno_portfolio_acumulado %&amp;gt;% 
+  ggplot(aes(x = data, y = retorno_acumulado, color = estrategia)) + 
+  geom_line(size = 1.2) + 
+  scale_y_continuous(label = scales::percent) +
+  labs(title = &amp;quot;Retorno acumulado por tipo de Portfólio, 2021&amp;quot;, y = &amp;quot;Retorno acumulado do portfólio&amp;quot;,
+       x = &amp;quot;&amp;quot;) + 
+  facet_wrap(~estrategia) + 
+  theme(legend.position = &amp;quot;none&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;figure&#34;&gt;&lt;span style=&#34;display:block;&#34; id=&#34;fig:plot-estrategias&#34;&gt;&lt;/span&gt;
+&lt;img src=&#34;https://robsonolima.com.br/post/analise-de-portfolio-com-r/index_files/figure-html/plot-estrategias-1.png&#34; alt=&#34;Retorno acumulado por tipo de Portfólio, 2017-2021&#34; width=&#34;672&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;
+Figure 3: Retorno acumulado por tipo de Portfólio, 2017-2021
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Por fim, algumas contas de padaria. A tabela &lt;a href=&#34;#tab:tab-retorno-1000&#34;&gt;9&lt;/a&gt; mostra que se um investidor em janeiro de 2020 tivesse alocado &lt;span class=&#34;math inline&#34;&gt;\(\text{R\$}\)&lt;/span&gt; 1000 dividos igualmente entre as 8 empresas (&lt;span class=&#34;math inline&#34;&gt;\(\text{R\$}\)&lt;/span&gt; 125 para cada), teria um retorno acumulado em dezembro de 2021 de &lt;span class=&#34;math inline&#34;&gt;\(\text{R\$}\)&lt;/span&gt; 1069. Este é um retorno semelhante ao de de um portfólio que tentasse minimizar os riscos (&lt;span class=&#34;math inline&#34;&gt;\(\text{R\$}\)&lt;/span&gt; 1148). No caso da estratégia de maximização de retornos, o investimento de &lt;span class=&#34;math inline&#34;&gt;\(\text{R\$}\)&lt;/span&gt; 1000 teria produzido &lt;span class=&#34;math inline&#34;&gt;\(\text{R\$}\)&lt;/span&gt; 339 reais. Maximizar a razão de Sharpe renderia &lt;span class=&#34;math inline&#34;&gt;\(\text{R\$}\)&lt;/span&gt; 941.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;retorno_portfolio_acumulado %&amp;gt;% 
+  select(-retorno) %&amp;gt;% 
+  filter(data == &amp;quot;2021-12-31&amp;quot;) %&amp;gt;% 
+  mutate(retorno_1000_reais = 1000 + (1000 * retorno_acumulado)) %&amp;gt;% 
+  knitr::kable(caption = &amp;quot;Retorno de R$ 1000 para cada tipo de portfólio&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;caption&gt;&lt;span id=&#34;tab:tab-retorno-1000&#34;&gt;Table 9: &lt;/span&gt;Retorno de R$ 1000 para cada tipo de portfólio&lt;/caption&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;left&#34;&gt;data&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;estrategia&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;retorno_acumulado&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;retorno_1000_reais&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;2021-12-31&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Alocação igualitária&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0697534&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1069.7534&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;2021-12-31&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Maximizar Retorno Médio&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.6607732&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;339.2268&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;2021-12-31&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Minimizar o risco&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.1483875&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1148.3875&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;2021-12-31&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Maximizar Razão de Sharpe&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;-0.0586792&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;941.3208&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;otimização-de-múltiplos-períodos&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Otimização de múltiplos períodos&lt;/h1&gt;
+&lt;p&gt;Os exemplos acima não representam exatamente uma estratégia ótima. Calculamos nossos pesos em janeiro de 2021 utilizando os dados do período de 2012 a dezembro de 2020 para treinamento.&lt;/p&gt;
+&lt;p&gt;No mundo real, podemos rebalancear nossa carteira de maneira períodica. Neste tipo de processo, ativos são comprados ou vendidos periodicamente para garantir, por exemplo, que o nível de retorno ou risco esteja no seu nível original. Para tanto, os pesos são periodicamente reecalculados.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.investopedia.com/terms/r/rebalancing.asp&#34;&gt;Por exemplo&lt;/a&gt;, digamos que originalmente o investidor tivesse construído um portfólio com 50% de ações e 50% de títulos públicos. Se as ações se valorizarem dentro de um período, seu peso no portfólio aumentará (digamos para 70%). Deste modo, o investidor pode decidir vender algumas ações e/ou comprar títulos públicos para que o portfólio retorne a alocação original de 50%/50%.&lt;/p&gt;
+&lt;p&gt;Em outro exemplo, o investidor pode estipular um certo nível de risco. Mas se em um determinado período, ações com maior nível de risco se valorizaram, seu peso no portfólio subiu, e consequentemente, o risco médio do portfólio também. Para reequilibrar o portfólio, podemos vender estes ativos de risco.&lt;/p&gt;
+&lt;p&gt;Este reequilíbrio, ou rebalanceamento, pode ser feito periodicamente (mensalmente ou trimestralmente) ou por meio de uma estratégia responsiva. Nesta último caso, podemos atribuir um peso alvo a cada ativo, e um nível de tolerância. Assim, podemos ter um portfólio em que 40% está alocado em ações e 60% em títulos públicos com uma margem de tolerância de +/- 5% para cada classe. Desse modo, ações podem flutuar entre 35% e 45%, mas se o peso dessa classe ficar fora deste intervalo, o portfólio como um todo é reequilibrado.&lt;/p&gt;
+&lt;p&gt;Outras estratégias de reequilíbrio existem e podem ser conferidas &lt;a href=&#34;https://www.investopedia.com/terms/r/rebalancing.asp&#34;&gt;aqui&lt;/a&gt;.&lt;/p&gt;
+&lt;div id=&#34;minimização-de-risco-com-rebalanceamento&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Minimização de Risco com Rebalanceamento&lt;/h2&gt;
+&lt;p&gt;Vamos repetir a otimização de minimização de risco, mas agora permitindo que o portfólio tenha seus pesos reequilibrados trimestralmente. Além dos parâmetros comuns à função &lt;code&gt;optimize.portfolio()&lt;/code&gt;, a função &lt;code&gt;optimize.portfolio.rebalance&lt;/code&gt; exige que informemos a periodicidade com que os pesos devem ser rebalanceados (&lt;code&gt;rebalance_on = &#34;quarters&#34;&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;Devemos ainda definir um período de treinamento, com &lt;code&gt;training_period = 60&lt;/code&gt;, e um valor para &lt;code&gt;rolling_window&lt;/code&gt;, para que o rebalanceamento dos pesos utilize uma janela móvel de dados. Caso o usuário queira utilizar todos os dados para estimar os pesos trimestrais, pode fixar &lt;code&gt;rolling_window = NULL&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;otimizacao_risco_rebalance &amp;lt;- tbl_retornos_wide %&amp;gt;% 
+  optimize.portfolio.rebalancing(
+    optimize_method = &amp;quot;ROI&amp;quot;,
+    portfolio = min_var_portfolio,
+    rebalance_on = &amp;quot;quarters&amp;quot;,
+    training_period = 60,
+    rolling_window = 60
+  )&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Warning: executing %dopar% sequentially: no parallel backend registered&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;otimizacao_risco_rebalance&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## **************************************************
+## PortfolioAnalytics Optimization with Rebalancing
+## **************************************************
+## 
+## Call:
+## optimize.portfolio.rebalancing(R = ., portfolio = min_var_portfolio, 
+##     optimize_method = &amp;quot;ROI&amp;quot;, rebalance_on = &amp;quot;quarters&amp;quot;, training_period = 60, 
+##     rolling_window = 60)
+## 
+## Number of rebalancing dates:  20 
+## First rebalance date:
+## [1] &amp;quot;2017-03-31&amp;quot;
+## Last rebalance date:
+## [1] &amp;quot;2021-12-31&amp;quot;
+## 
+## Annualized Portfolio Rebalancing Return:
+## [1] 0.1815471
+## 
+## Annualized Portfolio Standard Deviation:
+## [1] 0.221952&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;A saída da função mostra que foram feitos, durante o período de 2012-2021, um total de 20 rebalanceamentos, sendo o primeiro no primeiro trimestre de 2017. Como o treinamento exige 60 meses, precisamos acumular 60 meses de informações para realizar o primeiro rebalanceamento. No trimestre seguinte, os meses do primeiro trimestre de 2017 são incluídos no treinamento, e informações do primeiro trimestre de 2012 são excluídos.&lt;/p&gt;
+&lt;p&gt;Com a função &lt;code&gt;chart.Weights(otimizacao_sharpe_rebalance)&lt;/code&gt; podemos visualizar como os pesos mudaram ao longo dos trimestres. Como ela não gera uma visualização das mais bonitas, vamos recorrer aos gráficos do &lt;code&gt;ggplot2&lt;/code&gt;. Os pesos trimestrais podem ser visualizados na figura &lt;a href=&#34;#fig:plot-rebalance&#34;&gt;4&lt;/a&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;extractWeights(otimizacao_risco_rebalance) %&amp;gt;% 
+  as.data.frame() %&amp;gt;% 
+  rownames_to_column(&amp;quot;data&amp;quot;) %&amp;gt;% 
+  mutate(data = as.Date(data)) %&amp;gt;% 
+  pivot_longer(cols = &amp;quot;MGLU3.SA&amp;quot;:&amp;quot;WEGE3.SA&amp;quot;) %&amp;gt;% 
+  ggplot(aes(x = data, y = value, fill = name)) +
+  labs(fill = &amp;quot;&amp;quot;, x = &amp;quot;&amp;quot;, y = &amp;quot;Peso do ativo&amp;quot;,
+       title = &amp;quot;Peso dos ativos ao longo dos trimestres - Minimização do Risco&amp;quot;) +
+  geom_col() +
+  scale_x_date(date_breaks = &amp;quot;6 months&amp;quot;) +
+  theme(legend.position = &amp;quot;bottom&amp;quot;,
+        axis.text.x = element_text(angle = 90))&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;figure&#34;&gt;&lt;span style=&#34;display:block;&#34; id=&#34;fig:plot-rebalance&#34;&gt;&lt;/span&gt;
+&lt;img src=&#34;https://robsonolima.com.br/post/analise-de-portfolio-com-r/index_files/figure-html/plot-rebalance-1.png&#34; alt=&#34;Peso dos ativos ao longo dos trimestres&#34; width=&#34;672&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;
+Figure 4: Peso dos ativos ao longo dos trimestres
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Interessante notar como a Ambev perde participação no portfólio ao longo do tempo. Movimento inverso é visto com a empresa WEG.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;maximização-de-retorno-com-rebalanceamento&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Maximização de Retorno com Rebalanceamento&lt;/h2&gt;
+&lt;p&gt;A seguir, o mesmo exercício para diferentes configurações de portfólio. A figura &lt;a href=&#34;#fig:plot-rebalance-retorno&#34;&gt;5&lt;/a&gt; mostra os pesos para uma estratégia que maximiza retorno:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;otimizacao_retorno_rebalance &amp;lt;- tbl_retornos_wide %&amp;gt;% 
+  optimize.portfolio.rebalancing(
+    optimize_method = &amp;quot;ROI&amp;quot;,
+    portfolio = portfolio_retorno_maximo,
+    rebalance_on = &amp;quot;quarters&amp;quot;,
+    training_period = 60,
+    rolling_window = 60
+  )
+
+extractWeights(otimizacao_retorno_rebalance) %&amp;gt;% 
+  as.data.frame() %&amp;gt;% 
+  rownames_to_column(&amp;quot;data&amp;quot;) %&amp;gt;% 
+  mutate(data = as.Date(data)) %&amp;gt;% 
+  pivot_longer(cols = &amp;quot;MGLU3.SA&amp;quot;:&amp;quot;WEGE3.SA&amp;quot;) %&amp;gt;% 
+  ggplot(aes(x = data, y = value, fill = name)) +
+  labs(fill = &amp;quot;&amp;quot;, x = &amp;quot;&amp;quot;, y = &amp;quot;Peso do ativo&amp;quot;,
+       title = &amp;quot;Peso dos ativos ao longo dos trimestres - Maximização do Retorno&amp;quot;) +
+  geom_col() +
+  scale_x_date(date_breaks = &amp;quot;6 months&amp;quot;) +
+  theme(legend.position = &amp;quot;bottom&amp;quot;,
+        axis.text.x = element_text(angle = 90))&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;figure&#34;&gt;&lt;span style=&#34;display:block;&#34; id=&#34;fig:plot-rebalance-retorno&#34;&gt;&lt;/span&gt;
+&lt;img src=&#34;https://robsonolima.com.br/post/analise-de-portfolio-com-r/index_files/figure-html/plot-rebalance-retorno-1.png&#34; alt=&#34;Peso dos ativos ao longo dos trimestres - Maximização do retorno&#34; width=&#34;672&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;
+Figure 5: Peso dos ativos ao longo dos trimestres - Maximização do retorno
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Nenhuma surpresa que uma estratégia que maximiza retorno deixa o portfólio exposto a Magazine Luiza.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;função-objetiva-com-aversão-ao-risco&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Função Objetiva com Aversão ao Risco&lt;/h2&gt;
+&lt;p&gt;Por fim, vamos tentar um portfólio diferente. Vamos estimar um portfólio que maximizar uma função utilidade quadrática. Neste caso, a função objetivo tem dois termos: um para o retorno médio do portfólio, e outro para a variância do portfólio, de modo muito semelhante ao Risco de Sharpe. Contudo, vamos incluir um parâmetro de aversão ao risco, &lt;span class=&#34;math inline&#34;&gt;\(\lambda &amp;gt; 0\)&lt;/span&gt; no termo de minimização de risco. Um investidor tomador de riscos teria um valor de &lt;span class=&#34;math inline&#34;&gt;\(\lambda\)&lt;/span&gt; baixo, enquanto que um investidor averso ao risco teria um &lt;span class=&#34;math inline&#34;&gt;\(\lambda\)&lt;/span&gt; elevado. Se &lt;span class=&#34;math inline&#34;&gt;\(\lambda = 0\)&lt;/span&gt;, o termo de risco é ignorado e voltamos para o caso de maximização de retorno. Assim, &lt;span class=&#34;math inline&#34;&gt;\(\lambda\)&lt;/span&gt; representa um trade-off entre risco e retorno esperado.&lt;/p&gt;
+&lt;p&gt;A figura &lt;a href=&#34;#fig:plot-rebalance-aversao&#34;&gt;6&lt;/a&gt; mostra os pesos para um portfólio com &lt;span class=&#34;math inline&#34;&gt;\(\lambda=10\)&lt;/span&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;portfolio_quadratico &amp;lt;- portfolio.spec(assets = tickers) %&amp;gt;% 
+  add.constraint(type = &amp;quot;full_investiment&amp;quot;) %&amp;gt;% 
+  add.constraint(type = &amp;quot;box&amp;quot;, min = 0.05, max = 0.6) %&amp;gt;% 
+  add.objective(type = &amp;quot;return&amp;quot;, name = &amp;quot;mean&amp;quot;) %&amp;gt;% 
+  add.objective(type = &amp;quot;risk&amp;quot;, name = &amp;quot;var&amp;quot;, risk_aversion = 10)
+
+otimizacao_quadratico_rebalance &amp;lt;- tbl_retornos_wide %&amp;gt;% 
+  optimize.portfolio.rebalancing(
+    optimize_method = &amp;quot;ROI&amp;quot;,
+    portfolio = portfolio_quadratico,
+    rebalance_on = &amp;quot;quarters&amp;quot;,
+    training_period = 60,
+    rolling_window = 60
+  )
+
+extractWeights(otimizacao_quadratico_rebalance) %&amp;gt;% 
+  as.data.frame() %&amp;gt;% 
+  rownames_to_column(&amp;quot;data&amp;quot;) %&amp;gt;% 
+  mutate(data = as.Date(data)) %&amp;gt;% 
+  pivot_longer(cols = &amp;quot;MGLU3.SA&amp;quot;:&amp;quot;WEGE3.SA&amp;quot;) %&amp;gt;% 
+  ggplot(aes(x = data, y = value, fill = name)) +
+  labs(fill = &amp;quot;&amp;quot;, x = &amp;quot;&amp;quot;, y = &amp;quot;Peso do ativo&amp;quot;,
+       title = &amp;quot;Peso dos ativos ao longo dos trimestres - Função Quadrática&amp;quot;) +
+  geom_col() +
+  scale_x_date(date_breaks = &amp;quot;6 months&amp;quot;) +
+  theme(legend.position = &amp;quot;bottom&amp;quot;,
+        axis.text.x = element_text(angle = 90))&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;figure&#34;&gt;&lt;span style=&#34;display:block;&#34; id=&#34;fig:plot-rebalance-aversao&#34;&gt;&lt;/span&gt;
+&lt;img src=&#34;https://robsonolima.com.br/post/analise-de-portfolio-com-r/index_files/figure-html/plot-rebalance-aversao-1.png&#34; alt=&#34;Peso dos ativos ao longo dos trimestres - Quadrática&#34; width=&#34;672&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;
+Figure 6: Peso dos ativos ao longo dos trimestres - Quadrática
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;comparando-a-perfomance&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Comparando a perfomance:&lt;/h2&gt;
+&lt;p&gt;A figura &lt;a href=&#34;#fig:acumulado-rebalance&#34;&gt;7&lt;/a&gt; mostra o retorno acumulado entre 2017 (data do primeiro rebalanceamento) e 2021 para as três funções objetivas.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;retorno_rebalance_1 &amp;lt;- tbl_retornos_wide %&amp;gt;% 
+  Return.portfolio(weights = extractWeights(otimizacao_risco_rebalance)) %&amp;gt;% 
+  as.data.frame() %&amp;gt;% 
+  rename(min_risco = 1)
+
+retorno_rebalance_2 &amp;lt;- tbl_retornos_wide %&amp;gt;% 
+  Return.portfolio(weights = extractWeights(otimizacao_retorno_rebalance)) %&amp;gt;% 
+  as.data.frame() %&amp;gt;% 
+  rename(max_retorno = 1)
+
+retorno_rebalance_3 &amp;lt;- tbl_retornos_wide %&amp;gt;% 
+  Return.portfolio(weights = extractWeights(otimizacao_quadratico_rebalance)) %&amp;gt;% 
+  as.data.frame() %&amp;gt;% 
+  rename(quadratico = 1)
+
+
+retorno_rebalance &amp;lt;- cbind(retorno_rebalance_1, retorno_rebalance_2, 
+                           retorno_rebalance_3)
+
+retorno_rebalance %&amp;gt;% 
+  rownames_to_column(&amp;quot;data&amp;quot;) %&amp;gt;% 
+  pivot_longer(cols = 2:4) %&amp;gt;% 
+  mutate(data = as.Date(data)) %&amp;gt;% 
+  group_by(name) %&amp;gt;% 
+  mutate(retorno_acumulado = cumsum(value)) %&amp;gt;% 
+  ggplot(aes(x = data, y = retorno_acumulado, color = name)) +
+  geom_line(size = 1.5) +
+  facet_wrap(~name) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = &amp;quot;&amp;quot;, y = &amp;quot;Retorno acumulado&amp;quot;,
+       title = &amp;quot;Retorno acumulado por portfólio&amp;quot;) +
+  theme(legend.position = &amp;quot;none&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;figure&#34;&gt;&lt;span style=&#34;display:block;&#34; id=&#34;fig:acumulado-rebalance&#34;&gt;&lt;/span&gt;
+&lt;img src=&#34;https://robsonolima.com.br/post/analise-de-portfolio-com-r/index_files/figure-html/acumulado-rebalance-1.png&#34; alt=&#34;Retorno acumulado por portfólio&#34; width=&#34;672&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;
+Figure 7: Retorno acumulado por portfólio
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;conclusão&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Conclusão&lt;/h1&gt;
+&lt;p&gt;Neste post vimos como podemos utilizar o pacote &lt;code&gt;PortfolioAnalytics&lt;/code&gt; para resolver problemas de otimização de portfólio com diferentes funções objetivos e restrições.&lt;/p&gt;
+&lt;p&gt;O objetivo do post é meramente de apresentar estas diferentes possibilidades, e não de apresentar qual a melhor estratégia de construção de portfólio.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;referências&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Referências&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&#34;https://rpubs.com/hgjerning/517730&#34; class=&#34;uri&#34;&gt;https://rpubs.com/hgjerning/517730&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&#34;https://bookdown.org/wfoote01/faur/portfolio-analytics.html&#34; class=&#34;uri&#34;&gt;https://bookdown.org/wfoote01/faur/portfolio-analytics.html&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&#34;https://rdrr.io/cran/PortfolioAnalytics/f/inst/doc/risk_budget_optimization.pdf&#34; class=&#34;uri&#34;&gt;https://rdrr.io/cran/PortfolioAnalytics/f/inst/doc/risk_budget_optimization.pdf&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&#34;https://rdrr.io/cran/PortfolioAnalytics/f/inst/doc/portfolio_vignette.pdf&#34; class=&#34;uri&#34;&gt;https://rdrr.io/cran/PortfolioAnalytics/f/inst/doc/portfolio_vignette.pdf&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&#34;https://www.investopedia.com/terms/r/rebalancing.asp&#34; class=&#34;uri&#34;&gt;https://www.investopedia.com/terms/r/rebalancing.asp&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Diferença-em-Diferenca - Avanços Recentes (Parte 1)</title>
+      <link>https://robsonolima.com.br/post/diferenca-em-diferenca-avancos-recentes/</link>
+      <pubDate>Tue, 09 Nov 2021 00:00:00 +0000</pubDate>
+      <guid>https://robsonolima.com.br/post/diferenca-em-diferenca-avancos-recentes/</guid>
+      <description>
+&lt;script src=&#34;https://robsonolima.com.br/post/diferenca-em-diferenca-avancos-recentes/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+
+
+&lt;div id=&#34;introdução&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Introdução&lt;/h1&gt;
+&lt;p&gt;20% dos artigos da American Economic Review entre 2010 e 2012 estimam o efeito tratamento
+utilizando regressões com efeitos fixos de período e grupo (dC &amp;amp; DH, 2020):&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[Y_{g,t} = \lambda_g + \lambda_t + \beta D_{g,t}+\epsilon_{g,t}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Quando a hipótese da tendências paralelas é válida, e se o efeito tratamento (ET) de todas as unidades é uma constante &lt;span class=&#34;math inline&#34;&gt;\(\delta\)&lt;/span&gt;, então podemos assumir que
+&lt;span class=&#34;math inline&#34;&gt;\(\beta = \delta\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;Contudo, é muito improvável que o ET seja constante para a maior parte dos cenários de pesquisa imaginados. Nesta situação de ET heterogêneos, o &lt;span class=&#34;math inline&#34;&gt;\(\beta\)&lt;/span&gt; de TWFE se torna potencialmente inválido.&lt;/p&gt;
+&lt;p&gt;Nos últimos anos, surgiram uma enxurrada de artigos que discutem este problema e apresentam diferentes soluções para o problema. Entre eles temos o artigo de Chasemartin e d’Haultfoeuille (2020), que mostram como o estimador de TWFE nestes casos é uma soma ponderada de efeitos tratamentos para cada grupo e tempo, e que alguns desses pesos são negativos. Em casos extremos, o coeficiente de regressão linear pode ser negativo &lt;strong&gt;mesmo quando todos os efeitos tratamentos médios individuais são positivos&lt;/strong&gt;. Eles propõem um estimador que potencialmente corrige esses problemas. Este estimador está implementado tanto no Stata quando no R (pacote &lt;code&gt;DIDmultiplegt&lt;/code&gt;)&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;de-chasemartin-e-dhaultfoeuille-2020&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;de Chasemartin e d’Haultfoeuille (2020)&lt;/h1&gt;
+&lt;p&gt;Os autores argumentam que em um TWFE, se não assumirmos efeito tratamento constante, o estimador de diferença-em-diferença
+deve representar uma soma ponderada dos vários efeitos tratamentos médios (EFT):&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\beta = E \left[ \sum_{g,t} W_{g,t} TE_{g,t} \right]\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;onde &lt;span class=&#34;math inline&#34;&gt;\(W_{g,t}\)&lt;/span&gt; são pesos que somam a unidade e &lt;span class=&#34;math inline&#34;&gt;\(TE\)&lt;/span&gt; é o efeito tratamento no grupo &lt;span class=&#34;math inline&#34;&gt;\(g\)&lt;/span&gt; e no período &lt;span class=&#34;math inline&#34;&gt;\(t\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;Estes pesos &lt;span class=&#34;math inline&#34;&gt;\(W_{g,t}\)&lt;/span&gt; são diferentes da proporção de unidades na célula &lt;span class=&#34;math inline&#34;&gt;\((g,t)\)&lt;/span&gt; específica, o que torna este &lt;span class=&#34;math inline&#34;&gt;\(\beta\)&lt;/span&gt; diferente do efeito tratamento médio (ETM). E mais preocupante, algum desses pesos são negativos. De modo que &lt;span class=&#34;math inline&#34;&gt;\(\beta\)&lt;/span&gt; pode ser estritamente negativo mesmo quando todos os &lt;span class=&#34;math inline&#34;&gt;\(TE_{g,t}\)&lt;/span&gt; são positivos. Exemplo, se &lt;span class=&#34;math inline&#34;&gt;\(ET_1 = 1\)&lt;/span&gt; e &lt;span class=&#34;math inline&#34;&gt;\(ET_2 = 3\)&lt;/span&gt;, com pesos &lt;span class=&#34;math inline&#34;&gt;\(W_1 = 2\)&lt;/span&gt; e &lt;span class=&#34;math inline&#34;&gt;\(W_2 = -1\)&lt;/span&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\beta = 2 \times 1 - 1 \times 3 = -1\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Assim, como uma robustez é interessante computar os pesos ligados ao &lt;span class=&#34;math inline&#34;&gt;\(\beta\)&lt;/span&gt;. Se todos os pesos ou a maioria deles for maior que zero, não há problemas em continuar estimando uma regressão TWFE, mas se muitos pesos forem menores que zero, então pode existir a preocupação de que o efeito tratamento pode ser heterogêneo entre grupos e no tempo.&lt;/p&gt;
+&lt;blockquote class=&#34;twitter-tweet&#34;&gt;
+&lt;p lang=&#34;en&#34; dir=&#34;ltr&#34;&gt;
+Weights can be estimated, and used as a diagnostic tool. If all / most weights &amp;gt;0, you may be fine using the two ways fe regression. But if many weights &amp;lt;0, and you worry that treatment effect may be heterogeneous across time/groups, you may want to use other estimation method
+&lt;/p&gt;
+— Clément de Chaisemartin (&lt;span class=&#34;citation&#34;&gt;@CdeChaisemartin&lt;/span&gt;) &lt;a href=&#34;https://twitter.com/CdeChaisemartin/status/1055176097464111104?ref_src=twsrc%5Etfw&#34;&gt;October 24, 2018&lt;/a&gt;
+&lt;/blockquote&gt;
+&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+&lt;p&gt;Os autores recomendam o uso da função &lt;code&gt;twowayfeweights&lt;/code&gt; presente no pacote &lt;code&gt;TwoWayFEWeights&lt;/code&gt; do R. Abaixo, vemos o output da função aplicada para uma base de salários de 4360 indivíduos durante os anos de 1980 e 1987. No artigo original de Vella e Verbeek (1998) os autores utilizaram estas informações para investigar se jovens trabalhadores ganhavam um &lt;em&gt;premium&lt;/em&gt; salarial por estarem sindicalizados.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;needs::needs(wooldridge, TwoWayFEWeights, tidyverse)
+
+Y = &amp;quot;lwage&amp;quot;
+G = &amp;quot;nr&amp;quot;
+T = &amp;quot;year&amp;quot;
+D = &amp;quot;union&amp;quot;
+controls = c(&amp;quot;hours&amp;quot;)
+weights &amp;lt;- twowayfeweights(wagepan, Y, G, T, D, cmd_type = &amp;quot;feTR&amp;quot;, controls = controls)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;Under the common trends assumption, &amp;quot;
+## [1] &amp;quot;beta estimates a weighted sum of 1064 ATTs.&amp;quot;
+## [1] &amp;quot;875 ATT receive a positive weight, and 189 receive a negative weight.&amp;quot;
+## [1] &amp;quot;The sum of the positive weights is equal to 1.005601.&amp;quot;
+## [1] &amp;quot;The sum of the negative weights is equal to -0.005601.&amp;quot;
+## [1] &amp;quot;beta is compatible with a DGP where the average of those ATT is equal to 0,&amp;quot;
+## [1] &amp;quot;while their standard deviation is equal to 0.087235.&amp;quot;
+## [1] &amp;quot;beta is compatible with a DGP where those ATT all are of a different sign than beta,&amp;quot;
+## [1] &amp;quot;while their standard deviation is equal to 4.413974.&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Ao calcularmos os pesos, percebemos que dos 1064 efeitos tratamentos sobre o tratado (ETT) estimados, 189 possuem pesos negativos, um número considerável, e que pode levar a preocupações sobre as estimativas obtidas na época.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;weights %&amp;gt;% 
+  arrange(desc(weight)) %&amp;gt;% 
+  head() %&amp;gt;% 
+  knitr::kable()&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;left&#34;&gt;Tfactor&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;T&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;G&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;weight&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1986&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1986&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;560&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0028450&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1986&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1986&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;10311&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0028302&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1986&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1986&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;10043&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0027263&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1985&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1985&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;2306&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0027222&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1987&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1987&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;150&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0027171&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1985&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1985&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;4025&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.0027146&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;div id=&#34;de-onde-vem-estes-pesos-negativos&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;De onde vem estes pesos negativos?&lt;/h2&gt;
+&lt;p&gt;Estes pesos nascem da presença de heterogeneidades no ET entre grupos e no tempo. Especificamente, elas surgem a partir de dois tipos de comparações &lt;strong&gt;proibidas/indesejadas/impróprias&lt;/strong&gt; feitas pelo estimador de DiD. Vamos analisa-las uma a uma:&lt;/p&gt;
+&lt;div id=&#34;problema-1-beta-usa-unidades-tratadas-como-controles&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Problema 1: &lt;span class=&#34;math inline&#34;&gt;\(\beta\)&lt;/span&gt; usa unidades tratadas como controles&lt;/h3&gt;
+&lt;p&gt;Vamos assumir que o tratamento é binário e o tratamento das unidades seja paulatino no tempo, o chamado &lt;em&gt;design staggered&lt;/em&gt; (&lt;span class=&#34;math inline&#34;&gt;\(D_{g,t} \geq D_{g,t-1}\)&lt;/span&gt;).&lt;/p&gt;
+&lt;p&gt;Então o &lt;span class=&#34;math inline&#34;&gt;\(\beta\)&lt;/span&gt; será a média ponderada de dois tipos de DIDs:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;&lt;p&gt;&lt;span class=&#34;math inline&#34;&gt;\(DID_1\)&lt;/span&gt;: Comparação da evolução dos outcomes de unidades tratadas em &lt;span class=&#34;math inline&#34;&gt;\(t\)&lt;/span&gt; contra unidades nunca tratadas. Essa comparação não apresenta problemas.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;span class=&#34;math inline&#34;&gt;\(DID_2\)&lt;/span&gt;: Comparação da evolução dos outcomes entre unidades tratadas em &lt;span class=&#34;math inline&#34;&gt;\(t\)&lt;/span&gt; com unidades tratadas antes e depois de &lt;span class=&#34;math inline&#34;&gt;\(t\)&lt;/span&gt;. Essa comparação é problemática, pois no período &lt;span class=&#34;math inline&#34;&gt;\(t-1\)&lt;/span&gt; estamos usando como unidade de comparação, uma unidade já tratada.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Em resumo, na primeira comparação, para as unidades tratadas (&lt;span class=&#34;math inline&#34;&gt;\(S\)&lt;/span&gt;, ou switchers), a evolução do outcome após o tratamento representa a evolução que ocorreria independentemente do tratamento (&lt;span class=&#34;math inline&#34;&gt;\(\Delta Y(0)\)&lt;/span&gt;) mais o ET sobre essas unidades. Ou seja,&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[Y_{S,t-1} = Y_{S,t-1}(0)\]&lt;/span&gt;
+&lt;span class=&#34;math display&#34;&gt;\[Y_{S,t} = Y_{S,t}(0) + TE_{S,t}\]&lt;/span&gt;
+De modo que&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\Delta Y_S = \Delta Y(0) + TE_{S,t}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Mas quando temos unidades que foram tratadas em ambas as datas (&lt;span class=&#34;math inline&#34;&gt;\(AT\)&lt;/span&gt;, always treated), &lt;span class=&#34;math inline&#34;&gt;\(\Delta Y_{AT} = \Delta Y(0) + TE_{AT,t} - TE_{AT,t-1}\)&lt;/span&gt;, porque precisamos adicionar o efeito que o tratamento teve na evolução de &lt;span class=&#34;math inline&#34;&gt;\(Y\)&lt;/span&gt; no período anterior.&lt;/p&gt;
+&lt;p&gt;Assim, temos que o &lt;span class=&#34;math inline&#34;&gt;\(DID_2\)&lt;/span&gt; pode ser escrito como:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[DID_2 = \Delta Y_S - \Delta Y_{AT} = TE_{S,t} - TE_{AT,t} + TE_{AT,t-1}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Lembrando que pela hipótese das tendências paralelas, os dois &lt;span class=&#34;math inline&#34;&gt;\(\Delta Y(0)\)&lt;/span&gt; se cancelam. Mas ainda ficamos com o termo &lt;span class=&#34;math inline&#34;&gt;\(TE_{AT,t}\)&lt;/span&gt; entrando com pesos negativos no sinal de &lt;span class=&#34;math inline&#34;&gt;\(DID_2\)&lt;/span&gt;, e &lt;span class=&#34;math inline&#34;&gt;\(\beta\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;Contudo, se o efeito tratamento é homogêneo no tempo, os dois últimos termos vão se cancelar, pois &lt;span class=&#34;math inline&#34;&gt;\(TE_{AT,t} = TE_{AT,t-1}\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;Portanto, o problema acima só surge quando temos efeitos tratamentos heterogêneos &lt;strong&gt;no tempo.&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;problema-2-beta-usa-switchers-como-controle&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Problema 2: &lt;span class=&#34;math inline&#34;&gt;\(\beta\)&lt;/span&gt; usa switchers como controle&lt;/h3&gt;
+&lt;p&gt;Vamos comparar agora uma situação em que exista heterogeneidade do ET entre grupos. Usando a linguagem de dC &amp;amp; DH (2020), vamos assumir que exista um grupo cujo efeito tratamento aumente mais &lt;span class=&#34;math inline&#34;&gt;\(S_m\)&lt;/span&gt; e um grupo cujo efeito tratamento aumente menos (&lt;span class=&#34;math inline&#34;&gt;\(S_I\)&lt;/span&gt;).&lt;/p&gt;
+&lt;p&gt;Assim, o &lt;span class=&#34;math inline&#34;&gt;\(DID_3\)&lt;/span&gt; compara a evolução dos outcomes das unidades que mudam menos com as que mudam mais:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[DID_3 = \Delta Y_{S_m} - \Delta Y_{S_I}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Antes de continuar, vamos assumir que &lt;span class=&#34;math inline&#34;&gt;\(Y_{S_m,t}(d) = Y_{S_m,t}(0) + \delta S_md\)&lt;/span&gt; e &lt;span class=&#34;math inline&#34;&gt;\(Y_{S_I,t}(d) = Y_{S_I,t}(0) + \delta S_Id\)&lt;/span&gt; e que &lt;span class=&#34;math inline&#34;&gt;\(\delta_{S_I} - 3\delta_{S_m} &amp;gt; 0\)&lt;/span&gt;. Ou seja, o efeito tratamento dos dois grupos é capturado pela inclinação &lt;span class=&#34;math inline&#34;&gt;\(\delta_i\)&lt;/span&gt;, que esses dois efeitos são estritamente positivos mas um é três vezes maior que o outro.&lt;/p&gt;
+&lt;p&gt;Vamos assumir agora que o tratamento das unidades de &lt;span class=&#34;math inline&#34;&gt;\(S_m\)&lt;/span&gt; aumente de 0 para 2, enquanto que as unidades de &lt;span class=&#34;math inline&#34;&gt;\(S_I\)&lt;/span&gt;, vão de 0 para 1. Assim, a evolução do outcome será&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\Delta Y_{S_m} = Y_{S_m,t} + 2\delta_{S_m} - Y_{S_m,t-1}(0) = \Delta Y(0) + 2\delta_{S_m} = \Delta Y(0) + 2/3\delta_{S_I}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Assim, o efeito tratamento do grupo &lt;span class=&#34;math inline&#34;&gt;\(S_m\)&lt;/span&gt; é 2/3 do efeito do grupo &lt;span class=&#34;math inline&#34;&gt;\(S_I\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;Para o grupo &lt;span class=&#34;math inline&#34;&gt;\(S_I\)&lt;/span&gt; a evolução do outcome é dada por&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\Delta Y_{S_I} = Y_{S_I,t} + 1\delta_{S_I} - Y_{S_I,t-1}(0) = \Delta Y(0) + 1\delta_{S_I} = \Delta Y(0) + \delta_{S_I}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Portanto, o &lt;span class=&#34;math inline&#34;&gt;\(DID_3\)&lt;/span&gt;, que toma a diferença entre &lt;span class=&#34;math inline&#34;&gt;\(\Delta Y_{S_m}\)&lt;/span&gt; e &lt;span class=&#34;math inline&#34;&gt;\(\Delta Y_{S_I}\)&lt;/span&gt; será&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[DID_3 = \Delta Y(0) + 2/3\delta_{S_I} - \Delta Y(0) - \delta S_I\]&lt;/span&gt;
+&lt;span class=&#34;math display&#34;&gt;\[DID_3 = - 1/3 \delta_{S_I} &amp;lt; 0 \]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Assim, mesmo considerando que &lt;span class=&#34;math inline&#34;&gt;\(\delta_{S_M}\)&lt;/span&gt; e &lt;span class=&#34;math inline&#34;&gt;\(\delta_{S_I}\)&lt;/span&gt; sejam estritamente positivos, o coeficiente estimado será estritamente negativo, sendo igual a -0,33 o efeito do grupo &lt;span class=&#34;math inline&#34;&gt;\(S_I\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Novamente, este problema só surge quando os efeitos &lt;span class=&#34;math inline&#34;&gt;\(\delta_{S_M}\)&lt;/span&gt; e &lt;span class=&#34;math inline&#34;&gt;\(\delta_{S_I}\)&lt;/span&gt; são diferentes. Caso eles fossem iguais, os efeitos se cancelariam.&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;como-solucionar-o-problema&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Como solucionar o problema?&lt;/h2&gt;
+&lt;p&gt;Em dC &amp;amp; DH (2020), os autores propõem um estimador alternativo.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
 </description>
     </item>
     
     <item>
       <title>TidyQuant - Analise financeira no R</title>
-      <link>/post/tidyquant-analise-financeira-no-r/</link>
+      <link>https://robsonolima.com.br/post/tidyquant-analise-financeira-no-r/</link>
       <pubDate>Sat, 23 Oct 2021 00:00:00 +0000</pubDate>
-      <guid>/post/tidyquant-analise-financeira-no-r/</guid>
+      <guid>https://robsonolima.com.br/post/tidyquant-analise-financeira-no-r/</guid>
       <description>
-&lt;script src=&#34;/post/tidyquant-analise-financeira-no-r/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://robsonolima.com.br/post/tidyquant-analise-financeira-no-r/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
 
 
 &lt;div id=&#34;pacotes&#34; class=&#34;section level1&#34;&gt;
@@ -399,7 +1742,7 @@ Ra %&amp;gt;%
   theme(legend.position = &amp;quot;none&amp;quot;, 
         axis.text.x = element_text(angle = 45))&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## `summarise()` has grouped output by &amp;#39;Setor&amp;#39;. You can override using the `.groups` argument.&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/tidyquant-analise-financeira-no-r/index_files/figure-html/unnamed-chunk-6-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://robsonolima.com.br/post/tidyquant-analise-financeira-no-r/index_files/figure-html/unnamed-chunk-6-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;retorno-livre-de-risco&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Retorno Livre de Risco&lt;/h2&gt;
@@ -1208,16 +2551,16 @@ onde &lt;span class=&#34;math inline&#34;&gt;\(a_i\)&lt;/span&gt; é o retorno e
     
     <item>
       <title>Visualizando Seinfeld com ggplot2</title>
-      <link>/post/visualizacao-com-ggplot2-e-seinfeld/</link>
+      <link>https://robsonolima.com.br/post/visualizacao-com-ggplot2-e-seinfeld/</link>
       <pubDate>Tue, 19 Oct 2021 00:00:00 +0000</pubDate>
-      <guid>/post/visualizacao-com-ggplot2-e-seinfeld/</guid>
+      <guid>https://robsonolima.com.br/post/visualizacao-com-ggplot2-e-seinfeld/</guid>
       <description>
-&lt;script src=&#34;/post/visualizacao-com-ggplot2-e-seinfeld/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;/post/visualizacao-com-ggplot2-e-seinfeld/index_files/htmlwidgets/htmlwidgets.js&#34;&gt;&lt;/script&gt;
-&lt;link href=&#34;/post/visualizacao-com-ggplot2-e-seinfeld/index_files/wordcloud2/wordcloud.css&#34; rel=&#34;stylesheet&#34; /&gt;
-&lt;script src=&#34;/post/visualizacao-com-ggplot2-e-seinfeld/index_files/wordcloud2/wordcloud2-all.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;/post/visualizacao-com-ggplot2-e-seinfeld/index_files/wordcloud2/hover.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;/post/visualizacao-com-ggplot2-e-seinfeld/index_files/wordcloud2-binding/wordcloud2.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://robsonolima.com.br/post/visualizacao-com-ggplot2-e-seinfeld/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://robsonolima.com.br/post/visualizacao-com-ggplot2-e-seinfeld/index_files/htmlwidgets/htmlwidgets.js&#34;&gt;&lt;/script&gt;
+&lt;link href=&#34;https://robsonolima.com.br/post/visualizacao-com-ggplot2-e-seinfeld/index_files/wordcloud2/wordcloud.css&#34; rel=&#34;stylesheet&#34; /&gt;
+&lt;script src=&#34;https://robsonolima.com.br/post/visualizacao-com-ggplot2-e-seinfeld/index_files/wordcloud2/wordcloud2-all.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://robsonolima.com.br/post/visualizacao-com-ggplot2-e-seinfeld/index_files/wordcloud2/hover.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://robsonolima.com.br/post/visualizacao-com-ggplot2-e-seinfeld/index_files/wordcloud2-binding/wordcloud2.js&#34;&gt;&lt;/script&gt;
 
 
 &lt;div id=&#34;introdução&#34; class=&#34;section level1&#34;&gt;
@@ -1367,7 +2710,7 @@ onde &lt;span class=&#34;math inline&#34;&gt;\(a_i\)&lt;/span&gt; é o retorno e
   geom_label(aes(label = round(nota_media, 1)), nudge_y = 2.0) +
   theme(legend.position = &amp;quot;none&amp;quot;)  + 
   coord_flip()&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-6-1.png&#34; width=&#34;672&#34; /&gt;
+&lt;p&gt;&lt;img src=&#34;https://robsonolima.com.br/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-6-1.png&#34; width=&#34;672&#34; /&gt;
 A série começou bastante desacreditada, com apenas 5 episódios sendo encomendados para sua primeira temporada, e apesar de um início abaixo da média, as temporadas seguintes elevaram o nível da série, com notas médias sempre acima de 8,0.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;gráfico-de-nuvens&#34; class=&#34;section level2&#34;&gt;
@@ -1496,7 +2839,7 @@ nuvem_elaine &amp;lt;- nuvem_personagem(&amp;quot;ELAINE&amp;quot;)
 
 saveWidget(nuvem_elaine,&amp;quot;tmp.html&amp;quot;,selfcontained = F)
 webshot::webshot(&amp;quot;tmp.html&amp;quot;,&amp;quot;elaine.png&amp;quot;, delay =5, vwidth = 480, vheight=480)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-11-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://robsonolima.com.br/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-11-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;(&lt;em&gt;Por alguma razão &lt;code&gt;wordclou2&lt;/code&gt; tem um &lt;a href=&#34;https://github.com/Lchiffon/wordcloud2/issues/60&#34;&gt;bug bem estranho&lt;/a&gt; que não permite a visualização de mais que uma núvem na mesma página. Por isso, essas últimas visualizações são estáticas e exibidas como imagens.&lt;/em&gt;)&lt;/p&gt;
 &lt;p&gt;Nuvens de palavras são simples de entender e tendem a ser visualmente interessantes. Contudo elas podem ser problemáticas por várias razões: primeiro, porque o número de letras de uma palavra pode torna-la maior do que deveria; segundo, porque pode ser difícil distinguir visualmente duas palavras com frequências próximas. Compare “Car” com 17 menções, a “Newman” (com 14), onde o segundo parece muito maior que o primeiro.&lt;/p&gt;
 &lt;p&gt;Em contextos mais formais, vale mais a pena o uso de gráficos de barras ou lollipop. Como, por exemplo, a quantidade de vezes que os personagens mencionam “coffee”:&lt;/p&gt;
@@ -1516,7 +2859,7 @@ webshot::webshot(&amp;quot;tmp.html&amp;quot;,&amp;quot;elaine.png&amp;quot;, de
        caption = &amp;quot;Fonte: IMDb&amp;quot;) +
   theme(legend.position = &amp;quot;none&amp;quot;)  + 
   coord_flip()&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-12-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://robsonolima.com.br/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-12-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;&lt;br&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -1536,7 +2879,7 @@ webshot::webshot(&amp;quot;tmp.html&amp;quot;,&amp;quot;elaine.png&amp;quot;, de
   annotate(&amp;quot;label&amp;quot;, label = &amp;quot;Nota média: 8.4&amp;quot;, x = 6, y = 9) +
   #geom_label(aes(label = as.factor(Season))) +
   theme(legend.position = &amp;quot;bottom&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-13-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://robsonolima.com.br/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-13-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;Acima usamos um gráfico de dispersão (&lt;code&gt;geom_point&lt;/code&gt;) em conjunto com uma gráfico de tendência/ajuste (&lt;code&gt;geom_smooth&lt;/code&gt;). Com eles observamos as notas dos episódios dentro de cada temporada.&lt;/p&gt;
 &lt;p&gt;Para facilitar a comparação, inclui uma linha tracejada com a nota média de toda a série (de 8,4), facilitando algumas comparações. Por exemplo, a primeira temporada foi consistentemente abaixo da média; a quinta temporada teve um final arrebatador; enquanto que as temporadas 6, 7 e 8 seguraram bem a qualidade. Já a final da última temporada parece ter desapontado a maioria dos fãs, ficando abaixo da média histórica.&lt;/p&gt;
 &lt;p&gt;Alternativamente, podemos estar interessados se existe uma relação entre o total de falas de cada personagem e a nota do episódio.&lt;/p&gt;
@@ -1640,7 +2983,7 @@ aparicoes_notas %&amp;gt;%
   theme_ipsum(base_family = &amp;quot;Roboto&amp;quot;, base_size = 24) +
   labs(y = &amp;quot;Nota&amp;quot;, x = &amp;quot;Falas durante o episódio&amp;quot;, title = &amp;quot;Seinfeld, Relação entre total de falas do personagem e Nota do Episódio&amp;quot;, caption = &amp;quot;Fonte: IMDb&amp;quot;) +
   theme(legend.position = &amp;quot;none&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-15-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://robsonolima.com.br/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-15-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;Jerry, George, Elaine e Kramer aparecem na grande maioria dos episódios, de modo que é difícil enxergar uma relação entre o total de falas do personagem e a nota dos episódios. Morty, Helen e Newman são personagens que surgem esporadicamente, então a adição ou não dos personagens poderia revelar algo mais interessante, mas também não parece ser o caso. Acredito que é uma boa notícia: a série é consistemente bem avaliada independente do elenco do episódio e do personagem em foco.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;gráfico-de-calor&#34; class=&#34;section level2&#34;&gt;
@@ -1658,7 +3001,7 @@ aparicoes_notas %&amp;gt;%
   labs(title = &amp;quot;Seinfeld, Notas por Episódio&amp;quot;, 
        y = &amp;quot;Temporada&amp;quot;, x = &amp;quot;Episódio&amp;quot;, color = &amp;quot;Temporada&amp;quot;, caption = &amp;quot;Fonte: IMDb&amp;quot;, fill = &amp;quot;Nota:&amp;quot;) +
   theme(legend.position = &amp;quot;bottom&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-16-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://robsonolima.com.br/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-16-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;Se bateu a curiosidade para saber quais são os melhores episódios, segue a lista abaixo:&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;df %&amp;gt;% 
   group_by(Season) %&amp;gt;% 
@@ -1720,7 +3063,7 @@ aparicoes_notas %&amp;gt;%
   theme_ipsum(base_family = &amp;quot;Roboto&amp;quot;, base_size = 24, plot_title_size = 24) +
   labs(title = &amp;quot;Seinfeld, Fala dos Personagens&amp;quot;, y = &amp;quot;&amp;quot;, x = &amp;quot;&amp;quot;) +
   theme(legend.position = &amp;quot;none&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-18-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://robsonolima.com.br/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-18-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;gráfico-de-densidade&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Gráfico de densidade&lt;/h2&gt;
@@ -1733,7 +3076,7 @@ aparicoes_notas %&amp;gt;%
   theme_ipsum(base_family = &amp;quot;Roboto&amp;quot;, base_size = 24) +
   theme(legend.position = &amp;quot;none&amp;quot;,
         panel.spacing = unit(0.1, &amp;quot;lines&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-19-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://robsonolima.com.br/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-19-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;boxplot&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Boxplot&lt;/h2&gt;
@@ -1749,7 +3092,7 @@ aparicoes_notas %&amp;gt;%
        caption = &amp;quot;Fonte: IMDb&amp;quot;) +
   theme(legend.position = &amp;quot;none&amp;quot;) + 
   coord_flip()&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-20-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://robsonolima.com.br/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-20-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;A mesma visualização de boxplot pode ser usada para exibir o total de falas por episódio. Para não repetir o mesmo tipo de informação, vamos construir o total de falas por cada temporada.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;aparicoes_notas %&amp;gt;% 
   filter(Character %in% c(&amp;quot;JERRY&amp;quot;, &amp;quot;GEORGE&amp;quot;, &amp;quot;ELAINE&amp;quot;, &amp;quot;KRAMER&amp;quot;)) %&amp;gt;% 
@@ -1759,7 +3102,7 @@ aparicoes_notas %&amp;gt;%
   labs(title = &amp;quot;Seinfeld, Fala dos Personagens por Temporada&amp;quot;, y = &amp;quot;&amp;quot;, x = &amp;quot;&amp;quot;) +
   theme(legend.position = &amp;quot;none&amp;quot;) +
   facet_wrap(~Season, scale = &amp;quot;free_y&amp;quot;) &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-21-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://robsonolima.com.br/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-21-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;É possível notar que Jerry consistentemente possui mais falas ao longo das 9 temporadas da série, enquanto que a participação dos demais é mais balanceada, principalmente a partir da sexta temporada.&lt;/p&gt;
 &lt;p&gt;Podemos repetir a mesma visualização pra os personagens secundários, mas agora utilizando um gráfico de violino. A interpretação desse gráfico é a mesma do gráfico boxplot (ele exibe mediana, e o 1º e 3º quartis, além de valores discrepantes).&lt;/p&gt;
 &lt;p&gt;É possível notar que apenas a partir da terceira temporada esses personagens se tornaram peça recorrente da série, com destaque para a quinta temporada.&lt;/p&gt;
@@ -1771,7 +3114,7 @@ aparicoes_notas %&amp;gt;%
   labs(title = &amp;quot;Seinfeld, Fala dos Personagens por Temporada&amp;quot;, y = &amp;quot;&amp;quot;, x = &amp;quot;&amp;quot;) +
   theme(legend.position = &amp;quot;none&amp;quot;) +
   facet_wrap(~Season, scale = &amp;quot;free_y&amp;quot;, ncol = 2) &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-22-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://robsonolima.com.br/post/visualizacao-com-ggplot2-e-seinfeld/index_files/figure-html/unnamed-chunk-22-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;&lt;br&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -1785,11 +3128,11 @@ aparicoes_notas %&amp;gt;%
     
     <item>
       <title>Estimando Demanda e Definindo Preço</title>
-      <link>/post/estimando-demanda-e-definindo-preco/</link>
+      <link>https://robsonolima.com.br/post/estimando-demanda-e-definindo-preco/</link>
       <pubDate>Thu, 08 Apr 2021 00:00:00 +0000</pubDate>
-      <guid>/post/estimando-demanda-e-definindo-preco/</guid>
+      <guid>https://robsonolima.com.br/post/estimando-demanda-e-definindo-preco/</guid>
       <description>
-&lt;script src=&#34;/post/estimando-demanda-e-definindo-preco/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://robsonolima.com.br/post/estimando-demanda-e-definindo-preco/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
 
 
 &lt;div id=&#34;introdução&#34; class=&#34;section level1&#34;&gt;
@@ -1847,7 +3190,7 @@ ggplot(mapping = aes(x = x, y = y)) +
   annotate(&amp;quot;text&amp;quot;, x = 80, y = 3000, label = &amp;quot;Elasticidade = 0,43&amp;quot;) +
   theme_minimal() +
   labs(x = &amp;quot;Quantidade&amp;quot;, y = &amp;quot;Preço&amp;quot;, title = &amp;quot;Curva de Demanda Linear&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/estimando-demanda-e-definindo-preco/index_files/figure-html/unnamed-chunk-1-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://robsonolima.com.br/post/estimando-demanda-e-definindo-preco/index_files/figure-html/unnamed-chunk-1-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;Note que a curva de demanda possui uma inclinação negativa, mas diferentes valores de elasticidade ao longo dela. É intuitivo imaginar que os consumidores são muito mais sensíveis a um aumento de preço de 10% se esse aumento ocorre quando o preço já está muito alto.&lt;/p&gt;
 &lt;p&gt;Mas também é intuitivo generalizar que se o valor de &lt;span class=&#34;math inline&#34;&gt;\(\frac{\delta q}{\delta p}\)&lt;/span&gt; é próximo de zero, os consumidores serão em média menos sensíveis a mudanças de preço (&lt;strong&gt;demanda inelástica&lt;/strong&gt;), o que daria uma maior liberdade para a empresa definir um preço &lt;span class=&#34;math inline&#34;&gt;\(p*\)&lt;/span&gt; mais alto. Do contrário, se o valor de &lt;span class=&#34;math inline&#34;&gt;\(\frac{\delta q}{\delta p}\)&lt;/span&gt; é um número muito negativo, os consumidores serão sempre muito sensíveis a mudanças nos preços (&lt;strong&gt;demanda elástica&lt;/strong&gt;). Isto porque o segundo termo da equação de &lt;span class=&#34;math inline&#34;&gt;\(p^*\)&lt;/span&gt; tenderá a zero e o preço ótimo vai se aproximar do custo marginal &lt;span class=&#34;math inline&#34;&gt;\(c\)&lt;/span&gt; de produzir o bem.&lt;/p&gt;
 &lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[p^* = c - \downarrow \frac{q}{q&amp;#39;(p)}\]&lt;/span&gt;&lt;/p&gt;
@@ -1904,7 +3247,7 @@ df_diario %&amp;gt;%
        subtitle = &amp;quot;Um Experimento envolvendo o Aumento Drástico do Preço&amp;quot;) +
   theme_minimal() +
   theme(legend.position = &amp;#39;bottom&amp;#39;)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/estimando-demanda-e-definindo-preco/index_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://robsonolima.com.br/post/estimando-demanda-e-definindo-preco/index_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;A figura mostra que a empresa executou um aumento brusco dos preços que os clientes que visitaram o site a partir de 46º dia se defrontaram. Agora podemos usar estes dados diários para estimar uma regressão linear do efeito do preço sobre a quantidade. A equação que vamos estimar está na forma:&lt;/p&gt;
 &lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[Q = \beta_0 + \beta_1 P + \epsilon\]&lt;/span&gt;&lt;/p&gt;
 &lt;p&gt;Onde &lt;span class=&#34;math inline&#34;&gt;\(\beta_0\)&lt;/span&gt; tenta capturar o intercepto da curva de demanda e &lt;span class=&#34;math inline&#34;&gt;\(\beta_1\)&lt;/span&gt; estima a inclinação da reta de demanda, que é o nosso termo de interesse: &lt;span class=&#34;math inline&#34;&gt;\(\delta q / \delta p\)&lt;/span&gt;.&lt;/p&gt;
@@ -2031,7 +3374,7 @@ curva_demanda %&amp;gt;%
   geom_line(size = 1, color = &amp;quot;#FC4E07&amp;quot;) +
   labs(x = &amp;quot;Quantidade&amp;quot;, y = &amp;quot;Preço&amp;quot;, title = &amp;quot;Curva de Demanda Estimada&amp;quot;) +
   theme_minimal() &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/estimando-demanda-e-definindo-preco/index_files/figure-html/unnamed-chunk-7-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://robsonolima.com.br/post/estimando-demanda-e-definindo-preco/index_files/figure-html/unnamed-chunk-7-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;Assim, se a empresa resolvesse elevar o preço para &lt;span class=&#34;math inline&#34;&gt;\(\$ 1\)&lt;/span&gt;, ela veria suas vendas cairem para cerca de 4500 unidades por dia, ou &lt;span class=&#34;math inline&#34;&gt;\(4500 \times 90 = 405000\)&lt;/span&gt; unidades ao longo de 90 dias.&lt;/p&gt;
 &lt;p&gt;Isto não significa que o lucro vai diminuir com a redução da quantidade. Se a demanda for pouco sensível a aumentos de preços, o efeito do aumento de preço pode dominar o efeito negativo da queda das vendas, produzindo um aumento de lucros. Para avaliar este efeito da mudança de preço sobre a receita, podemos derivar a curva de receitas a partir da curva de demanda. Como nossos custos são constantes, as mesmas conclusões são feitas para o lucro.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;curva_receita &amp;lt;- curva_demanda %&amp;gt;% 
@@ -2050,7 +3393,7 @@ curva_receita %&amp;gt;%
   geom_vline(xintercept = preco_receita_max, linetype = &amp;quot;longdash&amp;quot;) +
   labs(x = &amp;quot;Preço&amp;quot;, y = &amp;quot;Lucro&amp;quot;, title = &amp;quot;Função de Receita Estimada&amp;quot;, subtitle = &amp;quot;A Empresa poderia aumentar sua receita elevando o preço para $ 1.78&amp;quot;) +
   theme_minimal() &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/estimando-demanda-e-definindo-preco/index_files/figure-html/unnamed-chunk-8-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://robsonolima.com.br/post/estimando-demanda-e-definindo-preco/index_files/figure-html/unnamed-chunk-8-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;Assim, assumindo que nossa curva de receita está bem especificada, a firma poderia maximizar sua receita (e lucros) caso definisse um preço de &lt;span class=&#34;math inline&#34;&gt;\(\$ 1,78\)&lt;/span&gt;. Considerando que o produto é bastante &lt;strong&gt;inelástico&lt;/strong&gt; (&lt;span class=&#34;math inline&#34;&gt;\(\epsilon = -0.2\)&lt;/span&gt;), o efeito sobre a receita de um aumento de preço é positivo para esta faixa de preço, dado que o efeito do aumento do preço domina o efeito da queda das vendas.&lt;/p&gt;
 &lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\Delta \% RT = \Delta \%P + \Delta\%Q\]&lt;/span&gt;&lt;/p&gt;
 &lt;/div&gt;
@@ -2088,7 +3431,7 @@ ggplot() +
        title = &amp;quot;Deslocamento para a direita da demanda&amp;quot;,
        subtitle = &amp;quot;A Quantidade vendida pode aumentar por fatores que deslocam a curva&amp;quot;) +
   theme_classic()&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/estimando-demanda-e-definindo-preco/index_files/figure-html/unnamed-chunk-9-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://robsonolima.com.br/post/estimando-demanda-e-definindo-preco/index_files/figure-html/unnamed-chunk-9-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;Assim, se houver um aumento de preço que coincida com o deslocamento da curva de demanda, ao estimar a relação entre preço e quantidade &lt;span class=&#34;math inline&#34;&gt;\(\frac{\delta q}{\delta p}\)&lt;/span&gt; como fizemos lá em cima, o coeficiente encontrado pode refletir estes outros eventos. Em um caso extremo, podemos estimar até mesmo um coeficiente positivo. Desse modo, não estaremos mais recuperando um coeficiente com interpretação causal, já que o efeito do preço está sendo confundida com o efeito de outros fatores que deslocaram a curva de demanda.&lt;/p&gt;
 &lt;p&gt;Para ilustrar esta situação, imagine que a decisão de compra permaneça a mesma. Ela depende (1) da utilidade média, que reflete a qualidade do produto e é igual para todos os consumidores, (2) da utilidade atribuída por cada consumidor e (3) do preço do produto. No primeiro exemplo, a empresa promoveu um aumento de preço em um dado ponto no tempo. Vamos permitir agora que a cada dia, o preço que os clientes se defrontam seja um pouco maior. Além disto, vamos assumir que a qualidade do produto varie no tempo. Assim, a cada 9 dias, a qualidade média do produto se altera. Se nosso produto fosse um curso online, um incremento da qualidade poderia representar um módulo a mais na ementa do curso, por exemplo.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# incremento nos precos de 0.4 para 1.8 a cada 1 dia. Totalizando 90 incrementos.
@@ -2123,7 +3466,7 @@ df_diario_2 %&amp;gt;%
        subtitle = &amp;quot;Aumento na quantidade reflete mudança de preço e de qualidade&amp;quot;) +
   theme_minimal() +
   theme(legend.position = &amp;#39;bottom&amp;#39;)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/estimando-demanda-e-definindo-preco/index_files/figure-html/unnamed-chunk-10-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://robsonolima.com.br/post/estimando-demanda-e-definindo-preco/index_files/figure-html/unnamed-chunk-10-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;O gráfico acima mostra que a quantidade vendida ao longo do período aumentou, a despeito do aumento de preço que ocorreu no período (de &lt;span class=&#34;math inline&#34;&gt;\(\$ 0.4\)&lt;/span&gt; para &lt;span class=&#34;math inline&#34;&gt;\(\$ 1.8\)&lt;/span&gt;). É bastante improvável que a quantidade vendida aumente como resposta a aumentos de preços (a exceção são os bens de Gifen). O mais provável é que o efeito do preço esteja sendo confudido pelo aumento na qualidade do produto. A qualidade promove um aumento na quantidade vendida, mas o aumento dos preços desestimula parte dos consumidores. O efeito líquido é positivo, pois o aumento na qualidade mais que compensa os produtos mais caros.&lt;/p&gt;
 &lt;p&gt;Neste tipo de situação, ao estimarmos o efeito dos preços sobre a quantidade vendida, o coeficiente para o preço (&lt;span class=&#34;math inline&#34;&gt;\(\frac{\delta q}{\delta p}\)&lt;/span&gt;) obtido pela regressão linear será positivo. Assim, aquilo que a regressão nos informa é muito diferente daquilo que desejamos. O que queremos é o efeito dos preços sobre a quantidade vendida, &lt;em&gt;ceteris paribus&lt;/em&gt;, que significa que desejamos manter constantes todos os outros fatores que impactam a quantidade, e assim obter exclusivamente o efeito dos preços.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;df_diario_2 %&amp;gt;% 
@@ -2533,19 +3876,19 @@ qualidade
     
     <item>
       <title>Previsão de Séries Semanais com Pacote Modeltime</title>
-      <link>/post/previsao-de-dados-semanais-com-modeltime/</link>
+      <link>https://robsonolima.com.br/post/previsao-de-dados-semanais-com-modeltime/</link>
       <pubDate>Mon, 05 Apr 2021 00:00:00 +0000</pubDate>
-      <guid>/post/previsao-de-dados-semanais-com-modeltime/</guid>
+      <guid>https://robsonolima.com.br/post/previsao-de-dados-semanais-com-modeltime/</guid>
       <description>
-&lt;script src=&#34;/post/previsao-de-dados-semanais-com-modeltime/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;/post/previsao-de-dados-semanais-com-modeltime/index_files/htmlwidgets/htmlwidgets.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;/post/previsao-de-dados-semanais-com-modeltime/index_files/plotly-binding/plotly.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;/post/previsao-de-dados-semanais-com-modeltime/index_files/typedarray/typedarray.min.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;/post/previsao-de-dados-semanais-com-modeltime/index_files/jquery/jquery.min.js&#34;&gt;&lt;/script&gt;
-&lt;link href=&#34;/post/previsao-de-dados-semanais-com-modeltime/index_files/crosstalk/css/crosstalk.css&#34; rel=&#34;stylesheet&#34; /&gt;
-&lt;script src=&#34;/post/previsao-de-dados-semanais-com-modeltime/index_files/crosstalk/js/crosstalk.min.js&#34;&gt;&lt;/script&gt;
-&lt;link href=&#34;/post/previsao-de-dados-semanais-com-modeltime/index_files/plotly-htmlwidgets-css/plotly-htmlwidgets.css&#34; rel=&#34;stylesheet&#34; /&gt;
-&lt;script src=&#34;/post/previsao-de-dados-semanais-com-modeltime/index_files/plotly-main/plotly-latest.min.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://robsonolima.com.br/post/previsao-de-dados-semanais-com-modeltime/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://robsonolima.com.br/post/previsao-de-dados-semanais-com-modeltime/index_files/htmlwidgets/htmlwidgets.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://robsonolima.com.br/post/previsao-de-dados-semanais-com-modeltime/index_files/plotly-binding/plotly.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://robsonolima.com.br/post/previsao-de-dados-semanais-com-modeltime/index_files/typedarray/typedarray.min.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://robsonolima.com.br/post/previsao-de-dados-semanais-com-modeltime/index_files/jquery/jquery.min.js&#34;&gt;&lt;/script&gt;
+&lt;link href=&#34;https://robsonolima.com.br/post/previsao-de-dados-semanais-com-modeltime/index_files/crosstalk/css/crosstalk.css&#34; rel=&#34;stylesheet&#34; /&gt;
+&lt;script src=&#34;https://robsonolima.com.br/post/previsao-de-dados-semanais-com-modeltime/index_files/crosstalk/js/crosstalk.min.js&#34;&gt;&lt;/script&gt;
+&lt;link href=&#34;https://robsonolima.com.br/post/previsao-de-dados-semanais-com-modeltime/index_files/plotly-htmlwidgets-css/plotly-htmlwidgets.css&#34; rel=&#34;stylesheet&#34; /&gt;
+&lt;script src=&#34;https://robsonolima.com.br/post/previsao-de-dados-semanais-com-modeltime/index_files/plotly-main/plotly-latest.min.js&#34;&gt;&lt;/script&gt;
 
 
 &lt;div id=&#34;introdução&#34; class=&#34;section level1&#34;&gt;
@@ -2619,7 +3962,7 @@ receita_fourier &amp;lt;- recipe(gasoline ~ date, training(tbl_treinamento_teste
   geom_line() +
   facet_wrap(~name, scales = &amp;quot;free_y&amp;quot;) +
   theme_bw()&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/previsao-de-dados-semanais-com-modeltime/index_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://robsonolima.com.br/post/previsao-de-dados-semanais-com-modeltime/index_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;estimação-dos-modelos&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Estimação dos Modelos&lt;/h1&gt;
@@ -2790,11 +4133,11 @@ fit_12_k %&amp;gt;% modeltime_accuracy(new_data = testing(tbl_treinamento_teste)
     
     <item>
       <title>Quando clusterizar o erro padrão?</title>
-      <link>/post/quando-clusterizar-o-erro-padrao/</link>
+      <link>https://robsonolima.com.br/post/quando-clusterizar-o-erro-padrao/</link>
       <pubDate>Sun, 04 Apr 2021 00:00:00 +0000</pubDate>
-      <guid>/post/quando-clusterizar-o-erro-padrao/</guid>
+      <guid>https://robsonolima.com.br/post/quando-clusterizar-o-erro-padrao/</guid>
       <description>
-&lt;script src=&#34;/post/quando-clusterizar-o-erro-padrao/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://robsonolima.com.br/post/quando-clusterizar-o-erro-padrao/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
 
 
 &lt;div id=&#34;introdução&#34; class=&#34;section level1&#34;&gt;
@@ -2872,11 +4215,11 @@ fit_12_k %&amp;gt;% modeltime_accuracy(new_data = testing(tbl_treinamento_teste)
     
     <item>
       <title>Analise de Churn com Tidymodels Parte 1</title>
-      <link>/post/analise-de-churn-com-tidymodels-parte-1/</link>
+      <link>https://robsonolima.com.br/post/analise-de-churn-com-tidymodels-parte-1/</link>
       <pubDate>Sat, 03 Apr 2021 00:00:00 +0000</pubDate>
-      <guid>/post/analise-de-churn-com-tidymodels-parte-1/</guid>
+      <guid>https://robsonolima.com.br/post/analise-de-churn-com-tidymodels-parte-1/</guid>
       <description>
-&lt;script src=&#34;/post/analise-de-churn-com-tidymodels-parte-1/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://robsonolima.com.br/post/analise-de-churn-com-tidymodels-parte-1/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
 
 
 &lt;div id=&#34;introdução&#34; class=&#34;section level1&#34;&gt;
@@ -3762,7 +5105,7 @@ matriz_confusao %&amp;gt;%
   geom_tile(show.legend = FALSE) +
   labs(x = &amp;quot;Previsto&amp;quot;, y = &amp;quot;Observado&amp;quot;) + 
   geom_text(aes(label = n), color = &amp;#39;white&amp;#39;, alpha = 1, size = 8)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/analise-de-churn-com-tidymodels-parte-1/index_files/figure-html/unnamed-chunk-9-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://robsonolima.com.br/post/analise-de-churn-com-tidymodels-parte-1/index_files/figure-html/unnamed-chunk-9-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;A matriz de confusão mostra que o modelo erroneamente previu como negativo 222 clientes que iriam abandonar a empresa. E previu incorretamente que 90 clientes iriam sair da empresa quando na verdade eles permaneceram como clientes.&lt;/p&gt;
 &lt;p&gt;A partir da matriz de confusão podemos estimar algumas medidas de performance, como acurácia, precisão e recall.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;matriz_confusao %&amp;gt;% 
@@ -3821,11 +5164,11 @@ summary() %&amp;gt;%
     
     <item>
       <title>Analise de Churn com Tidymodels Parte 2</title>
-      <link>/post/analise-de-churn-com-tidymodels-parte-2/</link>
+      <link>https://robsonolima.com.br/post/analise-de-churn-com-tidymodels-parte-2/</link>
       <pubDate>Sat, 03 Apr 2021 00:00:00 +0000</pubDate>
-      <guid>/post/analise-de-churn-com-tidymodels-parte-2/</guid>
+      <guid>https://robsonolima.com.br/post/analise-de-churn-com-tidymodels-parte-2/</guid>
       <description>
-&lt;script src=&#34;/post/analise-de-churn-com-tidymodels-parte-2/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://robsonolima.com.br/post/analise-de-churn-com-tidymodels-parte-2/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
 
 
 &lt;div id=&#34;introdução&#34; class=&#34;section level1&#34;&gt;
@@ -4188,11 +5531,11 @@ rf_wflow_final_fit&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>Estimando Crescimento com Função CES</title>
-      <link>/post/estimando-crescimento-com-funcao-ces/</link>
+      <link>https://robsonolima.com.br/post/estimando-crescimento-com-funcao-ces/</link>
       <pubDate>Sat, 03 Apr 2021 00:00:00 +0000</pubDate>
-      <guid>/post/estimando-crescimento-com-funcao-ces/</guid>
+      <guid>https://robsonolima.com.br/post/estimando-crescimento-com-funcao-ces/</guid>
       <description>
-&lt;script src=&#34;/post/estimando-crescimento-com-funcao-ces/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://robsonolima.com.br/post/estimando-crescimento-com-funcao-ces/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
 
 
 &lt;div id=&#34;introdução&#34; class=&#34;section level1&#34;&gt;
@@ -4337,7 +5680,7 @@ print(cesNls)&lt;/code&gt;&lt;/pre&gt;
   ggplot(aes(x = y2, y = fitted(cesKmenta))) + 
   geom_point() + 
   theme_bw()&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/estimando-crescimento-com-funcao-ces/index_files/figure-html/unnamed-chunk-6-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://robsonolima.com.br/post/estimando-crescimento-com-funcao-ces/index_files/figure-html/unnamed-chunk-6-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;Figura acima mostra que os parâmetros produzem valores ajustados razoáveis. Porém, a aproximação de Kmenta produz vários problemas. Primeiro, ela é uma série de Taylor truncada e o termo Resto deve ser visto como uma variável omitida. Segundo, a aproximação de Kmenta apenas converge para a função CES na região de convergência que é dependente do verdadeiro parâmetro da CES (Thursby and Lovell 1978).&lt;/p&gt;
 &lt;div id=&#34;replicação-de-sun-henderson-and-kumbhakar-2011&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Replicação de Sun, Henderson and Kumbhakar (2011)&lt;/h2&gt;

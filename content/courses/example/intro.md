@@ -7,11 +7,11 @@ weight: 20
 
 Entendendo o básico.
 
+Em construção
+
 <!--more-->
 
 {{< icon name="clock" pack="fas" >}} 1-2 hours per week, for 8 weeks
-
-
 
 ## Learn
 
@@ -19,20 +19,15 @@ Entendendo o básico.
 
 ## Quiz
 
-{{< spoiler text="What is the difference between lists and tuples?" >}}
+{{< spoiler text="Pergunta?" >}}
 Lists
 
 - Lists are mutable - they can be changed
 - Slower than tuples
 - Syntax: `a_list = [1, 2.0, 'Hello world']`
 
-Tuples
-
-- Tuples are immutable - they can't be changed
-- Tuples are faster than lists 
-- Syntax: `a_tuple = (1, 2.0, 'Hello world')`
 {{< /spoiler >}}
 
-{{< spoiler text="Is Python case-sensitive?" >}}
+{{< spoiler text="Is R case-sensitive?" >}}
 Yes
 {{< /spoiler >}}

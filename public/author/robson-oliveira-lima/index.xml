@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Robson Oliveira Lima | Daily Regression</title>
-    <link>/author/robson-oliveira-lima/</link>
-      <atom:link href="/author/robson-oliveira-lima/index.xml" rel="self" type="application/rss+xml" />
+    <title>Robson Oliveira Lima | Robson Lima</title>
+    <link>https://robsonolima.com.br/author/robson-oliveira-lima/</link>
+      <atom:link href="https://robsonolima.com.br/author/robson-oliveira-lima/index.xml" rel="self" type="application/rss+xml" />
     <description>Robson Oliveira Lima</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2021 Robson Oliveira</copyright><lastBuildDate>Mon, 05 Apr 2021 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2022 Robson Oliveira</copyright><lastBuildDate>Mon, 05 Apr 2021 00:00:00 +0000</lastBuildDate>
     <image>
-      <url>/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png</url>
+      <url>https://robsonolima.com.br/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png</url>
       <title>Robson Oliveira Lima</title>
-      <link>/author/robson-oliveira-lima/</link>
+      <link>https://robsonolima.com.br/author/robson-oliveira-lima/</link>
     </image>
     
     <item>
       <title>Previsão de Séries Semanais com Pacote Modeltime</title>
-      <link>/post/previsao-de-dados-semanais-com-modeltime/</link>
+      <link>https://robsonolima.com.br/post/previsao-de-dados-semanais-com-modeltime/</link>
       <pubDate>Mon, 05 Apr 2021 00:00:00 +0000</pubDate>
-      <guid>/post/previsao-de-dados-semanais-com-modeltime/</guid>
+      <guid>https://robsonolima.com.br/post/previsao-de-dados-semanais-com-modeltime/</guid>
       <description>
-&lt;script src=&#34;/post/previsao-de-dados-semanais-com-modeltime/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;/post/previsao-de-dados-semanais-com-modeltime/index_files/htmlwidgets/htmlwidgets.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;/post/previsao-de-dados-semanais-com-modeltime/index_files/plotly-binding/plotly.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;/post/previsao-de-dados-semanais-com-modeltime/index_files/typedarray/typedarray.min.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;/post/previsao-de-dados-semanais-com-modeltime/index_files/jquery/jquery.min.js&#34;&gt;&lt;/script&gt;
-&lt;link href=&#34;/post/previsao-de-dados-semanais-com-modeltime/index_files/crosstalk/css/crosstalk.css&#34; rel=&#34;stylesheet&#34; /&gt;
-&lt;script src=&#34;/post/previsao-de-dados-semanais-com-modeltime/index_files/crosstalk/js/crosstalk.min.js&#34;&gt;&lt;/script&gt;
-&lt;link href=&#34;/post/previsao-de-dados-semanais-com-modeltime/index_files/plotly-htmlwidgets-css/plotly-htmlwidgets.css&#34; rel=&#34;stylesheet&#34; /&gt;
-&lt;script src=&#34;/post/previsao-de-dados-semanais-com-modeltime/index_files/plotly-main/plotly-latest.min.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://robsonolima.com.br/post/previsao-de-dados-semanais-com-modeltime/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://robsonolima.com.br/post/previsao-de-dados-semanais-com-modeltime/index_files/htmlwidgets/htmlwidgets.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://robsonolima.com.br/post/previsao-de-dados-semanais-com-modeltime/index_files/plotly-binding/plotly.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://robsonolima.com.br/post/previsao-de-dados-semanais-com-modeltime/index_files/typedarray/typedarray.min.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://robsonolima.com.br/post/previsao-de-dados-semanais-com-modeltime/index_files/jquery/jquery.min.js&#34;&gt;&lt;/script&gt;
+&lt;link href=&#34;https://robsonolima.com.br/post/previsao-de-dados-semanais-com-modeltime/index_files/crosstalk/css/crosstalk.css&#34; rel=&#34;stylesheet&#34; /&gt;
+&lt;script src=&#34;https://robsonolima.com.br/post/previsao-de-dados-semanais-com-modeltime/index_files/crosstalk/js/crosstalk.min.js&#34;&gt;&lt;/script&gt;
+&lt;link href=&#34;https://robsonolima.com.br/post/previsao-de-dados-semanais-com-modeltime/index_files/plotly-htmlwidgets-css/plotly-htmlwidgets.css&#34; rel=&#34;stylesheet&#34; /&gt;
+&lt;script src=&#34;https://robsonolima.com.br/post/previsao-de-dados-semanais-com-modeltime/index_files/plotly-main/plotly-latest.min.js&#34;&gt;&lt;/script&gt;
 
 
 &lt;div id=&#34;introdução&#34; class=&#34;section level1&#34;&gt;
@@ -100,7 +100,7 @@ receita_fourier &amp;lt;- recipe(gasoline ~ date, training(tbl_treinamento_teste
   geom_line() +
   facet_wrap(~name, scales = &amp;quot;free_y&amp;quot;) +
   theme_bw()&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/previsao-de-dados-semanais-com-modeltime/index_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://robsonolima.com.br/post/previsao-de-dados-semanais-com-modeltime/index_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;estimação-dos-modelos&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Estimação dos Modelos&lt;/h1&gt;

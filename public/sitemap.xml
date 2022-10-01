@@ -2,133 +2,136 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>/courses/example/intro/</loc>
+    <loc>https://robsonolima.com.br/courses/example/intro/</loc>
     <lastmod>2021-01-01T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/courses/example/visualization/</loc>
+    <loc>https://robsonolima.com.br/courses/example/visualization/</loc>
     <lastmod>2021-01-01T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/courses/example/stats/</loc>
+    <loc>https://robsonolima.com.br/courses/example/stats/</loc>
     <lastmod>2021-01-01T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/</loc>
+    <loc>https://robsonolima.com.br/talk/example-talk/</loc>
     <lastmod>2030-06-01T13:00:00+00:00</lastmod>
   </url><url>
-    <loc>/talk/example-talk/</loc>
+    <loc>https://robsonolima.com.br/event/</loc>
     <lastmod>2030-06-01T13:00:00+00:00</lastmod>
   </url><url>
-    <loc>/event/</loc>
+    <loc>https://robsonolima.com.br/</loc>
     <lastmod>2030-06-01T13:00:00+00:00</lastmod>
   </url><url>
-    <loc>/post/diferenca-em-diferenca-avancos-recentes/</loc>
+    <loc>https://robsonolima.com.br/post/analise-de-portfolio-com-r/</loc>
+    <lastmod>2021-12-11T11:42:00-03:00</lastmod>
+  </url><url>
+    <loc>https://robsonolima.com.br/post/</loc>
+    <lastmod>2021-12-11T11:42:00-03:00</lastmod>
+  </url><url>
+    <loc>https://robsonolima.com.br/post/diferenca-em-diferenca-avancos-recentes/</loc>
     <lastmod>2021-11-09T10:30:28-03:00</lastmod>
   </url><url>
-    <loc>/post/</loc>
-    <lastmod>2021-11-09T10:30:28-03:00</lastmod>
-  </url><url>
-    <loc>/post/tidyquant-analise-financeira-no-r/</loc>
+    <loc>https://robsonolima.com.br/post/tidyquant-analise-financeira-no-r/</loc>
     <lastmod>2021-10-23T13:57:07-03:00</lastmod>
   </url><url>
-    <loc>/post/visualizacao-com-ggplot2-e-seinfeld/</loc>
+    <loc>https://robsonolima.com.br/post/visualizacao-com-ggplot2-e-seinfeld/</loc>
     <lastmod>2021-10-19T19:40:19-03:00</lastmod>
   </url><url>
-    <loc>/post/estimando-demanda-e-definindo-preco/</loc>
+    <loc>https://robsonolima.com.br/post/estimando-demanda-e-definindo-preco/</loc>
     <lastmod>2021-04-08T21:51:53-03:00</lastmod>
   </url><url>
-    <loc>/authors/</loc>
+    <loc>https://robsonolima.com.br/authors/</loc>
     <lastmod>2021-04-05T16:33:30-03:00</lastmod>
   </url><url>
-    <loc>/post/previsao-de-dados-semanais-com-modeltime/</loc>
+    <loc>https://robsonolima.com.br/post/previsao-de-dados-semanais-com-modeltime/</loc>
     <lastmod>2021-04-05T16:33:30-03:00</lastmod>
   </url><url>
-    <loc>/author/robson-oliveira-lima/</loc>
+    <loc>https://robsonolima.com.br/author/robson-oliveira-lima/</loc>
     <lastmod>2021-04-05T16:33:30-03:00</lastmod>
   </url><url>
-    <loc>/post/quando-clusterizar-o-erro-padrao/</loc>
+    <loc>https://robsonolima.com.br/post/quando-clusterizar-o-erro-padrao/</loc>
     <lastmod>2021-04-04T00:16:19-03:00</lastmod>
   </url><url>
-    <loc>/post/analise-de-churn-com-tidymodels-parte-1/</loc>
+    <loc>https://robsonolima.com.br/post/analise-de-churn-com-tidymodels-parte-1/</loc>
     <lastmod>2021-04-03T22:55:01-03:00</lastmod>
   </url><url>
-    <loc>/post/analise-de-churn-com-tidymodels-parte-2/</loc>
+    <loc>https://robsonolima.com.br/post/analise-de-churn-com-tidymodels-parte-2/</loc>
     <lastmod>2021-04-03T22:56:59-03:00</lastmod>
   </url><url>
-    <loc>/post/estimando-crescimento-com-funcao-ces/</loc>
+    <loc>https://robsonolima.com.br/post/estimando-crescimento-com-funcao-ces/</loc>
     <lastmod>2021-04-03T23:41:24-03:00</lastmod>
   </url><url>
-    <loc>/courses/</loc>
+    <loc>https://robsonolima.com.br/courses/</loc>
     <lastmod>2021-01-24T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/courses/example/</loc>
+    <loc>https://robsonolima.com.br/courses/example/</loc>
     <lastmod>2021-01-24T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/publication-type/3/</loc>
+    <loc>https://robsonolima.com.br/publication-type/3/</loc>
     <lastmod>2019-04-07T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/publication/preprint/</loc>
+    <loc>https://robsonolima.com.br/publication/preprint/</loc>
     <lastmod>2019-04-07T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/publication_types/</loc>
+    <loc>https://robsonolima.com.br/publication_types/</loc>
     <lastmod>2019-04-07T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/publication/</loc>
+    <loc>https://robsonolima.com.br/publication/</loc>
     <lastmod>2019-04-07T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/author/robson-oliveira/</loc>
+    <loc>https://robsonolima.com.br/author/robson-oliveira/</loc>
     <lastmod>2019-04-07T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/tag/source-themes/</loc>
+    <loc>https://robsonolima.com.br/tag/source-themes/</loc>
     <lastmod>2019-04-07T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/tags/</loc>
+    <loc>https://robsonolima.com.br/tags/</loc>
     <lastmod>2019-04-07T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/slides/</loc>
+    <loc>https://robsonolima.com.br/slides/</loc>
     <lastmod>2019-02-05T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/slides/example/</loc>
+    <loc>https://robsonolima.com.br/slides/example/</loc>
     <lastmod>2019-02-05T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/tag/deep-learning/</loc>
+    <loc>https://robsonolima.com.br/tag/deep-learning/</loc>
     <lastmod>2016-04-27T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/tag/demo/</loc>
+    <loc>https://robsonolima.com.br/tag/demo/</loc>
     <lastmod>2016-04-27T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/project/external-project/</loc>
+    <loc>https://robsonolima.com.br/project/external-project/</loc>
     <lastmod>2016-04-27T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/project/internal-project/</loc>
+    <loc>https://robsonolima.com.br/project/internal-project/</loc>
     <lastmod>2016-04-27T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/project/</loc>
+    <loc>https://robsonolima.com.br/project/</loc>
     <lastmod>2016-04-27T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/publication-type/2/</loc>
+    <loc>https://robsonolima.com.br/publication-type/2/</loc>
     <lastmod>2015-09-01T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/publication/journal-article/</loc>
+    <loc>https://robsonolima.com.br/publication/journal-article/</loc>
     <lastmod>2015-09-01T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/author/robert-ford/</loc>
+    <loc>https://robsonolima.com.br/author/robert-ford/</loc>
     <lastmod>2015-09-01T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/publication-type/1/</loc>
+    <loc>https://robsonolima.com.br/publication-type/1/</loc>
     <lastmod>2013-07-01T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/publication/conference-paper/</loc>
+    <loc>https://robsonolima.com.br/publication/conference-paper/</loc>
     <lastmod>2013-07-01T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/admin/</loc>
+    <loc>https://robsonolima.com.br/admin/</loc>
   </url><url>
-    <loc>/courses/example/aula01_intro_files/reveal.js-3.3.0.1/contributing/</loc>
+    <loc>https://robsonolima.com.br/courses/example/aula01_intro_files/reveal.js-3.3.0.1/contributing/</loc>
   </url><url>
-    <loc>/courses/example/aula01_intro_files/reveal.js-3.3.0.1/plugin/markdown/example/</loc>
+    <loc>https://robsonolima.com.br/courses/example/aula01_intro_files/reveal.js-3.3.0.1/plugin/markdown/example/</loc>
   </url><url>
-    <loc>/categories/</loc>
+    <loc>https://robsonolima.com.br/categories/</loc>
   </url><url>
-    <loc>/courses/example/slides/aula01/aula01_intro/</loc>
+    <loc>https://robsonolima.com.br/courses/example/slides/aula01/aula01_intro/</loc>
   </url><url>
-    <loc>/author/%E5%90%B3%E6%81%A9%E9%81%94/</loc>
+    <loc>https://robsonolima.com.br/author/%E5%90%B3%E6%81%A9%E9%81%94/</loc>
   </url>
 </urlset>

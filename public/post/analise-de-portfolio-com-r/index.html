@@ -1,0 +1,2362 @@
+<!DOCTYPE html><html lang="en-us" >
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  
+  
+    <meta name="generator" content="Wowchemy 5.1.0 for Hugo" />
+  
+
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Robson Oliveira" />
+
+  
+  
+  
+    
+  
+  <meta name="description" content="IntroduçãoA teória moderna do Portfólio foi introduzida por Harry Markowitz em 1952. Em geral, esta teoria afirma que o objetivo do investidor é maximizar os retornos esperados do portfólio para um dado nível de risco." />
+
+  
+  <link rel="alternate" hreflang="en-us" href="https://robsonolima.com.br/post/analise-de-portfolio-com-r/" />
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+
+  
+  
+  
+    <meta name="theme-color" content="#1565c0" />
+  
+
+  
+  
+    
+    <script src="/js/mathjax-config.js"></script>
+  
+
+  
+  
+  
+  
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha256-FMvZuGapsJLjouA6k7Eo2lusoAX9i0ShlWFG6qt7SLc=" crossorigin="anonymous">
+
+    
+    
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/github.min.css" crossorigin="anonymous" title="hl-light" media="print" onload="this.media='all'">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" media="print" onload="this.media='all'" disabled>
+        
+      
+    
+
+    
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css" integrity="sha512-1xoFisiGdy9nvho8EgXuXvnpR5GAMSjFwp40gSRE3NwdUdIMIKuPa7bqoUhLD0O/5tPNhteAsE5XyyMi5reQVA==" crossorigin="anonymous" media="print" onload="this.media='all'">
+    
+
+    
+
+    
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+  
+
+  
+  
+  
+    
+      
+      <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+    
+  
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/wowchemy.9a66e344a68eb664b392d406a3f80726.css" />
+
+  
+
+
+
+  
+
+  
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+    <link rel="manifest" href="/index.webmanifest" />
+  
+
+  <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_2.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_180x180_fill_lanczos_center_2.png" />
+
+  <link rel="canonical" href="https://robsonolima.com.br/post/analise-de-portfolio-com-r/" />
+
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  <meta property="twitter:card" content="summary" />
+  
+  <meta property="og:site_name" content="Robson Lima" />
+  <meta property="og:url" content="https://robsonolima.com.br/post/analise-de-portfolio-com-r/" />
+  <meta property="og:title" content="Análise de Portfolio com R - PortfolioAnalytics | Robson Lima" />
+  <meta property="og:description" content="IntroduçãoA teória moderna do Portfólio foi introduzida por Harry Markowitz em 1952. Em geral, esta teoria afirma que o objetivo do investidor é maximizar os retornos esperados do portfólio para um dado nível de risco." /><meta property="og:image" content="https://robsonolima.com.br/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" />
+    <meta property="twitter:image" content="https://robsonolima.com.br/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" /><meta property="og:locale" content="en-us" />
+  
+    
+      <meta
+        property="article:published_time"
+        content="2021-12-11T00:00:00&#43;00:00"
+      />
+    
+    <meta property="article:modified_time" content="2021-12-11T11:42:00-03:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+  
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://robsonolima.com.br/post/analise-de-portfolio-com-r/"
+  },
+  "headline": "Análise de Portfolio com R - PortfolioAnalytics",
+  
+  "datePublished": "2021-12-11T00:00:00Z",
+  "dateModified": "2021-12-11T11:42:00-03:00",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Robson Oliveira"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "Robson Lima",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://robsonolima.com.br/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_192x192_fill_lanczos_center_2.png"
+    }
+  },
+  "description": "Introdução\rA teória moderna do Portfólio foi introduzida por Harry Markowitz em 1952. Em geral, esta teoria afirma que o objetivo do investidor é maximizar os retornos esperados do portfólio para um dado nível de risco."
+}
+</script>
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+  <title>Análise de Portfolio com R - PortfolioAnalytics | Robson Lima</title>
+</head>
+
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="c439b83079c6040900db1b5a4eef99c1" >
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <script src="/js/wowchemy-init.min.226a9011996d125bf3fe4a5f22353a49.js"></script>
+
+  
+
+
+<aside class="search-modal" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#" aria-label="Close"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search" class="form-control"
+        aria-label="Search...">
+        
+      </div>
+
+      
+      
+
+      
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+
+  <div class="page-header">
+    
+
+
+
+
+
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container-xl">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="/">Robson Lima</a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="/">Robson Lima</a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#about"><span>About</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#posts"><span>Posts</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#featured"><span>Publications</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/courses/"><span>Courses</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#contact"><span>Contact</span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+
+      
+      
+        
+          
+          <li class="nav-item d-none d-lg-inline-flex">
+            <a class="nav-link" href="https://twitter.com/robsonol" data-toggle="tooltip" data-placement="bottom" title="Twitter" target="_blank" rel="noopener" aria-label="Twitter">
+              <i class="fab fa-twitter" aria-hidden="true"></i>
+            </a>
+          </li>
+        
+      
+
+      
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+      
+      <li class="nav-item dropdown theme-dropdown">
+        <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-label="Display preferences">
+          <i class="fas fa-moon" aria-hidden="true"></i>
+        </a>
+        <div class="dropdown-menu">
+          <a href="#" class="dropdown-item js-set-theme-light">
+            <span>Light</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-dark">
+            <span>Dark</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-auto">
+            <span>Automatic</span>
+          </a>
+        </div>
+      </li>
+      
+
+      
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  </div>
+
+  <div class="page-body">
+    <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>Análise de Portfolio com R - PortfolioAnalytics</h1>
+
+  
+
+  
+    
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+          Last updated on
+      
+    
+    Dec 11, 2021
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    26 min read
+  </span>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+  
+
+</div>
+
+    
+
+
+
+
+
+  
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      
+<script src="https://robsonolima.com.br/post/analise-de-portfolio-com-r/index_files/header-attrs/header-attrs.js"></script>
+
+
+<div id="introdução" class="section level1">
+<h1>Introdução</h1>
+<p>A teória moderna do Portfólio foi introduzida por Harry Markowitz em 1952. Em geral, esta teoria afirma que o objetivo do investidor é maximizar os retornos esperados do portfólio para um dado nível de risco.</p>
+<p>Por exemplo, o retorno de um portfólio (<span class="math inline">\(r_{\text{portfolio}}\)</span>) com cinco ativos é dado pela soma dos retornos dos ativos individuais ponderados por seus pesos (<span class="math inline">\(W_i\)</span>) na carteira.</p>
+<p><span class="math display">\[r_{\text{portfolio}, t} = \sum_{i=1}^5 W_i r_{i,t}\]</span>
+Assim, dado cinco ativos, estamos interessados em saber o quanto deve ser alocado para cada ativo, para que tenhamos o retorno máximo para um dado nível de risco.</p>
+<p>Este objetivo envolve maximizar uma medida de ganho por unidade de risco ou mesmo a minimização da medida de risco. Mas como definir risco? E se quisermos definir objetivos e restrições mais complexos?</p>
+<p>Para além das formulações clássicas de Markowitz, podemos estar interessados em definir o problema de minimização de risco em outros termos. Por exemplo, podemos definir risco como a variância do portfólio (volatilidade), mas em uma circunstância específica podemos estar interessados em minimizar o risco da cauda para nos ajudar a evitar perdas extremas.</p>
+<p>Da mesma forma, o problema de maximização de retorno pode ser visto por outras óticas, como maximizar um retorno ajustado ao risco, usando medidas como a razão de Sharpe ou a razão de informação.</p>
+<p>Em termos de restrições, nosso problema específico pode envolver fixar um valor mínimo e máximo que será investido em cada ativo. Podemos estabelecer por exemplo, fixar que um ativo particular não pode representar mais do que 60% do valor investido. Podemos ainda tentar encontrar portfólios altamente diversificados em detrimentos de um conjunto concentrado de ativos.</p>
+<div id="pacote-portfolioanalytics" class="section level2">
+<h2>Pacote PortfolioAnalytics</h2>
+<p>Para resolver estes problemas menos convencionais, podemos nos valer do pacote <code>PortfolioAnalytics</code>. Este pacote fornece soluções numéricas para problemas de portfólio com restrições complexas. Este tipo de generalidade das possibilidades de restrições e funções objetivas, distinguem o pacote de competidores como o pacote <code>fPortfolio</code>, que são mais indicados para problemas padrões de Markowitz.</p>
+<p>Assim, o pacote <code>PortfolioAnalytics</code> pode resolver problemas genéricos do tipo</p>
+<p><span class="math display">\[\min_w g(w) \]</span>
+<span class="math display">\[\text{sujeito a  } h_1(w) \leq 0\]</span>
+<span class="math display">\[...\]</span>
+<span class="math display">\[h_q(w) \leq 0\]</span></p>
+<p>Após ter o problema montado, o valor ótimo desta função é encontrado a partir de um algorítimo de <em>Differential Evolution (DE)</em>.</p>
+<p><img src="cursoR.png" /></p>
+<div id="principais-funções-de-portfolioanalytics" class="section level3">
+<h3>Principais funções de <code>PortfolioAnalytics</code></h3>
+<p>As principais funções do pacote são:</p>
+<ul>
+<li><p><code>portfolio.spec(assets)</code>: é a primeira função que utilizaremos. Nelas podemos especificar o portfólio inicial. O argumento <code>assets</code> é uma lista de ativos ou um número indicando o número de ativos.</p></li>
+<li><p><code>add.objetive(portfolio, type, name)</code>: cria funções objetivas para serem adicionadas ao objetivo <code>portfolio</code>. Podemos definir funções objetivos de minimização de risco ou maximização de retornos, por exemplo.</p></li>
+<li><p><code>add.constraints(portfolio, type)</code> adiciona as restrições desejadas ao objeto <code>portfolio</code> criado acima. Por exemplo, podemos definir que a soma dos pesos deve ser igual a unidade.</p></li>
+<li><p><code>optimize.portfolio(R, portfolio)</code>: com o objeto <code>portfolio</code> definido, o algorítmo de otimização pode encontrar os pesos que resolvem o problema definido (objetivo e restrições).</p></li>
+<li><p><code>optimize.portfolio.rebalancing(R, portfolio, rebalance_on, trailing_periods)</code>: Uma forma diferente de resolver o problema de otimização. Podemos elaborar uma estratégia em que os pesos do portfólio são recalculados periodicamente (mensalmente, trimestralmente ou anualmente).</p></li>
+</ul>
+</div>
+<div id="outras-funções-objetivos-e-restrições" class="section level3">
+<h3>Outras funções objetivos e restrições</h3>
+<p>O objetivo do <em>post</em> será resolver três problemas simples: um portfólio que minimiza riscos, um que maximiza retornos e outro que maximiza a razão de Sharpe (uma medida que pondera o retorno pelo risco do ativo). Mas as possibilidades não se restringem a estas três opções. Entre os tipos de funções objetivos que <code>PortfolioAnalytics</code> é capaz de resolver temos:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Minimização de risco</strong>: <code>add.objetive(type = "risk", name = "var")</code>: com este objetivo, podemos encontrar o portfólio com menor risco.</p></li>
+<li><p><strong>Maximização de retorno</strong>: <code>add.objetive(type = "return", name = "mean")</code>: definindo esta função objetivo, o algorítmo vai encontrar o portfólio com o maior retorno médio.</p></li>
+<li><p><strong>Especificação de limites na contribuição de risco</strong>: <code>add.objetive(type = "risk_budget", name = "ETL", arguments = list(0.95), max_prisk=0.3)</code>: Um tipo especial de objetivo, em que podemos definir um valor máximo que um ativo pode contribuir para o risco total do portfólio. Por exemplo, podemos definir que um ativo em específico não pode contribuir com mais que 30% do risco total de um portfólio.</p></li>
+<li><p><strong>Minimização da concentração de pesos</strong>: <code>add.objective(portfolio=pspec, type="weight_concentration", name="HHI", conc_aversion=0.1)</code>: Com esta função objetivo, podemos minimizar a concentração do portfólio em alguns ativos com o uso de um coeficiente de aversão.</p></li>
+</ol>
+<p>Já em termos de restrições, os problemas que resolveremos no <em>post</em> envolverão limites sobre os pesos dos ativos. Mas o pacote <code>PortfolioAnalysis</code> permite ainda uma série de outras restrições.Alguns exemplos de restrições adicionais:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Limites de posições </strong><code>type = position_limit</code>: com esta restrição, podemos encontrar apenas portfólios com um número máximo de ativos com peso não-zero);</p></li>
+<li><p><strong>Restrições de diversificação</strong> <code>type = "diversification</code>: com esta restrição, podemos definir o valor alvo de diversificação <span class="math inline">\(\sum_{i=1}^N w_i^2\)</span>.</p></li>
+<li><p><strong>Alvo para o retorno:</strong> <code>type = "return"</code>, com esta restrição podemos estipular um alvo para a média do retorno com <code>return_target</code>. Permitindo por exemplo, a miminização do risco sujeito a um nível de retorno.</p></li>
+<li><p><strong>Fator de exposição</strong> <code>type = "factor_exposure"</code>: podemos definir limites máximos e mínimos para fatores de exposição ao risco, como os valores de beta dos ativos.</p></li>
+</ol>
+<p>Muitas outras funções objetivos e restrições são possíveis de serem calculadas com este pacote. Podemos, por exemplo, limitar nosso portfólio por grupo de empresas: 30% para empresas de tecnologia, 40% para empresas do setor bancário, etc. Mais informações podem ser encontradas na <a href="https://rdrr.io/cran/PortfolioAnalytics/f/inst/doc/portfolio_vignette.pdf">documentação do pacote</a>.</p>
+</div>
+</div>
+</div>
+<div id="dados" class="section level1">
+<h1>Dados</h1>
+<p>Nesse post vamos selecionar algumas empresas negociadas na B3 e utilizar três estratégias de seleção de portfólio: uma que maximiza o retorno médio, outra que minimiza o risco dos ativos e outra que maximiza a razão de Sharpe. Inicialmente resolveremos um problema de único período, com a função <code>optimize.portfolio</code>.</p>
+<p>Antes de começarmos, vamos carregar os pacotes que serão utilizados ao longo da análise. É sempre boa prática carrega-los no inicio.</p>
+<pre class="r"><code>rm(list = ls())
+# o código abaixo instala o pacote &quot;needs&quot; caso não tenha instalado na sua máquina
+# install.packages(&quot;needs&quot;)
+
+needs::needs(tidyverse, tidyquant, ROI.plugin.quadprog, timetk,
+             ROI.plugin.glpk, PortfolioAnalytics)</code></pre>
+<p>Para nossa análise de portfólio vamos escolher alguma das empresas mais negóciadas na B3. Em <code>tickers</code> vamos guardar os tickers das empresas selecionadas. Além disto, vamos iniciar nossa análise a partir de 2012, uma data completamente arbitrária.</p>
+<pre class="r"><code>data_inicial &lt;- &quot;2012-01-01&quot;
+data_final &lt;- &quot;2021-12-10&quot;
+tickers &lt;- c(&quot;MGLU3.SA&quot;,
+             &quot;ABEV3.SA&quot;,
+             &quot;BBDC3.SA&quot;,
+             &quot;EMBR3.SA&quot;,
+             &quot;JBSS3.SA&quot;,
+             &quot;PETR3.SA&quot;,
+             &quot;VALE3.SA&quot;,
+             &quot;WEGE3.SA&quot;)</code></pre>
+<p>Para obter os dados de preço das ações selecionadas vamos utilizar o pacote <code>TidyQuant</code>. Ele fornece uma função bastante conveniente para baixar dados de ações com apenas o nome do ticker e o período: a função <code>tq_get()</code>.</p>
+<p>Os dados da tabela <a href="#tab:precos-tbl">1</a> possuem uma série de informações sobre as empresas negociadas no B3, com atributos de valor de abertura, fechamento, fechamento ajustado e volume negociado para cada dia do período entre Janeiro de 2012 e dezembro de 2021.</p>
+<pre class="r"><code>tbl_precos &lt;- tidyquant::tq_get(
+  x = tickers,
+  get = &quot;stock.prices&quot;,
+  from = data_inicial
+) 
+
+tbl_precos %&gt;% 
+  head() %&gt;% 
+  knitr::kable(caption = &quot;Informações sobre empresas da B3 extraídos da API Yahoo&quot;)</code></pre>
+<table>
+<caption><span id="tab:precos-tbl">Table 1: </span>Informações sobre empresas da B3 extraídos da API Yahoo</caption>
+<thead>
+<tr class="header">
+<th align="left">symbol</th>
+<th align="left">date</th>
+<th align="right">open</th>
+<th align="right">high</th>
+<th align="right">low</th>
+<th align="right">close</th>
+<th align="right">volume</th>
+<th align="right">adjusted</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">MGLU3.SA</td>
+<td align="left">2012-01-02</td>
+<td align="right">0.296562</td>
+<td align="right">0.296562</td>
+<td align="right">0.290625</td>
+<td align="right">0.290625</td>
+<td align="right">8681600</td>
+<td align="right">0.261855</td>
+</tr>
+<tr class="even">
+<td align="left">MGLU3.SA</td>
+<td align="left">2012-01-03</td>
+<td align="right">0.293750</td>
+<td align="right">0.295312</td>
+<td align="right">0.288750</td>
+<td align="right">0.288750</td>
+<td align="right">23385600</td>
+<td align="right">0.260165</td>
+</tr>
+<tr class="odd">
+<td align="left">MGLU3.SA</td>
+<td align="left">2012-01-04</td>
+<td align="right">0.289687</td>
+<td align="right">0.289687</td>
+<td align="right">0.283125</td>
+<td align="right">0.285937</td>
+<td align="right">19008000</td>
+<td align="right">0.257631</td>
+</tr>
+<tr class="even">
+<td align="left">MGLU3.SA</td>
+<td align="left">2012-01-05</td>
+<td align="right">0.286250</td>
+<td align="right">0.286250</td>
+<td align="right">0.282812</td>
+<td align="right">0.283437</td>
+<td align="right">7024000</td>
+<td align="right">0.255378</td>
+</tr>
+<tr class="odd">
+<td align="left">MGLU3.SA</td>
+<td align="left">2012-01-06</td>
+<td align="right">0.283750</td>
+<td align="right">0.291250</td>
+<td align="right">0.279687</td>
+<td align="right">0.291250</td>
+<td align="right">19286400</td>
+<td align="right">0.262418</td>
+</tr>
+<tr class="even">
+<td align="left">MGLU3.SA</td>
+<td align="left">2012-01-09</td>
+<td align="right">0.290937</td>
+<td align="right">0.290937</td>
+<td align="right">0.283437</td>
+<td align="right">0.288437</td>
+<td align="right">13600000</td>
+<td align="right">0.259883</td>
+</tr>
+</tbody>
+</table>
+<p>Para nossa análise, vamos trabalhar apenas com o valor de fechamento ajustado das ações. Mas antes precisamos converter o preço da ação em retornos.</p>
+<p>A tabela <a href="#tab:tbl-retorno">2</a> mostra qual é o resultado da transformação dos preços em retornos.</p>
+<pre class="r"><code>tbl_retornos &lt;- tbl_precos %&gt;%
+  group_by(symbol) %&gt;%
+  tidyquant::tq_transmute(
+    select = adjusted,
+    col_rename = &quot;retorno&quot;,
+    mutate_fun = periodReturn,
+    period = &quot;monthly&quot;,
+    type = &quot;arithmetic&quot;,
+    leading = FALSE,
+    indexAt = &quot;lastof&quot;
+    ) %&gt;% 
+  rename(ativo = symbol,
+         data = date
+         ) %&gt;% 
+  na.omit()
+
+tbl_retornos %&gt;% 
+  head() %&gt;% 
+  knitr::kable(caption = &quot;Tabela de retornos das empresas selecionadas&quot;)</code></pre>
+<table>
+<caption><span id="tab:tbl-retorno">Table 2: </span>Tabela de retornos das empresas selecionadas</caption>
+<thead>
+<tr class="header">
+<th align="left">ativo</th>
+<th align="left">data</th>
+<th align="right">retorno</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">MGLU3.SA</td>
+<td align="left">2012-02-29</td>
+<td align="right">0.1826341</td>
+</tr>
+<tr class="even">
+<td align="left">MGLU3.SA</td>
+<td align="left">2012-03-31</td>
+<td align="right">0.0092851</td>
+</tr>
+<tr class="odd">
+<td align="left">MGLU3.SA</td>
+<td align="left">2012-04-30</td>
+<td align="right">-0.0484958</td>
+</tr>
+<tr class="even">
+<td align="left">MGLU3.SA</td>
+<td align="left">2012-05-31</td>
+<td align="right">-0.1790712</td>
+</tr>
+<tr class="odd">
+<td align="left">MGLU3.SA</td>
+<td align="left">2012-06-30</td>
+<td align="right">0.0075045</td>
+</tr>
+<tr class="even">
+<td align="left">MGLU3.SA</td>
+<td align="left">2012-07-31</td>
+<td align="right">0.0904247</td>
+</tr>
+</tbody>
+</table>
+<p>A função <code>tq_transmute()</code> permite calcular o retorno mensal para o valor de fechamento ajustado da ação. Para isto, precisamos indicar qual a variável que sofrerá a transformação (<code>adjusted</code>), qual a transformação utilizada (<code>mutate_fun = periodReturn</code>) e qual a periodicidade do cálculo (<code>period = "monthly"</code>). Por fim, <code>na.omit()</code> é utilizado para excluir linhas que possuam retorno <code>NA</code>. Este é o caso do primeiro mês da amostra.</p>
+<div id="estatísticas-descritivas" class="section level2">
+<h2>Estatísticas descritivas</h2>
+<p>É sempre boa prática verificar a média e desvio padrão dos retornos, que representam o retorno médio por ativo e a volatidade do ativo. A tabela @reff(tab:media-desvio) mostram estas estatísticas descritivas.</p>
+<pre class="r"><code>tbl_retornos %&gt;% 
+  group_by(ativo) %&gt;% 
+  summarise(`Média` = mean(retorno),
+            `Desvio-padrão` = sd(retorno)) %&gt;% 
+  knitr::kable(caption = &quot;Média e Desvio-padrão dos ativos&quot;)</code></pre>
+<table>
+<caption><span id="tab:media-desvio">Table 3: </span>Média e Desvio-padrão dos ativos</caption>
+<thead>
+<tr class="header">
+<th align="left">ativo</th>
+<th align="right">Média</th>
+<th align="right">Desvio-padrão</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ABEV3.SA</td>
+<td align="right">0.0087075</td>
+<td align="right">0.0674682</td>
+</tr>
+<tr class="even">
+<td align="left">BBDC3.SA</td>
+<td align="right">0.0116825</td>
+<td align="right">0.0916488</td>
+</tr>
+<tr class="odd">
+<td align="left">EMBR3.SA</td>
+<td align="right">0.0109486</td>
+<td align="right">0.1065495</td>
+</tr>
+<tr class="even">
+<td align="left">JBSS3.SA</td>
+<td align="right">0.0224573</td>
+<td align="right">0.1131114</td>
+</tr>
+<tr class="odd">
+<td align="left">MGLU3.SA</td>
+<td align="right">0.0435138</td>
+<td align="right">0.2000139</td>
+</tr>
+<tr class="even">
+<td align="left">PETR3.SA</td>
+<td align="right">0.0139661</td>
+<td align="right">0.1414935</td>
+</tr>
+<tr class="odd">
+<td align="left">VALE3.SA</td>
+<td align="right">0.0148660</td>
+<td align="right">0.1093709</td>
+</tr>
+<tr class="even">
+<td align="left">WEGE3.SA</td>
+<td align="right">0.0260981</td>
+<td align="right">0.0801259</td>
+</tr>
+</tbody>
+</table>
+<p>Já a figura <a href="#fig:retorno-plotado">1</a> exibe o retorno acumulado para as empresas selecionadas.</p>
+<pre class="r"><code>tbl_retornos %&gt;% 
+  group_by(ativo) %&gt;% 
+  mutate(retorno_acumulado = cumsum(retorno)) %&gt;% 
+  ggplot(aes(x = data, y = retorno_acumulado, color = ativo)) +
+  geom_line() + 
+  geom_vline(xintercept = as.Date(&quot;2020-03-01&quot;), linetype = 2, color = &quot;red&quot;) +
+  geom_hline(yintercept = 0, linetype = 2) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = &quot;&quot;, y = &quot;Retorno acumulado&quot;, 
+       title = &quot;Retorno acumulado por empresa selecionada, 2017-2020&quot;,
+       subtitle = &quot;Linha vermelha representa o início da crise de Covid-19&quot;) +
+  facet_wrap(~ativo, scales = &quot;free_y&quot;, ncol = 2) +
+  theme(legend.position = &quot;none&quot;,
+        axis.text.x = element_text(angle=45, size = 8))</code></pre>
+<div class="figure"><span style="display:block;" id="fig:retorno-plotado"></span>
+<img src="https://robsonolima.com.br/post/analise-de-portfolio-com-r/index_files/figure-html/retorno-plotado-1.png" alt="Retorno acumulado por empresa selecionada, 2017-2021" width="672" />
+<p class="caption">
+Figure 1: Retorno acumulado por empresa selecionada, 2017-2021
+</p>
+</div>
+<p>Contudo, o pacote <code>PortfolioAnalytics</code> não gosta deste formato dos dados. O formato original, que podemos chamar de <code>tidy</code>, apresenta uma única coluna que indica o nome das empresas e uma única coluna que informa os retornos. Precisamos converter para o formato <strong>wider</strong>, em que cada empresa tem sua própria coluna de retornos.</p>
+<p>A tabela <a href="#tab:retorno-wide">4</a> mostra o novo formato dos dados, onde cada empresa ocupa uma coluna. Também vamos criar um período de treinamento, em que o portfolio é otimizado (entre 2012 e 2020), para ser testado e comparado com um <strong>benchmarking</strong> durante 2021.</p>
+<pre class="r"><code>tbl_retornos_wide &lt;- tbl_retornos %&gt;% 
+  pivot_wider(names_from = ativo, 
+              values_from = retorno
+              ) %&gt;% 
+  column_to_rownames(&quot;data&quot;) %&gt;% 
+  as.xts()
+
+tbl_retornos_wide_training &lt;- tbl_retornos %&gt;% 
+  filter(data &lt; as.Date(&quot;2021-01-01&quot;)) %&gt;% 
+  pivot_wider(names_from = ativo, 
+              values_from = retorno
+              ) %&gt;% 
+  column_to_rownames(&quot;data&quot;) %&gt;% 
+  as.xts()
+
+tbl_retornos_wide_training %&gt;% 
+  head() %&gt;% 
+  knitr::kable(caption = &quot;Tabela de retornos no formato wide&quot;)</code></pre>
+<table>
+<caption><span id="tab:retorno-wide">Table 4: </span>Tabela de retornos no formato wide</caption>
+<colgroup>
+<col width="13%" />
+<col width="12%" />
+<col width="13%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">MGLU3.SA</th>
+<th align="right">ABEV3.SA</th>
+<th align="right">BBDC3.SA</th>
+<th align="right">EMBR3.SA</th>
+<th align="right">JBSS3.SA</th>
+<th align="right">PETR3.SA</th>
+<th align="right">VALE3.SA</th>
+<th align="right">WEGE3.SA</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.182634062</td>
+<td align="right">0.11769176</td>
+<td align="right">0.027945006</td>
+<td align="right">0.06136012</td>
+<td align="right">0.14241022</td>
+<td align="right">-0.04496462</td>
+<td align="right">-0.02572697</td>
+<td align="right">-0.01227134</td>
+</tr>
+<tr class="even">
+<td align="right">0.009285096</td>
+<td align="right">0.09766948</td>
+<td align="right">0.025695354</td>
+<td align="right">0.14374988</td>
+<td align="right">0.02739719</td>
+<td align="right">-0.04979342</td>
+<td align="right">-0.01492530</td>
+<td align="right">0.04009375</td>
+</tr>
+<tr class="odd">
+<td align="right">-0.048495773</td>
+<td align="right">0.07114161</td>
+<td align="right">-0.051420149</td>
+<td align="right">0.12295077</td>
+<td align="right">0.00000000</td>
+<td align="right">-0.07860092</td>
+<td align="right">0.01799848</td>
+<td align="right">0.01717146</td>
+</tr>
+<tr class="even">
+<td align="right">-0.179071219</td>
+<td align="right">-0.07150281</td>
+<td align="right">-0.036454059</td>
+<td align="right">-0.12712896</td>
+<td align="right">-0.27333348</td>
+<td align="right">-0.10691652</td>
+<td align="right">-0.11760559</td>
+<td align="right">0.03277080</td>
+</tr>
+<tr class="odd">
+<td align="right">0.007504505</td>
+<td align="right">0.01255177</td>
+<td align="right">0.009579797</td>
+<td align="right">-0.06348695</td>
+<td align="right">0.10642209</td>
+<td align="right">-0.04545461</td>
+<td align="right">0.06757121</td>
+<td align="right">-0.05978129</td>
+</tr>
+<tr class="even">
+<td align="right">0.090424729</td>
+<td align="right">0.01804931</td>
+<td align="right">0.056351662</td>
+<td align="right">-0.01646687</td>
+<td align="right">-0.11111118</td>
+<td align="right">0.06084673</td>
+<td align="right">-0.07425858</td>
+<td align="right">-0.04497375</td>
+</tr>
+</tbody>
+</table>
+<p>Este procedimento de treinamento e teste será feito manualmente na primeira parte do <em>post</em>, mas com a função <code>optimize.portfolio.rebalancing</code> podemos realizar um processo de maneira mais automática.</p>
+</div>
+</div>
+<div id="análise-de-portfólio-para-período-único" class="section level1">
+<h1>Análise de Portfólio para Período Único</h1>
+<p>Nossa tarefa agora é construir diferentes portfólios. Para tanto, iremos utilizar três estratégias de seleção de portfólios: a de minimização do risco, a de maximização do retorno e a de maximização do risco de Sharpe. Para tanto, utilizaremos os dados até dezembro de 2020 para escolher os portfólios, e depois verificaremos como estes portfólios teriam se comportamento em 2021.</p>
+<div id="portfólio-com-variância-mínima-global" class="section level2">
+<h2>Portfólio com Variância Mínima Global</h2>
+<p>Começamos com um problema de otimização que busca obter os pesos que nos forneça a menor variâcia possível (a volatilidade do portfólio). Volatilidade é uma medida de risco, e portanto, quanto menor a volatilidade, menor o risco em um portfólio.</p>
+<p>Dito isto, nosso objetivo se torna encontrar os pesos que minimizem nossa variância sujeito a duas restrições:</p>
+<ol style="list-style-type: decimal">
+<li><p>que a soma dos pesos dos ativos seja a unidade; e</p></li>
+<li><p>que cada ativo represente no mínimo 5% do total investido e no máximo 60%.</p></li>
+</ol>
+<p>A primeira restrição garante o investimento completo (<em>full investiment</em>), ou seja, que utilizaremos todos os recursos disponíveis. A segunda restrição garante que todos os ativos farão parte do portfólio, ao mesmo tempo que não permite que um ativo domine todo o investimento.</p>
+<p>Este problema pode ser anunciado matematicamente da seguinte forma:</p>
+<p><span class="math display">\[\min \sigma^2 = W^T \sum W\]</span>
+<span class="math display">\[\text{s.a.}\]</span>
+<span class="math display">\[\sum_{i=1}^N W_i = 1\]</span>
+<span class="math display">\[0.05 \leq W_i \leq 0.6\]</span></p>
+<p>Técnicamente, como a função objetiva é quadratica e as restrições são lineares, utilizaremos um solucionador (<em>solver</em>) quadrático. O pacote <code>PortfolioAnalytics</code> utiliza o plugin <code>ROI.plugin.quadprog</code> para resolver este tipo de problema.</p>
+<div id="criando-o-portfólio" class="section level3">
+<h3>Criando o Portfólio</h3>
+<p>Para implementarmos este problema usando o pacote <code>PortfolioAnalytics</code> precisamos primeiro construir o objeto <code>portfolio</code> com a função <code>porfolio.spec()</code>.</p>
+<p>Na primeira linha do código abaixo, definimos o portfólio informando a lista de ativos (objeto <code>ticker</code>).</p>
+<pre class="r"><code>#### Portfólio com a variância mínima global
+min_var_portfolio &lt;- portfolio.spec(assets = tickers) %&gt;% 
+  add.constraint(type = &quot;full_investiment&quot;) %&gt;% 
+  add.constraint(type = &quot;box&quot;, min = 0.05, max = 0.6) %&gt;% 
+  add.objective(type = &quot;risk&quot;, name = &quot;var&quot;)</code></pre>
+<p>Na segunda linha de código, definimos a primeira restrição. Definimos o tipo de restrição com <code>type = "full_investiment"</code> (a soma dos pesos será igual a unidade). Esta restrição também pode ser especificada escrevendo <code>add.constraint(type = "weight_sum", min_sum = 0, max_sum = 0)</code>.</p>
+<p>Na linha 3 escrevemos a restrição de que cada ativo deve ter peso maior que 0,05 e menor que 0,6. Este tipo de restrição é nomeado de <code>type = "box"</code> pelo pacote <code>PortfolioAnalysis</code>. Um caso especial da restrição <em>box</em> é a <em>long</em>. Nela, o valor mínimo é igual a zero e o máximo igual a unidade. Este tipo de restrição pode ser escrito como <code>add.constraint(type = "long_only")</code>.</p>
+<p>Por fim, na linha 4, definimos o objetivo da otimização. Especificamente definimos que o otimizador deve buscar pesos que minimizem o risco do portfólio.</p>
+</div>
+<div id="rodar-a-otimização" class="section level3">
+<h3>Rodar a otimização</h3>
+<p>A função <code>optimize.portfolio()</code> roda a otimização utilizando o <em>solver</em> quadrático. Nesta função passamos os dados, o objeto portfólio criado acima e o método de otimização.</p>
+<pre class="r"><code>otimizacao_risco &lt;- tbl_retornos_wide_training %&gt;% 
+  optimize.portfolio(
+    portfolio = min_var_portfolio,
+    optimize_method = &quot;quadprog&quot;,
+    trace = TRUE
+    )
+otimizacao_risco</code></pre>
+<pre><code>## ***********************************
+## PortfolioAnalytics Optimization
+## ***********************************
+## 
+## Call:
+## optimize.portfolio(R = ., portfolio = min_var_portfolio, optimize_method = &quot;quadprog&quot;, 
+##     trace = TRUE)
+## 
+## Optimal Weights:
+## MGLU3.SA ABEV3.SA BBDC3.SA EMBR3.SA JBSS3.SA PETR3.SA VALE3.SA WEGE3.SA 
+##   0.0500   0.3042   0.0500   0.1409   0.0789   0.0500   0.0765   0.2494 
+## 
+## Objective Measure:
+##  StdDev 
+## 0.05104</code></pre>
+<p>A saída da otimização mostra os pesos calculados e a medida de desvio-padrão do portfólio que minimiza risco (0,05104).</p>
+<p>Para visualizar melhor os pesos, podemos extrai-los do objeto <code>otimizacao_risco</code> com a função <code>extractWeights</code> e observar na tabela <a href="#tab:tab-pesos-1">5</a> que os pesos estimados são consistentes com as restrinções impostas.</p>
+<pre class="r"><code>pesos_var_minima &lt;- extractWeights(otimizacao_risco)
+
+tibble(ativos = tickers, pesos = pesos_var_minima) %&gt;% 
+  mutate(soma_pesos = cumsum(pesos)) %&gt;% 
+  knitr::kable(caption = &quot;Conjunto de pesos dos ativos que minimizam o risco do porfólio&quot;)</code></pre>
+<table>
+<caption><span id="tab:tab-pesos-1">Table 5: </span>Conjunto de pesos dos ativos que minimizam o risco do porfólio</caption>
+<thead>
+<tr class="header">
+<th align="left">ativos</th>
+<th align="right">pesos</th>
+<th align="right">soma_pesos</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">MGLU3.SA</td>
+<td align="right">0.0500000</td>
+<td align="right">0.0500000</td>
+</tr>
+<tr class="even">
+<td align="left">ABEV3.SA</td>
+<td align="right">0.3042140</td>
+<td align="right">0.3542140</td>
+</tr>
+<tr class="odd">
+<td align="left">BBDC3.SA</td>
+<td align="right">0.0500000</td>
+<td align="right">0.4042140</td>
+</tr>
+<tr class="even">
+<td align="left">EMBR3.SA</td>
+<td align="right">0.1409229</td>
+<td align="right">0.5451369</td>
+</tr>
+<tr class="odd">
+<td align="left">JBSS3.SA</td>
+<td align="right">0.0789496</td>
+<td align="right">0.6240865</td>
+</tr>
+<tr class="even">
+<td align="left">PETR3.SA</td>
+<td align="right">0.0500000</td>
+<td align="right">0.6740865</td>
+</tr>
+<tr class="odd">
+<td align="left">VALE3.SA</td>
+<td align="right">0.0764677</td>
+<td align="right">0.7505542</td>
+</tr>
+<tr class="even">
+<td align="left">WEGE3.SA</td>
+<td align="right">0.2494458</td>
+<td align="right">1.0000000</td>
+</tr>
+</tbody>
+</table>
+<p>O ativo com menor peso é o <code>MGLU3</code>, com 5%, respeitando a primeira restrição. Enquanto que a soma dos pesos é igual a unidade, de modo que todo o recurso financeiro será utilizado para comprar os ativos acima.</p>
+</div>
+</div>
+<div id="portfólio-de-retorno-máximo-esperado" class="section level2">
+<h2>Portfólio de Retorno Máximo Esperado</h2>
+<p>Agora o objetivo é inverso. Queremos encontrar os pesos que produzem o portfólio com maior retorno esperado. O problema se torna maximizar o retorno <span class="math inline">\(\mu\)</span> sujeito às mesmas duas restrições anteriores:</p>
+<p><span class="math display">\[\max \mu^T W\]</span>
+<span class="math display">\[\text{s.a. } \sum_{i=1}^N W_i = 1\]</span></p>
+<p><span class="math display">\[\text{ e } \epsilon_i \leq W_i \leq \delta_i\]</span></p>
+<p>Como a função é linear, podemos utilizar um <em>solver</em> de programação linear. O <code>PortfolioAnalytics</code> fornece a plugin <code>glpk</code> como uma solução para problemas de otimização de programação linear.</p>
+<div id="criando-o-portfólio-1" class="section level3">
+<h3>Criando o Portfólio</h3>
+<p>A criação do porfólio segue o mesmo passo-a-passo do problema de minimização da risco Portanto, a única alteração será na função objetiva <code>add.objetive</code>, em que o tipo de otimização será pelos retornos médios (<code>type = "return"</code> e <code>name = "mean"</code>).</p>
+<pre class="r"><code>portfolio_retorno_maximo &lt;- portfolio.spec(assets = tickers) %&gt;% 
+  add.constraint(type = &quot;full_investiment&quot;) %&gt;% 
+  add.constraint(type = &quot;box&quot;, min = 0.05, max = 0.6) %&gt;% 
+  add.objective(type = &quot;return&quot;, name = &quot;mean&quot;)</code></pre>
+</div>
+<div id="rodando-a-otimização" class="section level3">
+<h3>Rodando a otimização</h3>
+<p>Sem muito segredo, vamos rodar a função <code>optimize.portfolio()</code> mas alterando o método de otimização para <code>optimize_method = "glpk"</code>.</p>
+<pre class="r"><code>otimizacao_retorno &lt;- tbl_retornos_wide_training %&gt;% 
+  optimize.portfolio(
+    portfolio = portfolio_retorno_maximo,
+    optimize_method = &quot;glpk&quot;,
+    trace = TRUE
+    )
+otimizacao_retorno</code></pre>
+<pre><code>## ***********************************
+## PortfolioAnalytics Optimization
+## ***********************************
+## 
+## Call:
+## optimize.portfolio(R = ., portfolio = portfolio_retorno_maximo, 
+##     optimize_method = &quot;glpk&quot;, trace = TRUE)
+## 
+## Optimal Weights:
+## MGLU3.SA ABEV3.SA BBDC3.SA EMBR3.SA JBSS3.SA PETR3.SA VALE3.SA WEGE3.SA 
+##     0.60     0.05     0.05     0.05     0.05     0.05     0.05     0.10 
+## 
+## Objective Measure:
+##    mean 
+## 0.04271</code></pre>
+<p>A saída do otimizador mostra que o retorno médio foi de 4,3% para um portfólio com 60% do orçamento investido na Magazine Luiza, 10% na WEG e 5% nas demais. A tabela <a href="#tab:tab-pesos-2">6</a> mostra que as restrições foram novamente respeitadas.</p>
+<pre class="r"><code>pesos_retorno_maximo &lt;- extractWeights(otimizacao_retorno)
+
+
+tibble(ativos = tickers, pesos = pesos_retorno_maximo) %&gt;% 
+  mutate(soma_pesos = cumsum(pesos)) %&gt;% 
+  knitr::kable(caption = &quot;Conjunto de pesos dos ativos que maximizam o retorno médio do porfólio&quot;)</code></pre>
+<table>
+<caption><span id="tab:tab-pesos-2">Table 6: </span>Conjunto de pesos dos ativos que maximizam o retorno médio do porfólio</caption>
+<thead>
+<tr class="header">
+<th align="left">ativos</th>
+<th align="right">pesos</th>
+<th align="right">soma_pesos</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">MGLU3.SA</td>
+<td align="right">0.60</td>
+<td align="right">0.60</td>
+</tr>
+<tr class="even">
+<td align="left">ABEV3.SA</td>
+<td align="right">0.05</td>
+<td align="right">0.65</td>
+</tr>
+<tr class="odd">
+<td align="left">BBDC3.SA</td>
+<td align="right">0.05</td>
+<td align="right">0.70</td>
+</tr>
+<tr class="even">
+<td align="left">EMBR3.SA</td>
+<td align="right">0.05</td>
+<td align="right">0.75</td>
+</tr>
+<tr class="odd">
+<td align="left">JBSS3.SA</td>
+<td align="right">0.05</td>
+<td align="right">0.80</td>
+</tr>
+<tr class="even">
+<td align="left">PETR3.SA</td>
+<td align="right">0.05</td>
+<td align="right">0.85</td>
+</tr>
+<tr class="odd">
+<td align="left">VALE3.SA</td>
+<td align="right">0.05</td>
+<td align="right">0.90</td>
+</tr>
+<tr class="even">
+<td align="left">WEGE3.SA</td>
+<td align="right">0.10</td>
+<td align="right">1.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="portfólio-com-razão-de-sharpe-máxima" class="section level2">
+<h2>Portfólio com Razão de Sharpe Máxima</h2>
+<p>Por fim, podemos encontrar um portfólio que maximiza a razão de Sharpe. Mas antes, uma breve explicação sobre esta medida de risco.</p>
+<div id="a-razão-de-sharpe" class="section level3">
+<h3>A razão de Sharpe</h3>
+<p>A Razão de Sharpe é comumente utilizada como uma medida de retorno por unidade de risco, e tem a seguinte fórmula:</p>
+<p><span class="math display">\[\frac{r_P - r_F}{\sigma_P}\]</span></p>
+<p>onde <span class="math inline">\(r_p\)</span> é o retorno do portfólio, <span class="math inline">\(r_F\)</span> é a taxa livre de risco e <span class="math inline">\(\sigma_P\)</span> é o risco do portfólio (desvio-padrão do retorno) normalizada e anualizada. Abaixo, um exemplo de como funciona a Razão de Sharp:</p>
+<table>
+<colgroup>
+<col width="28%" />
+<col width="45%" />
+<col width="25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Portfólio A</th>
+<th>Portfólio B</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Retorno</td>
+<td>7,9%</td>
+<td>6,9%</td>
+</tr>
+<tr class="even">
+<td>Risco</td>
+<td>5,5%</td>
+<td>3,2%</td>
+</tr>
+<tr class="odd">
+<td>Taxa livre de risco</td>
+<td>2,0%</td>
+<td>2,0%</td>
+</tr>
+<tr class="even">
+<td>Razão de Sharpe</td>
+<td><span class="math inline">\(\frac{7,9\% - 2,0\%}{5,5\%} = 1,07\)</span></td>
+<td><span class="math inline">\(\frac{6,9\% - 2,0\%}{3,2\%} = 1,53\)</span></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Quando maior a razão Sharpe, melhor é a combinação de risco e retorno.</strong> Portanto, o portifólio B possui uma melhor performance ajustada ao risco do que o portfólio A.</p>
+</div>
+<div id="criando-o-portfólio-2" class="section level3">
+<h3>Criando o Portfólio</h3>
+<p>Vamos definir o portfólio com função objetiva divida em dois termos: uma para maximizar o retorno, e outra para minimizar o risco.</p>
+<pre class="r"><code>portfolio_sharpe &lt;- portfolio.spec(assets = tickers) %&gt;% 
+  add.constraint(type = &quot;full_investiment&quot;) %&gt;% 
+  add.constraint(type = &quot;box&quot;, min = 0.05, max = 0.6) %&gt;% 
+  add.objective(type = &quot;return&quot;, name = &quot;mean&quot;) %&gt;% 
+  add.objective(type = &quot;risk&quot;, name = &quot;StdDev&quot;)</code></pre>
+</div>
+<div id="rodando-a-otimização-1" class="section level3">
+<h3>Rodando a otimização</h3>
+<p>A maximizar a razão de Sharpe pode ser formulada como um problema de programação quadrática e resolvido rapidamente utilizando <code>optimize_method="ROI"</code>.</p>
+<pre class="r"><code>otimizacao_sharpe &lt;- tbl_retornos_wide_training %&gt;% 
+  optimize.portfolio(
+    portfolio=portfolio_sharpe,
+    optimize_method=&quot;ROI&quot;,
+    maxSR=TRUE, 
+    trace=TRUE)
+
+otimizacao_sharpe</code></pre>
+<pre><code>## ***********************************
+## PortfolioAnalytics Optimization
+## ***********************************
+## 
+## Call:
+## optimize.portfolio(R = ., portfolio = portfolio_sharpe, optimize_method = &quot;ROI&quot;, 
+##     trace = TRUE, maxSR = TRUE)
+## 
+## Optimal Weights:
+## MGLU3.SA ABEV3.SA BBDC3.SA EMBR3.SA JBSS3.SA PETR3.SA VALE3.SA WEGE3.SA 
+##   0.1369   0.0500   0.0500   0.0500   0.1050   0.0500   0.0500   0.5082 
+## 
+## Objective Measure:
+## StdDev 
+##  0.063 
+## 
+## 
+##    mean 
+## 0.02789</code></pre>
+<p>A ação padrão quando definimos “mean” e “StdDev” como objetivos no <code>optimize_method="ROI"</code> é o de maximizar a utilidade quadrática. Se quisermos maximizar a Razão de Sharpe, precisamos passar o parâmetro <code>maxSR=TRUE</code>.</p>
+<p>A tabela <a href="#tab:tab-pesos-3">7</a> mostra os pesos para a solução do problema de maximização da razão de Sharpe.</p>
+<pre class="r"><code>pesos_sharpe &lt;- extractWeights(otimizacao_sharpe)
+
+tibble(ativos = tickers, pesos = pesos_sharpe) %&gt;% 
+  mutate(soma_pesos = cumsum(pesos)) %&gt;% 
+  knitr::kable(caption = &quot;Conjunto de pesos dos ativos que maximizam a Razão de Sharpe&quot;)</code></pre>
+<table>
+<caption><span id="tab:tab-pesos-3">Table 7: </span>Conjunto de pesos dos ativos que maximizam a Razão de Sharpe</caption>
+<thead>
+<tr class="header">
+<th align="left">ativos</th>
+<th align="right">pesos</th>
+<th align="right">soma_pesos</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">MGLU3.SA</td>
+<td align="right">0.1368750</td>
+<td align="right">0.1368750</td>
+</tr>
+<tr class="even">
+<td align="left">ABEV3.SA</td>
+<td align="right">0.0500000</td>
+<td align="right">0.1868750</td>
+</tr>
+<tr class="odd">
+<td align="left">BBDC3.SA</td>
+<td align="right">0.0500000</td>
+<td align="right">0.2368750</td>
+</tr>
+<tr class="even">
+<td align="left">EMBR3.SA</td>
+<td align="right">0.0500000</td>
+<td align="right">0.2868750</td>
+</tr>
+<tr class="odd">
+<td align="left">JBSS3.SA</td>
+<td align="right">0.1049609</td>
+<td align="right">0.3918359</td>
+</tr>
+<tr class="even">
+<td align="left">PETR3.SA</td>
+<td align="right">0.0500000</td>
+<td align="right">0.4418359</td>
+</tr>
+<tr class="odd">
+<td align="left">VALE3.SA</td>
+<td align="right">0.0500000</td>
+<td align="right">0.4918359</td>
+</tr>
+<tr class="even">
+<td align="left">WEGE3.SA</td>
+<td align="right">0.5081641</td>
+<td align="right">1.0000000</td>
+</tr>
+</tbody>
+</table>
+<p>Novamente, os pesos foram encontrados e eles respeitam as restrições impostas.</p>
+</div>
+</div>
+<div id="construíndo-o-portfólio" class="section level2">
+<h2>Construíndo o Portfólio</h2>
+<p>A figura <a href="#fig:plot-pesos">2</a> mostra os pesos de cada ativo em cada problema resolvido.</p>
+<pre class="r"><code>tibble(ativos = tickers, 
+       pesos_sharpe = pesos_sharpe,
+       pesos_retorno = pesos_retorno_maximo,
+       pesos_risco = pesos_var_minima) %&gt;% 
+  pivot_longer(cols = &quot;pesos_sharpe&quot;:&quot;pesos_risco&quot;) %&gt;% 
+  ggplot(aes(x = name, y = value, fill = ativos)) +
+  geom_col() + 
+  scale_x_discrete(labels = c(&quot;Maximizar retorno&quot;, &quot;Minimizar risco&quot;, &quot;Maximizar Risco de Sharpe&quot;)) +
+  labs(x = &quot;Estratégia&quot;, y = &quot;Peso no portfólio&quot;,
+       title = &quot;Seleção de carteiras de investimentos por estratégia&quot;,
+       subtitle = &quot;Empresas selecionadas, 2017-2020&quot;) +
+  geom_text(aes(label = ativos),
+            position = position_stack(vjust = .6),
+            size = 2) + 
+  theme(legend.position = &quot;none&quot;)</code></pre>
+<div class="figure"><span style="display:block;" id="fig:plot-pesos"></span>
+<img src="https://robsonolima.com.br/post/analise-de-portfolio-com-r/index_files/figure-html/plot-pesos-1.png" alt="Seleção de carteiras de investimentos por estratégia" width="672" />
+<p class="caption">
+Figure 2: Seleção de carteiras de investimentos por estratégia
+</p>
+</div>
+<p>Agora podemos construir uma série no tempo dos retornos do portfólio caso tivessemos investido exatamente como sugerido pelos três problemas definidos. Por fim, vamos compara-los a uma solução de <em>benchmarking</em>, em que investimos 12,5% em cada ativo.</p>
+<p>Para construir esta nova série, vamos multiplicar cada retorno observado em 2021 pelo peso definido pelo otimizador. Assim, o retorno do portfólio em um mês <span class="math inline">\(t\)</span> é dado por:</p>
+<p><span class="math display">\[r_{\text{portfolio}, t} = \sum_{i=1}^5 W_i r_{i,t}\]</span></p>
+<p>É fácil computar manualmente, ou utilizando a função <code>Return.portfolio</code> do mesmo pacote <code>PortfolioAnalytics</code>, mas como uma alternativa conveniente vamos utilizar o pacote <code>tidyquant</code>, que possui a função <code>tq_portfolio()</code>. Esta função utiliza os dados originais (no formato <strong>tidy</strong>) e o vetor de pesos produzidos pela otimização para construir um <code>data.frame</code> de retornos de portfólio. Abaixo fazemos o computo do retorno do portfólio para as três estratégias.</p>
+<pre class="r"><code>retorno_portfolio_retorno_maximo &lt;- tbl_retornos %&gt;% 
+  filter(data &gt; as.Date(&quot;2021-01-01&quot;)) %&gt;% 
+  tq_portfolio(
+    assets_col = ativo,
+    returns_col = retorno,
+    weights = pesos_retorno_maximo,
+    col_rename = &quot;retorno_max_retorno&quot;,
+    rebalance_on = &quot;months&quot;
+  )
+
+retorno_portfolio_risco_minimo &lt;- tbl_retornos %&gt;% 
+  filter(data &gt; as.Date(&quot;2021-01-01&quot;)) %&gt;% 
+  tq_portfolio(
+    assets_col = ativo,
+    returns_col = retorno,
+    weights = pesos_var_minima,
+    col_rename = &quot;retorno_minimo_risco&quot;,
+    rebalance_on = &quot;months&quot;
+  )
+
+retorno_portfolio_sharpe &lt;- tbl_retornos %&gt;% 
+  filter(data &gt; as.Date(&quot;2021-01-01&quot;)) %&gt;% 
+  tq_portfolio(
+    assets_col = ativo,
+    returns_col = retorno,
+    weights = pesos_sharpe,
+    col_rename = &quot;retorno_max_sharpe&quot;,
+    rebalance_on = &quot;months&quot;
+  )</code></pre>
+<pre><code>## Warning in check_weights(weights, assets_col, map, x): Sum of weights must be 1.</code></pre>
+<p>Vamos definir ainda um portfólio <strong>benchmarking</strong> de pesos iguais para os ativos. A intuição é que uma abordagem de pesos iguais não apresenta preferências para um ativo específico. A pergunta que faremos é: “os problemas de otimização de carteiras podem produzir resultados melhores do que simplesmente construir um portfólio de pesos iguais?”.</p>
+<p>Como temos 8 empresas no nosso portfólio, vamos criar um portfólio naïve, onde o investidor aloca a mesma quantidade de recursos para as 8 empresas, ou seja, 12,5%.</p>
+<pre class="r"><code>peso_naive &lt;- rep(1/8, 8)
+
+retorno_portfolio_naive &lt;- tbl_retornos %&gt;% 
+  filter(data &gt; as.Date(&quot;2021-01-01&quot;)) %&gt;% 
+  tq_portfolio(
+    assets_col = ativo,
+    returns_col = retorno,
+    weights = peso_naive,
+    col_rename = &quot;retorno_naive&quot;,
+    rebalance_on = &quot;months&quot;
+  )</code></pre>
+<p>A tabela <a href="#tab:retorno-3-portfolios">8</a> mostra os dados para as quatro estratégias empregadas.</p>
+<pre class="r"><code>retorno_portfolio &lt;- retorno_portfolio_naive %&gt;% 
+  left_join(retorno_portfolio_retorno_maximo, by = &quot;data&quot;) %&gt;% 
+  left_join(retorno_portfolio_risco_minimo, by = &quot;data&quot;) %&gt;% 
+  left_join(retorno_portfolio_sharpe, by = &quot;data&quot;)
+
+retorno_portfolio %&gt;% tail() %&gt;% 
+  knitr::kable(caption = &quot;Retorno para os quatro portfólios&quot;)</code></pre>
+<table>
+<caption><span id="tab:retorno-3-portfolios">Table 8: </span>Retorno para os quatro portfólios</caption>
+<colgroup>
+<col width="12%" />
+<col width="16%" />
+<col width="23%" />
+<col width="24%" />
+<col width="22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">data</th>
+<th align="right">retorno_naive</th>
+<th align="right">retorno_max_retorno</th>
+<th align="right">retorno_minimo_risco</th>
+<th align="right">retorno_max_sharpe</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2021-07-31</td>
+<td align="right">-0.0085991</td>
+<td align="right">-0.0143558</td>
+<td align="right">0.0026513</td>
+<td align="right">0.0274050</td>
+</tr>
+<tr class="even">
+<td align="left">2021-08-31</td>
+<td align="right">0.0156670</td>
+<td align="right">-0.0567314</td>
+<td align="right">0.0346343</td>
+<td align="right">-0.0033454</td>
+</tr>
+<tr class="odd">
+<td align="left">2021-09-30</td>
+<td align="right">-0.0337014</td>
+<td align="right">-0.1253286</td>
+<td align="right">-0.0168419</td>
+<td align="right">0.0310422</td>
+</tr>
+<tr class="even">
+<td align="left">2021-10-31</td>
+<td align="right">-0.0406964</td>
+<td align="right">-0.1549873</td>
+<td align="right">-0.0062129</td>
+<td align="right">-0.0651341</td>
+</tr>
+<tr class="odd">
+<td align="left">2021-11-30</td>
+<td align="right">-0.0729333</td>
+<td align="right">-0.1887645</td>
+<td align="right">-0.0827880</td>
+<td align="right">-0.1158582</td>
+</tr>
+<tr class="even">
+<td align="left">2021-12-31</td>
+<td align="right">0.0281725</td>
+<td align="right">-0.1069004</td>
+<td align="right">0.0412393</td>
+<td align="right">0.0392830</td>
+</tr>
+</tbody>
+</table>
+<p>Agora podemos visualizar o retorno acumulado no período caso o investidor tivesse, em janeiro de 2021, investido seus recursos empregando cada uma das estratégias.</p>
+<p>A figura <a href="#fig:plot-estrategias">3</a> mostra que a estratégia que produziu os maiores ganhos foi a de minimização do risco.</p>
+<pre class="r"><code>retorno_portfolio_acumulado &lt;- retorno_portfolio %&gt;%
+  pivot_longer(cols = &quot;retorno_naive&quot;:&quot;retorno_max_sharpe&quot;,
+               names_to = &quot;estrategia&quot;,
+               values_to = &quot;retorno&quot;) %&gt;% 
+  mutate(estrategia = case_when(estrategia == &quot;retorno_max_retorno&quot; ~ &quot;Maximizar Retorno Médio&quot;,
+                                estrategia == &quot;retorno_minimo_risco&quot; ~ &quot;Minimizar o risco&quot;,
+                                estrategia == &quot;retorno_naive&quot; ~ &quot;Alocação igualitária&quot;,
+                                estrategia == &quot;retorno_max_sharpe&quot; ~ &quot;Maximizar Razão de Sharpe&quot;)) %&gt;% 
+  group_by(estrategia) %&gt;% 
+  mutate(retorno_acumulado = cumsum(retorno)) %&gt;% 
+  ungroup()
+
+retorno_portfolio_acumulado %&gt;% 
+  ggplot(aes(x = data, y = retorno_acumulado, color = estrategia)) + 
+  geom_line(size = 1.2) + 
+  scale_y_continuous(label = scales::percent) +
+  labs(title = &quot;Retorno acumulado por tipo de Portfólio, 2021&quot;, y = &quot;Retorno acumulado do portfólio&quot;,
+       x = &quot;&quot;) + 
+  facet_wrap(~estrategia) + 
+  theme(legend.position = &quot;none&quot;)</code></pre>
+<div class="figure"><span style="display:block;" id="fig:plot-estrategias"></span>
+<img src="https://robsonolima.com.br/post/analise-de-portfolio-com-r/index_files/figure-html/plot-estrategias-1.png" alt="Retorno acumulado por tipo de Portfólio, 2017-2021" width="672" />
+<p class="caption">
+Figure 3: Retorno acumulado por tipo de Portfólio, 2017-2021
+</p>
+</div>
+<p>Por fim, algumas contas de padaria. A tabela <a href="#tab:tab-retorno-1000">9</a> mostra que se um investidor em janeiro de 2020 tivesse alocado <span class="math inline">\(\text{R\$}\)</span> 1000 dividos igualmente entre as 8 empresas (<span class="math inline">\(\text{R\$}\)</span> 125 para cada), teria um retorno acumulado em dezembro de 2021 de <span class="math inline">\(\text{R\$}\)</span> 1069. Este é um retorno semelhante ao de de um portfólio que tentasse minimizar os riscos (<span class="math inline">\(\text{R\$}\)</span> 1148). No caso da estratégia de maximização de retornos, o investimento de <span class="math inline">\(\text{R\$}\)</span> 1000 teria produzido <span class="math inline">\(\text{R\$}\)</span> 339 reais. Maximizar a razão de Sharpe renderia <span class="math inline">\(\text{R\$}\)</span> 941.</p>
+<pre class="r"><code>retorno_portfolio_acumulado %&gt;% 
+  select(-retorno) %&gt;% 
+  filter(data == &quot;2021-12-31&quot;) %&gt;% 
+  mutate(retorno_1000_reais = 1000 + (1000 * retorno_acumulado)) %&gt;% 
+  knitr::kable(caption = &quot;Retorno de R$ 1000 para cada tipo de portfólio&quot;)</code></pre>
+<table>
+<caption><span id="tab:tab-retorno-1000">Table 9: </span>Retorno de R$ 1000 para cada tipo de portfólio</caption>
+<thead>
+<tr class="header">
+<th align="left">data</th>
+<th align="left">estrategia</th>
+<th align="right">retorno_acumulado</th>
+<th align="right">retorno_1000_reais</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2021-12-31</td>
+<td align="left">Alocação igualitária</td>
+<td align="right">0.0697534</td>
+<td align="right">1069.7534</td>
+</tr>
+<tr class="even">
+<td align="left">2021-12-31</td>
+<td align="left">Maximizar Retorno Médio</td>
+<td align="right">-0.6607732</td>
+<td align="right">339.2268</td>
+</tr>
+<tr class="odd">
+<td align="left">2021-12-31</td>
+<td align="left">Minimizar o risco</td>
+<td align="right">0.1483875</td>
+<td align="right">1148.3875</td>
+</tr>
+<tr class="even">
+<td align="left">2021-12-31</td>
+<td align="left">Maximizar Razão de Sharpe</td>
+<td align="right">-0.0586792</td>
+<td align="right">941.3208</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="otimização-de-múltiplos-períodos" class="section level1">
+<h1>Otimização de múltiplos períodos</h1>
+<p>Os exemplos acima não representam exatamente uma estratégia ótima. Calculamos nossos pesos em janeiro de 2021 utilizando os dados do período de 2012 a dezembro de 2020 para treinamento.</p>
+<p>No mundo real, podemos rebalancear nossa carteira de maneira períodica. Neste tipo de processo, ativos são comprados ou vendidos periodicamente para garantir, por exemplo, que o nível de retorno ou risco esteja no seu nível original. Para tanto, os pesos são periodicamente reecalculados.</p>
+<p><a href="https://www.investopedia.com/terms/r/rebalancing.asp">Por exemplo</a>, digamos que originalmente o investidor tivesse construído um portfólio com 50% de ações e 50% de títulos públicos. Se as ações se valorizarem dentro de um período, seu peso no portfólio aumentará (digamos para 70%). Deste modo, o investidor pode decidir vender algumas ações e/ou comprar títulos públicos para que o portfólio retorne a alocação original de 50%/50%.</p>
+<p>Em outro exemplo, o investidor pode estipular um certo nível de risco. Mas se em um determinado período, ações com maior nível de risco se valorizaram, seu peso no portfólio subiu, e consequentemente, o risco médio do portfólio também. Para reequilibrar o portfólio, podemos vender estes ativos de risco.</p>
+<p>Este reequilíbrio, ou rebalanceamento, pode ser feito periodicamente (mensalmente ou trimestralmente) ou por meio de uma estratégia responsiva. Nesta último caso, podemos atribuir um peso alvo a cada ativo, e um nível de tolerância. Assim, podemos ter um portfólio em que 40% está alocado em ações e 60% em títulos públicos com uma margem de tolerância de +/- 5% para cada classe. Desse modo, ações podem flutuar entre 35% e 45%, mas se o peso dessa classe ficar fora deste intervalo, o portfólio como um todo é reequilibrado.</p>
+<p>Outras estratégias de reequilíbrio existem e podem ser conferidas <a href="https://www.investopedia.com/terms/r/rebalancing.asp">aqui</a>.</p>
+<div id="minimização-de-risco-com-rebalanceamento" class="section level2">
+<h2>Minimização de Risco com Rebalanceamento</h2>
+<p>Vamos repetir a otimização de minimização de risco, mas agora permitindo que o portfólio tenha seus pesos reequilibrados trimestralmente. Além dos parâmetros comuns à função <code>optimize.portfolio()</code>, a função <code>optimize.portfolio.rebalance</code> exige que informemos a periodicidade com que os pesos devem ser rebalanceados (<code>rebalance_on = "quarters"</code>).</p>
+<p>Devemos ainda definir um período de treinamento, com <code>training_period = 60</code>, e um valor para <code>rolling_window</code>, para que o rebalanceamento dos pesos utilize uma janela móvel de dados. Caso o usuário queira utilizar todos os dados para estimar os pesos trimestrais, pode fixar <code>rolling_window = NULL</code>.</p>
+<pre class="r"><code>otimizacao_risco_rebalance &lt;- tbl_retornos_wide %&gt;% 
+  optimize.portfolio.rebalancing(
+    optimize_method = &quot;ROI&quot;,
+    portfolio = min_var_portfolio,
+    rebalance_on = &quot;quarters&quot;,
+    training_period = 60,
+    rolling_window = 60
+  )</code></pre>
+<pre><code>## Warning: executing %dopar% sequentially: no parallel backend registered</code></pre>
+<pre class="r"><code>otimizacao_risco_rebalance</code></pre>
+<pre><code>## **************************************************
+## PortfolioAnalytics Optimization with Rebalancing
+## **************************************************
+## 
+## Call:
+## optimize.portfolio.rebalancing(R = ., portfolio = min_var_portfolio, 
+##     optimize_method = &quot;ROI&quot;, rebalance_on = &quot;quarters&quot;, training_period = 60, 
+##     rolling_window = 60)
+## 
+## Number of rebalancing dates:  20 
+## First rebalance date:
+## [1] &quot;2017-03-31&quot;
+## Last rebalance date:
+## [1] &quot;2021-12-31&quot;
+## 
+## Annualized Portfolio Rebalancing Return:
+## [1] 0.1815471
+## 
+## Annualized Portfolio Standard Deviation:
+## [1] 0.221952</code></pre>
+<p>A saída da função mostra que foram feitos, durante o período de 2012-2021, um total de 20 rebalanceamentos, sendo o primeiro no primeiro trimestre de 2017. Como o treinamento exige 60 meses, precisamos acumular 60 meses de informações para realizar o primeiro rebalanceamento. No trimestre seguinte, os meses do primeiro trimestre de 2017 são incluídos no treinamento, e informações do primeiro trimestre de 2012 são excluídos.</p>
+<p>Com a função <code>chart.Weights(otimizacao_sharpe_rebalance)</code> podemos visualizar como os pesos mudaram ao longo dos trimestres. Como ela não gera uma visualização das mais bonitas, vamos recorrer aos gráficos do <code>ggplot2</code>. Os pesos trimestrais podem ser visualizados na figura <a href="#fig:plot-rebalance">4</a>.</p>
+<pre class="r"><code>extractWeights(otimizacao_risco_rebalance) %&gt;% 
+  as.data.frame() %&gt;% 
+  rownames_to_column(&quot;data&quot;) %&gt;% 
+  mutate(data = as.Date(data)) %&gt;% 
+  pivot_longer(cols = &quot;MGLU3.SA&quot;:&quot;WEGE3.SA&quot;) %&gt;% 
+  ggplot(aes(x = data, y = value, fill = name)) +
+  labs(fill = &quot;&quot;, x = &quot;&quot;, y = &quot;Peso do ativo&quot;,
+       title = &quot;Peso dos ativos ao longo dos trimestres - Minimização do Risco&quot;) +
+  geom_col() +
+  scale_x_date(date_breaks = &quot;6 months&quot;) +
+  theme(legend.position = &quot;bottom&quot;,
+        axis.text.x = element_text(angle = 90))</code></pre>
+<div class="figure"><span style="display:block;" id="fig:plot-rebalance"></span>
+<img src="https://robsonolima.com.br/post/analise-de-portfolio-com-r/index_files/figure-html/plot-rebalance-1.png" alt="Peso dos ativos ao longo dos trimestres" width="672" />
+<p class="caption">
+Figure 4: Peso dos ativos ao longo dos trimestres
+</p>
+</div>
+<p>Interessante notar como a Ambev perde participação no portfólio ao longo do tempo. Movimento inverso é visto com a empresa WEG.</p>
+</div>
+<div id="maximização-de-retorno-com-rebalanceamento" class="section level2">
+<h2>Maximização de Retorno com Rebalanceamento</h2>
+<p>A seguir, o mesmo exercício para diferentes configurações de portfólio. A figura <a href="#fig:plot-rebalance-retorno">5</a> mostra os pesos para uma estratégia que maximiza retorno:</p>
+<pre class="r"><code>otimizacao_retorno_rebalance &lt;- tbl_retornos_wide %&gt;% 
+  optimize.portfolio.rebalancing(
+    optimize_method = &quot;ROI&quot;,
+    portfolio = portfolio_retorno_maximo,
+    rebalance_on = &quot;quarters&quot;,
+    training_period = 60,
+    rolling_window = 60
+  )
+
+extractWeights(otimizacao_retorno_rebalance) %&gt;% 
+  as.data.frame() %&gt;% 
+  rownames_to_column(&quot;data&quot;) %&gt;% 
+  mutate(data = as.Date(data)) %&gt;% 
+  pivot_longer(cols = &quot;MGLU3.SA&quot;:&quot;WEGE3.SA&quot;) %&gt;% 
+  ggplot(aes(x = data, y = value, fill = name)) +
+  labs(fill = &quot;&quot;, x = &quot;&quot;, y = &quot;Peso do ativo&quot;,
+       title = &quot;Peso dos ativos ao longo dos trimestres - Maximização do Retorno&quot;) +
+  geom_col() +
+  scale_x_date(date_breaks = &quot;6 months&quot;) +
+  theme(legend.position = &quot;bottom&quot;,
+        axis.text.x = element_text(angle = 90))</code></pre>
+<div class="figure"><span style="display:block;" id="fig:plot-rebalance-retorno"></span>
+<img src="https://robsonolima.com.br/post/analise-de-portfolio-com-r/index_files/figure-html/plot-rebalance-retorno-1.png" alt="Peso dos ativos ao longo dos trimestres - Maximização do retorno" width="672" />
+<p class="caption">
+Figure 5: Peso dos ativos ao longo dos trimestres - Maximização do retorno
+</p>
+</div>
+<p>Nenhuma surpresa que uma estratégia que maximiza retorno deixa o portfólio exposto a Magazine Luiza.</p>
+</div>
+<div id="função-objetiva-com-aversão-ao-risco" class="section level2">
+<h2>Função Objetiva com Aversão ao Risco</h2>
+<p>Por fim, vamos tentar um portfólio diferente. Vamos estimar um portfólio que maximizar uma função utilidade quadrática. Neste caso, a função objetivo tem dois termos: um para o retorno médio do portfólio, e outro para a variância do portfólio, de modo muito semelhante ao Risco de Sharpe. Contudo, vamos incluir um parâmetro de aversão ao risco, <span class="math inline">\(\lambda &gt; 0\)</span> no termo de minimização de risco. Um investidor tomador de riscos teria um valor de <span class="math inline">\(\lambda\)</span> baixo, enquanto que um investidor averso ao risco teria um <span class="math inline">\(\lambda\)</span> elevado. Se <span class="math inline">\(\lambda = 0\)</span>, o termo de risco é ignorado e voltamos para o caso de maximização de retorno. Assim, <span class="math inline">\(\lambda\)</span> representa um trade-off entre risco e retorno esperado.</p>
+<p>A figura <a href="#fig:plot-rebalance-aversao">6</a> mostra os pesos para um portfólio com <span class="math inline">\(\lambda=10\)</span>.</p>
+<pre class="r"><code>portfolio_quadratico &lt;- portfolio.spec(assets = tickers) %&gt;% 
+  add.constraint(type = &quot;full_investiment&quot;) %&gt;% 
+  add.constraint(type = &quot;box&quot;, min = 0.05, max = 0.6) %&gt;% 
+  add.objective(type = &quot;return&quot;, name = &quot;mean&quot;) %&gt;% 
+  add.objective(type = &quot;risk&quot;, name = &quot;var&quot;, risk_aversion = 10)
+
+otimizacao_quadratico_rebalance &lt;- tbl_retornos_wide %&gt;% 
+  optimize.portfolio.rebalancing(
+    optimize_method = &quot;ROI&quot;,
+    portfolio = portfolio_quadratico,
+    rebalance_on = &quot;quarters&quot;,
+    training_period = 60,
+    rolling_window = 60
+  )
+
+extractWeights(otimizacao_quadratico_rebalance) %&gt;% 
+  as.data.frame() %&gt;% 
+  rownames_to_column(&quot;data&quot;) %&gt;% 
+  mutate(data = as.Date(data)) %&gt;% 
+  pivot_longer(cols = &quot;MGLU3.SA&quot;:&quot;WEGE3.SA&quot;) %&gt;% 
+  ggplot(aes(x = data, y = value, fill = name)) +
+  labs(fill = &quot;&quot;, x = &quot;&quot;, y = &quot;Peso do ativo&quot;,
+       title = &quot;Peso dos ativos ao longo dos trimestres - Função Quadrática&quot;) +
+  geom_col() +
+  scale_x_date(date_breaks = &quot;6 months&quot;) +
+  theme(legend.position = &quot;bottom&quot;,
+        axis.text.x = element_text(angle = 90))</code></pre>
+<div class="figure"><span style="display:block;" id="fig:plot-rebalance-aversao"></span>
+<img src="https://robsonolima.com.br/post/analise-de-portfolio-com-r/index_files/figure-html/plot-rebalance-aversao-1.png" alt="Peso dos ativos ao longo dos trimestres - Quadrática" width="672" />
+<p class="caption">
+Figure 6: Peso dos ativos ao longo dos trimestres - Quadrática
+</p>
+</div>
+</div>
+<div id="comparando-a-perfomance" class="section level2">
+<h2>Comparando a perfomance:</h2>
+<p>A figura <a href="#fig:acumulado-rebalance">7</a> mostra o retorno acumulado entre 2017 (data do primeiro rebalanceamento) e 2021 para as três funções objetivas.</p>
+<pre class="r"><code>retorno_rebalance_1 &lt;- tbl_retornos_wide %&gt;% 
+  Return.portfolio(weights = extractWeights(otimizacao_risco_rebalance)) %&gt;% 
+  as.data.frame() %&gt;% 
+  rename(min_risco = 1)
+
+retorno_rebalance_2 &lt;- tbl_retornos_wide %&gt;% 
+  Return.portfolio(weights = extractWeights(otimizacao_retorno_rebalance)) %&gt;% 
+  as.data.frame() %&gt;% 
+  rename(max_retorno = 1)
+
+retorno_rebalance_3 &lt;- tbl_retornos_wide %&gt;% 
+  Return.portfolio(weights = extractWeights(otimizacao_quadratico_rebalance)) %&gt;% 
+  as.data.frame() %&gt;% 
+  rename(quadratico = 1)
+
+
+retorno_rebalance &lt;- cbind(retorno_rebalance_1, retorno_rebalance_2, 
+                           retorno_rebalance_3)
+
+retorno_rebalance %&gt;% 
+  rownames_to_column(&quot;data&quot;) %&gt;% 
+  pivot_longer(cols = 2:4) %&gt;% 
+  mutate(data = as.Date(data)) %&gt;% 
+  group_by(name) %&gt;% 
+  mutate(retorno_acumulado = cumsum(value)) %&gt;% 
+  ggplot(aes(x = data, y = retorno_acumulado, color = name)) +
+  geom_line(size = 1.5) +
+  facet_wrap(~name) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = &quot;&quot;, y = &quot;Retorno acumulado&quot;,
+       title = &quot;Retorno acumulado por portfólio&quot;) +
+  theme(legend.position = &quot;none&quot;)</code></pre>
+<div class="figure"><span style="display:block;" id="fig:acumulado-rebalance"></span>
+<img src="https://robsonolima.com.br/post/analise-de-portfolio-com-r/index_files/figure-html/acumulado-rebalance-1.png" alt="Retorno acumulado por portfólio" width="672" />
+<p class="caption">
+Figure 7: Retorno acumulado por portfólio
+</p>
+</div>
+</div>
+</div>
+<div id="conclusão" class="section level1">
+<h1>Conclusão</h1>
+<p>Neste post vimos como podemos utilizar o pacote <code>PortfolioAnalytics</code> para resolver problemas de otimização de portfólio com diferentes funções objetivos e restrições.</p>
+<p>O objetivo do post é meramente de apresentar estas diferentes possibilidades, e não de apresentar qual a melhor estratégia de construção de portfólio.</p>
+</div>
+<div id="referências" class="section level1">
+<h1>Referências</h1>
+<ul>
+<li><p><a href="https://rpubs.com/hgjerning/517730" class="uri">https://rpubs.com/hgjerning/517730</a></p></li>
+<li><p><a href="https://bookdown.org/wfoote01/faur/portfolio-analytics.html" class="uri">https://bookdown.org/wfoote01/faur/portfolio-analytics.html</a></p></li>
+<li><p><a href="https://rdrr.io/cran/PortfolioAnalytics/f/inst/doc/risk_budget_optimization.pdf" class="uri">https://rdrr.io/cran/PortfolioAnalytics/f/inst/doc/risk_budget_optimization.pdf</a></p></li>
+<li><p><a href="https://rdrr.io/cran/PortfolioAnalytics/f/inst/doc/portfolio_vignette.pdf" class="uri">https://rdrr.io/cran/PortfolioAnalytics/f/inst/doc/portfolio_vignette.pdf</a></p></li>
+<li><p><a href="https://www.investopedia.com/terms/r/rebalancing.asp" class="uri">https://www.investopedia.com/terms/r/rebalancing.asp</a></p></li>
+</ul>
+</div>
+
+    </div>
+
+    
+
+
+
+
+
+
+
+
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=https://robsonolima.com.br/post/analise-de-portfolio-com-r/&amp;text=An%c3%a1lise%20de%20Portfolio%20com%20R%20-%20PortfolioAnalytics" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=https://robsonolima.com.br/post/analise-de-portfolio-com-r/&amp;t=An%c3%a1lise%20de%20Portfolio%20com%20R%20-%20PortfolioAnalytics" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=An%c3%a1lise%20de%20Portfolio%20com%20R%20-%20PortfolioAnalytics&amp;body=https://robsonolima.com.br/post/analise-de-portfolio-com-r/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=https://robsonolima.com.br/post/analise-de-portfolio-com-r/&amp;title=An%c3%a1lise%20de%20Portfolio%20com%20R%20-%20PortfolioAnalytics" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=An%c3%a1lise%20de%20Portfolio%20com%20R%20-%20PortfolioAnalytics%20https://robsonolima.com.br/post/analise-de-portfolio-com-r/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=https://robsonolima.com.br/post/analise-de-portfolio-com-r/&amp;title=An%c3%a1lise%20de%20Portfolio%20com%20R%20-%20PortfolioAnalytics" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="https://robsonolima.com.br/"><img class="avatar mr-3 avatar-circle" src="/author/robson-oliveira/avatar_huecec962d4ebaa2f510296f512dd0906d_32502_270x270_fill_q75_lanczos_center.jpg" alt="Robson Oliveira"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="https://robsonolima.com.br/">Robson Oliveira</a></h5>
+      <h6 class="card-subtitle">Professor</h6>
+      <p class="card-text">Data analysis and modelling with a focus on Economics.</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <li>
+      <a href="mailto:robson.lima@ifpb.edu.br" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/robsonol" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/robsonol" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  </div>
+</article>
+  </div>
+
+  <div class="page-footer">
+    
+    
+    <div class="container">
+      <footer class="site-footer">
+
+  
+
+  
+
+  <p class="powered-by">
+    © 2022 Robson Oliveira
+  </p>
+
+  
+  
+
+
+
+
+
+
+  <p class="powered-by">
+    
+    
+    
+      
+      
+      
+      
+      
+      
+      Published with <a href="https://wowchemy.com/?utm_campaign=poweredby" target="_blank" rel="noopener">Wowchemy</a> — the free, <a href="https://github.com/wowchemy/wowchemy-hugo-modules" target="_blank" rel="noopener">open source</a> website builder that empowers creators.
+    
+  </p>
+</footer>
+
+    </div>
+    
+  </div>
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/instant.page/5.1.0/instantpage.min.js" integrity="sha512-1+qUtKoh9XZW7j+6LhRMAyOrgSQKenQ4mluTR+cvxXjP1Z54RxZuzstR/H9kgPXQsVB8IW7DMDFUJpzLjvhGSQ==" crossorigin="anonymous"></script>
+
+      
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      
+
+      
+      
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/highlight.min.js" integrity="sha512-TDKKr+IvoqZnPzc3l35hdjpHD0m+b2EC2SrLEgKDRWpxf2rFCxemkgvJ5kfU48ip+Y+m2XVKyOCD85ybtlZDmw==" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/r.min.js"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/python.min.js"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/latex.min.js"></script>
+        
+      
+
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.js" integrity="sha512-SeiQaaDh73yrb56sTW/RgVdi/mMqNeM2oBwubFHagc5BkixSpP1fvqF47mKzPGWYSSy4RwbBunrJBQ4Co8fRWA==" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+    
+      
+      <script id="search-hit-fuse-template" type="text/x-template">
+        <div class="search-hit" id="summary-{{key}}">
+          <div class="search-hit-content">
+            <div class="search-hit-name">
+              <a href="{{relpermalink}}">{{title}}</a>
+              <div class="article-metadata search-hit-type">{{type}}</div>
+              <p class="search-hit-description">{{snippet}}</p>
+            </div>
+          </div>
+        </div>
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    <script src="/js/bootstrap.bundle.min.6aed84840afc03ab4d5750157f69c120.js"></script>
+
+    
+    
+      
+      
+      
+      
+      
+      
+      
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+      
+      
+    
+    
+    <script src="/en/js/wowchemy.min.b61a8f62b6e5c0cd322c8158c5b5dfb6.js"></script>
+
+    
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+
+
+
+</body>
+</html>

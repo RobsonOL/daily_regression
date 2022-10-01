@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>📊 Introdução à Ciências de Dados com R | Daily Regression</title>
-    <link>/courses/example/</link>
-      <atom:link href="/courses/example/index.xml" rel="self" type="application/rss+xml" />
+    <title>📊 Introdução à Ciências de Dados com R | Robson Lima</title>
+    <link>https://robsonolima.com.br/courses/example/</link>
+      <atom:link href="https://robsonolima.com.br/courses/example/index.xml" rel="self" type="application/rss+xml" />
     <description>📊 Introdução à Ciências de Dados com R</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2021 Robson Oliveira</copyright><lastBuildDate>Sun, 24 Jan 2021 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2022 Robson Oliveira</copyright><lastBuildDate>Sun, 24 Jan 2021 00:00:00 +0000</lastBuildDate>
     <image>
-      <url>/courses/example/featured.jpg</url>
+      <url>https://robsonolima.com.br/courses/example/featured.jpg</url>
       <title>📊 Introdução à Ciências de Dados com R</title>
-      <link>/courses/example/</link>
+      <link>https://robsonolima.com.br/courses/example/</link>
     </image>
     
     <item>
       <title>Introdução ao R</title>
-      <link>/courses/example/intro/</link>
+      <link>https://robsonolima.com.br/courses/example/intro/</link>
       <pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate>
-      <guid>/courses/example/intro/</guid>
+      <guid>https://robsonolima.com.br/courses/example/intro/</guid>
       <description>&lt;p&gt;Entendendo o básico.&lt;/p&gt;
+&lt;p&gt;Em construção&lt;/p&gt;
 &lt;p&gt;
   &lt;i class=&#34;fas fa-clock  pr-1 fa-fw&#34;&gt;&lt;/i&gt; 1-2 hours per week, for 8 weeks&lt;/p&gt;
 &lt;h2 id=&#34;learn&#34;&gt;Learn&lt;/h2&gt;
@@ -28,32 +29,26 @@
 
 &lt;h2 id=&#34;quiz&#34;&gt;Quiz&lt;/h2&gt;
 &lt;details class=&#34;spoiler &#34;  id=&#34;spoiler-2&#34;&gt;
-  &lt;summary&gt;What is the difference between lists and tuples?&lt;/summary&gt;
+  &lt;summary&gt;Pergunta?&lt;/summary&gt;
   &lt;p&gt;&lt;p&gt;Lists&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Lists are mutable - they can be changed&lt;/li&gt;
 &lt;li&gt;Slower than tuples&lt;/li&gt;
 &lt;li&gt;Syntax: &lt;code&gt;a_list = [1, 2.0, &#39;Hello world&#39;]&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Tuples&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Tuples are immutable - they can&amp;rsquo;t be changed&lt;/li&gt;
-&lt;li&gt;Tuples are faster than lists&lt;/li&gt;
-&lt;li&gt;Syntax: &lt;code&gt;a_tuple = (1, 2.0, &#39;Hello world&#39;)&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
 &lt;/p&gt;
 &lt;/details&gt;
 &lt;details class=&#34;spoiler &#34;  id=&#34;spoiler-3&#34;&gt;
-  &lt;summary&gt;Is Python case-sensitive?&lt;/summary&gt;
+  &lt;summary&gt;Is R case-sensitive?&lt;/summary&gt;
   &lt;p&gt;Yes&lt;/p&gt;
 &lt;/details&gt;</description>
     </item>
     
     <item>
       <title>Visualization</title>
-      <link>/courses/example/visualization/</link>
+      <link>https://robsonolima.com.br/courses/example/visualization/</link>
       <pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate>
-      <guid>/courses/example/visualization/</guid>
+      <guid>https://robsonolima.com.br/courses/example/visualization/</guid>
       <description>&lt;p&gt;Learn how to visualize data with Plotly.&lt;/p&gt;
 &lt;p&gt;
   &lt;i class=&#34;fas fa-clock  pr-1 fa-fw&#34;&gt;&lt;/i&gt; 1-2 hours per week, for 8 weeks&lt;/p&gt;
@@ -80,9 +75,9 @@ fig&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
     
     <item>
       <title>Statistics</title>
-      <link>/courses/example/stats/</link>
+      <link>https://robsonolima.com.br/courses/example/stats/</link>
       <pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate>
-      <guid>/courses/example/stats/</guid>
+      <guid>https://robsonolima.com.br/courses/example/stats/</guid>
       <description>&lt;p&gt;Introduction to statistics for data science.&lt;/p&gt;
 &lt;p&gt;
   &lt;i class=&#34;fas fa-clock  pr-1 fa-fw&#34;&gt;&lt;/i&gt; 1-2 hours per week, for 8 weeks&lt;/p&gt;
@@ -108,9 +103,9 @@ The variance of the distribution is $\sigma^{2}$.
     
     <item>
       <title></title>
-      <link>/courses/example/aula01_intro_files/reveal.js-3.3.0.1/contributing/</link>
+      <link>https://robsonolima.com.br/courses/example/aula01_intro_files/reveal.js-3.3.0.1/contributing/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/courses/example/aula01_intro_files/reveal.js-3.3.0.1/contributing/</guid>
+      <guid>https://robsonolima.com.br/courses/example/aula01_intro_files/reveal.js-3.3.0.1/contributing/</guid>
       <description>&lt;h2 id=&#34;contributing&#34;&gt;Contributing&lt;/h2&gt;
 &lt;p&gt;Please keep the &lt;a href=&#34;http://github.com/hakimel/reveal.js/issues&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;issue tracker&lt;/a&gt; limited to &lt;strong&gt;bug reports&lt;/strong&gt;, &lt;strong&gt;feature requests&lt;/strong&gt; and &lt;strong&gt;pull requests&lt;/strong&gt;.&lt;/p&gt;
 &lt;h3 id=&#34;personal-support&#34;&gt;Personal Support&lt;/h3&gt;
@@ -135,9 +130,9 @@ The variance of the distribution is $\sigma^{2}$.
     
     <item>
       <title></title>
-      <link>/courses/example/aula01_intro_files/reveal.js-3.3.0.1/plugin/markdown/example/</link>
+      <link>https://robsonolima.com.br/courses/example/aula01_intro_files/reveal.js-3.3.0.1/plugin/markdown/example/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/courses/example/aula01_intro_files/reveal.js-3.3.0.1/plugin/markdown/example/</guid>
+      <guid>https://robsonolima.com.br/courses/example/aula01_intro_files/reveal.js-3.3.0.1/plugin/markdown/example/</guid>
       <description>&lt;h1 id=&#34;markdown-demo&#34;&gt;Markdown Demo&lt;/h1&gt;
 &lt;h2 id=&#34;external-11&#34;&gt;External 1.1&lt;/h2&gt;
 &lt;p&gt;Content 1.1&lt;/p&gt;
@@ -155,11 +150,11 @@ The variance of the distribution is $\sigma^{2}$.
     
     <item>
       <title>R for Data Science</title>
-      <link>/courses/example/slides/aula01/aula01_intro/</link>
+      <link>https://robsonolima.com.br/courses/example/slides/aula01/aula01_intro/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/courses/example/slides/aula01/aula01_intro/</guid>
+      <guid>https://robsonolima.com.br/courses/example/slides/aula01/aula01_intro/</guid>
       <description>
-&lt;script src=&#34;/rmarkdown-libs/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://robsonolima.com.br/rmarkdown-libs/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
 
 
 &lt;style&gt;
@@ -188,7 +183,7 @@ The variance of the distribution is $\sigma^{2}$.
 &lt;/div&gt;
 &lt;div id=&#34;por-que-r&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Por que R?&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;/courses/example/slides/Aula01/Aula01_Intro_files/figure-html/unnamed-chunk-2-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://robsonolima.com.br/courses/example/slides/Aula01/Aula01_Intro_files/figure-html/unnamed-chunk-2-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;o-que-você-vai-aprender&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;O que você vai aprender&lt;/h1&gt;
@@ -216,12 +211,12 @@ The variance of the distribution is $\sigma^{2}$.
 &lt;/div&gt;
 &lt;div id=&#34;visualizar&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Visualizar&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;/courses/example/slides/Aula01/Aula01_Intro_files/figure-html/unnamed-chunk-7-1.png&#34; width=&#34;480&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://robsonolima.com.br/courses/example/slides/Aula01/Aula01_Intro_files/figure-html/unnamed-chunk-7-1.png&#34; width=&#34;480&#34; /&gt;&lt;/p&gt;
 &lt;hr /&gt;
 &lt;/div&gt;
 &lt;div id=&#34;modelo&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Modelo&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;/courses/example/slides/Aula01/Aula01_Intro_files/figure-html/unnamed-chunk-8-1.png&#34; width=&#34;480&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://robsonolima.com.br/courses/example/slides/Aula01/Aula01_Intro_files/figure-html/unnamed-chunk-8-1.png&#34; width=&#34;480&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;comunicação&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Comunicação&lt;/h2&gt;

@@ -5,7 +5,7 @@ theme: "starter-academic"
 # This file is formatted using YAML syntax - learn more at https://learnxinyminutes.com/docs/yaml/
 
 title: Robson Lima # Website name
-baseurl: 'https://robsonlima.netlify.app/' # Website URL
+baseurl: 'https://robsonolima.com.br/' # Website URL
 copyright: '© {year} Robson Oliveira' # Footer text, e.g. '© {year} Me'
 
 ############################
