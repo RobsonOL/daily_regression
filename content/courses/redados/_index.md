@@ -6,7 +6,7 @@ title: "\U0001F4CA Transformando Dados em Informações"
 type: book
 ---
 
-{{< figure src="tidyverse-packages.png" >}}
+{{< figure src="redados.jpeg" >}}
 
 {{< toc hide_on="xl" >}}
 
