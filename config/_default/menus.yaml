@@ -10,9 +10,12 @@ main:
   - name: Postagens
     url: '#posts'
     weight: 20 
-  - name: Publicações
-    url: '#featured'
+  # - name: Publicações P 
+  #   url: '#featured'
     weight: 50
+  - name: Publicações
+    url: '#publications'
+    weight: 55
   - name: Cursos
     url: courses/
     weight: 60
