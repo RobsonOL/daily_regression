@@ -9,7 +9,7 @@ authors:
 - Cassio da Nobrega
 - Robson Oliveira Lima
 - Diego Pitta
-date: "2023-04-11T00:00:00Z"
+date: "2023-10-19T00:00:00Z"
 doi: "10.1108/JES-08-2022-0437"
 featured: false
 image:
@@ -22,7 +22,7 @@ links:
 publication: ""
 publication_short: ""
 publication_types:
-- "3"
+- "2"
 publishDate: "2023-09-15T00:00:00Z"
 summary: The aim of this study was to determine if there are asymmetries in the pass-through of West Texas Intermediate (WTI) crude oil prices to its derivatives (diesel and gasoline) in the Brazilian market.
 tags:
@@ -30,7 +30,7 @@ tags:
 - Passthrough
 - Assymetric effect
 title: Asymmetry in the prices of crude oil and its derivatives in Brazil
-publication: '*Journal of Economics Studies, 1*(1)'
+publication: '*Journal of Economics Studies*'
 url_code: ""
 url_dataset: ""
 #url_pdf: https://doi.org/10.1108/JES-08-2022-0437
