@@ -19,7 +19,7 @@ interests:
 - Time Series
 organizations:
 - name: IFPB
-  url: https://www.ifpb.edu.br/
+  url: https://www.ifpb.edu.br/joaopessoa
 role: Professor
 social:
 - icon: envelope
@@ -34,6 +34,18 @@ social:
 - icon: github
   icon_pack: fab
   link: https://github.com/robsonol
+- icon: orcid
+  icon_pack: fab
+  link: https://orcid.org/0000-0001-6310-0023
+- icon: researchgate
+  icon_pack: fab
+  link: https://www.researchgate.net/profile/Robson-Oliveira-Lima
+- icon: id-badge
+  icon_pack: far
+  link:  http://lattes.cnpq.br/9025662742228276
+- icon: google
+  icon_pack: fab
+  link:  https://scholar.google.com.br/citations?user=2shgdncAAAAJ&hl=pt-BR
 superuser: true
 title: Robson Oliveira 
 ---
