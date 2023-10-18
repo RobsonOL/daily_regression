@@ -6,9 +6,10 @@ slug: diferenca-em-diferenca-avancos-recentes
 categories: []
 tags: []
 subtitle: ''
-summary: ''
+summary: "Nos últimos anos, surgiram uma enxurrada de artigos que discutem este problema e apresentam diferentes soluções para o problema. Entre eles temos o artigo de Chasemartin e d'Haultfoeuille (2020), que mostram como o estimador de TWFE nestes casos é uma soma ponderada de efeitos tratamentos para cada grupo e tempo, e que alguns desses pesos são negativos. Em casos extremos, o coeficiente de regressão linear pode ser negativo **mesmo quando todos os efeitos tratamentos médios individuais são positivos**. Eles propõem um estimador que potencialmente corrige esses problemas. Este estimador está implementado tanto no Stata quando no R (pacote `DIDmultiplegt`)"
 authors: []
 lastmod: '2021-11-09T10:30:28-03:00'
+bibliography: [bib.bib]
 featured: no
 image:
   caption: ''
@@ -21,44 +22,43 @@ projects: []
 # Introdução
 
 20% dos artigos da American Economic Review entre 2010 e 2012 estimam o efeito tratamento
-utilizando regressões com efeitos fixos de período e grupo (dC & DH, 2020):
+utilizando regressões com efeitos fixos de período e grupo [@de_chaisemartin_two-way_2020] na forma da equação:
 
-$$Y_{g,t} = \lambda_g + \lambda_t + \beta D_{g,t}+\epsilon_{g,t}$$
-
-Quando a hipótese da tendências paralelas é válida, e se o efeito tratamento (ET) de todas as unidades é uma constante $\delta$, então podemos assumir que
-$\beta = \delta$.
-
-Contudo, é muito improvável que o ET seja constante para a maior parte dos cenários de pesquisa imaginados. Nesta situação de ET heterogêneos, o $\beta$ de TWFE se torna potencialmente inválido. 
-
-Nos últimos anos, surgiram uma enxurrada de artigos que discutem este problema e apresentam diferentes soluções para o problema. Entre eles temos o artigo de Chasemartin e d'Haultfoeuille (2020), que mostram como o estimador de TWFE nestes casos é uma soma ponderada de efeitos tratamentos para cada grupo e tempo, e que alguns desses pesos são negativos. Em casos extremos, o coeficiente de regressão linear pode ser negativo **mesmo quando todos os efeitos tratamentos médios individuais são positivos**. Eles propõem um estimador que potencialmente corrige esses problemas. Este estimador está implementado tanto no Stata quando no R (pacote `DIDmultiplegt`)
+$$
+Y_{g,t} = \lambda_g + \lambda_t + \beta D_{g,t}+\epsilon_{g,t}
+$$
 
 
+Na literatura, essa abordagem é comumente chamada de *Two-Way Fixed Effects* (TWFE) e quando a hipótese da tendências paralelas é válida e o efeito tratamento (ET) de todas as unidades é uma constante $\delta$, então podemos assumir que $\beta = \delta$. 
 
+Contudo, é muito improvável que o efeito tratamento seja constante para a maior parte dos cenários de pesquisa imaginados. Nesta situação de ET heterogêneos, o $\beta$ de TWFE se torna potencialmente inválido. 
 
+Nos últimos anos, surgiram uma enxurrada de artigos que discutem este problema e apresentam diferentes soluções para o problema. Entre eles o artigo de *Two-Way Fixed Effects Estimators with Heterogeneous Treatment Effects* de @de_chaisemartin_two-way_2020. No paper, os autores mostram como o estimador de TWFE nestes casos é uma soma ponderada de efeitos tratamentos para cada grupo e período, e que alguns dos pesos são negativos. Em casos extremos, o coeficiente estimado por TWFE poderia ser negativo **mesmo quando todos os efeitos tratamentos médios individuais fossem positivos**. 
 
+Os autores propõem um estimador que potencialmente corrige esses problemas. Este estimador está implementado tanto no Stata quando no R (no pacote `DIDmultiplegt`).
 
-
-# de Chasemartin e d'Haultfoeuille (2020)
-
-Os autores argumentam que em um TWFE, se não assumirmos efeito tratamento constante, o estimador de diferença-em-diferença
-deve representar uma soma ponderada dos vários efeitos tratamentos médios (EFT):
+Os autores argumentam que se não assumirmos efeito tratamento constante, o coeficiente obtido por meio do TWFE deve representar uma soma ponderada dos vários efeitos tratamentos médios (EFT):
 
 $$\beta = E \left[ \sum_{g,t} W_{g,t} TE_{g,t} \right]$$
 
-onde $W_{g,t}$ são pesos que somam a unidade e $TE$ é o efeito tratamento no grupo $g$ e no período $t$. 
+onde $W_{g,t}$ são pesos que devem somar a unidade e $TE$ é o efeito tratamento no grupo $g$ e no período $t$.  Estes pesos $W_{g,t}$ são diferentes da proporção de unidades na célula $(g,t)$ específica, o que torna este $\beta$ diferente do efeito tratamento médio (ETM). 
 
-Estes pesos $W_{g,t}$ são diferentes da proporção de unidades na célula $(g,t)$ específica, o que torna este $\beta$ diferente do efeito tratamento médio (ETM). E mais preocupante, algum desses pesos são negativos. De modo que $\beta$ pode ser estritamente negativo mesmo quando todos os $TE_{g,t}$ são positivos. Exemplo, se $ET_1 = 1$ e $ET_2 = 3$, com pesos $W_1 = 2$ e $W_2 = -1$:
+E mais preocupante, algum desses pesos são negativos. De modo que $\beta$ pode ser estritamente negativo mesmo quando todos os $TE_{g,t}$ são positivos. 
+
+**Exemplo:** Se $ET_1 = 1$ e $ET_2 = 3$ e seus pesos forem $W_1 = 2$ e $W_2 = -1$, teriamos:
 
 $$\beta = 2 \times 1 - 1 \times 3 = -1$$
+# Exemplo da Presença de Pesos Negativos
 
-Assim, como uma robustez é interessante computar os pesos ligados ao $\beta$. Se todos os pesos ou a maioria deles for maior que zero, não há problemas em continuar estimando uma regressão TWFE, mas se muitos pesos forem menores que zero, então pode existir a preocupação de que o efeito tratamento pode ser heterogêneo entre grupos e no tempo. 
+Como robustez é importante computar os pesos ligados ao $\beta$ estimado. Se todos os pesos ou a maioria deles for maior que zero, não haveria maiores problemas em continuar estimando o TWFE; mas se muitos pesos forem menores que zero, então pode existir a preocupação de que o efeito tratamento pode ser heterogêneo entre grupos e períodos. 
 
-<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Weights can be estimated, and used as a diagnostic tool. If all / most weights &gt;0, you may be fine using the two ways fe regression. But if many weights &lt;0, and you worry that treatment effect may be heterogeneous across time/groups, you may want to use other estimation method</p>&mdash; Clément de Chaisemartin (@CdeChaisemartin) <a href="https://twitter.com/CdeChaisemartin/status/1055176097464111104?ref_src=twsrc%5Etfw">October 24, 2018</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+Para demonstrar a presença de pesos negativos, os autores utilizam dados de @vella1998, que contém informações para 4360 indivíduos durante os anos de 1980 e 1987. No artigo original, os autores estavam interessados em investigar se jovens trabalhadores ganhavam um *premium* salarial por estarem sindicalizados. 
 
-Os autores recomendam o uso da função `twowayfeweights` presente no pacote `TwoWayFEWeights` do R. Abaixo, vemos o output da função aplicada para uma base de salários de 4360 indivíduos durante os anos de 1980 e 1987. No artigo original de Vella e Verbeek (1998) os autores utilizaram estas informações para investigar se jovens trabalhadores ganhavam um *premium* salarial por estarem sindicalizados. 
-
+Para estimar os pesos, vamos utilizar a função `twowayfeweights` presente no pacote `TwoWayFEWeights` do R:
 
 ```{r message=FALSE, warning=FALSE}
+# devtools::install_github("shuo-zhang-ucsb/twowayfeweights")
+
 needs::needs(wooldridge, TwoWayFEWeights, tidyverse)
 
 Y = "lwage"
@@ -66,33 +66,35 @@ G = "nr"
 T = "year"
 D = "union"
 controls = c("hours")
-weights <- twowayfeweights(wagepan, Y, G, T, D, cmd_type = "feTR", controls = controls)
+weights <- twowayfeweights(wagepan, Y, G, T, D, 
+                           cmd_type = "feTR", controls = controls)
+
+weights |>  
+  arrange(desc(weight)) |>  
+  mutate(weight_negative = ifelse(weight < 0, "Sim", "Não")) |> 
+  group_by(weight_negative) |>
+  summarise(n = n()) |> 
+  #head() |>  
+  knitr::kable(col.names = c("Pesos Negativos?", "N"))
+
 ```
-Ao calcularmos os pesos, percebemos que dos 1064 efeitos tratamentos sobre o tratado (ETT) estimados, 189 possuem pesos negativos, um número considerável, e que pode levar a preocupações sobre as estimativas obtidas na época. 
-
-```{r}
-weights %>% 
-  arrange(desc(weight)) %>% 
-  head() %>% 
-  knitr::kable()
-```
-
-## De onde vem estes pesos negativos?
-
-Estes pesos nascem da presença de heterogeneidades no ET entre grupos e no tempo. Especificamente, elas surgem a partir de dois tipos de comparações **proibidas/indesejadas/impróprias** feitas pelo estimador de DiD. Vamos analisa-las uma a uma:
-
-### Problema 1: $\beta$ usa unidades tratadas como controles
-
-Vamos assumir que o tratamento é binário e o tratamento das unidades seja paulatino no tempo, o chamado *design staggered* ($D_{g,t} \geq D_{g,t-1}$).
-
-Então o $\beta$ será a média ponderada de dois tipos de DIDs:
-
-1. $DID_1$: Comparação da evolução dos outcomes de unidades tratadas em $t$ contra unidades nunca tratadas. Essa comparação não apresenta problemas.
-
-2. $DID_2$: Comparação da evolução dos outcomes entre unidades tratadas em $t$ com unidades tratadas antes e depois de $t$. Essa comparação é problemática, pois no período $t-1$ estamos usando como unidade de comparação, uma unidade já tratada.
+A tabela acima apresenta os pesos estimados. Percebemos que dos efeitos tratamentos sobre o tratado (ETT) estimados, 189 possuem pesos negativos, um número considerável, e que pode levar a preocupações sobre as estimativas obtidas na época. 
 
 
-Em resumo, na primeira comparação, para as unidades tratadas ($S$, ou switchers), a evolução do outcome após o tratamento representa a evolução que ocorreria independentemente do tratamento ($\Delta Y(0)$) mais o ET sobre essas unidades. Ou seja,
+# De onde vem estes pesos negativos?
+
+Segundo os autores, estes pesos negativos nasceriam da presença de heterogeneidades no ET entre grupos e entre períodos. Especificamente, elas surgiriam a partir de dois tipos de comparações **proibidas/indesejadas/impróprias** feitas pelo estimador de TWFE. Vamos analisa-las uma a uma:
+
+## **Problema 1:** $\beta$ usa unidades tratadas como controles
+
+Vamos assumir que o tratamento é binário e o tratamento das unidades seja escalonado no tempo^[Ou seja, as unidades não são tratadas todas no mesmo momento.], o chamado *design staggered* ($D_{g,t} \geq D_{g,t-1}$). Neste caso, o $\beta$ será a média ponderada de dois tipos de comparações:
+
+1. $DID_1$: Comparação da evolução dos *outcomes* de unidades tratadas em $t$ contra unidades nunca tratadas. **Essa comparação não apresenta problemas.**
+
+2. $DID_2$: Comparação da evolução dos outcomes entre unidades tratadas em $t$ com unidades tratadas antes e depois de $t$. **Essa comparação é problemática, pois no período $t-1$ estamos usando como unidade de comparação, uma unidade já tratada.**
+
+
+Em resumo, na primeira comparação, para as unidades tratadas ($S$, ou switchers), a evolução do *outcome* após o tratamento representa a evolução que ocorreria independentemente do tratamento ($\Delta Y(0)$) mais o ET sobre essas unidades. Ou seja,
 
 
 $$Y_{S,t-1} = Y_{S,t-1}(0)$$
@@ -102,7 +104,7 @@ De modo que
 $$\Delta Y_S = \Delta Y(0) + TE_{S,t}$$
 
 
-Mas quando temos unidades que foram tratadas em ambas as datas ($AT$, always treated), $\Delta Y_{AT} = \Delta Y(0) + TE_{AT,t} - TE_{AT,t-1}$, porque precisamos adicionar o efeito que o tratamento teve na evolução de $Y$ no período anterior.
+Mas quando temos unidades que foram tratadas em ambas as datas ($AT$, **always treated**), $\Delta Y_{AT} = \Delta Y(0) + TE_{AT,t} - TE_{AT,t-1}$, porque precisamos adicionar o efeito que o tratamento teve na evolução de $Y$ no período anterior.
 
 Assim, temos que o $DID_2$ pode ser escrito como:
 
@@ -116,28 +118,27 @@ Contudo, se o efeito tratamento é homogêneo no tempo, os dois últimos termos 
 Portanto, o problema acima só surge quando temos efeitos tratamentos heterogêneos **no tempo.**
 
 
+## **Problema 2:** $\beta$ usa unidades Switchers como controle
 
-### Problema 2: $\beta$ usa switchers como controle
-
-Vamos comparar agora uma situação em que exista heterogeneidade do ET entre  grupos. Usando a linguagem de dC & DH (2020), vamos assumir que exista um grupo cujo efeito tratamento aumente mais $S_m$ e um grupo cujo efeito tratamento aumente menos ($S_I$).
+Vamos comparar agora uma situação em que exista heterogeneidade do ET entre  grupos. Usando a linguagem de @de_chaisemartin_two-way_2020, vamos assumir que exista um grupo cujo efeito tratamento aumente mais $S_m$ e um grupo cujo efeito tratamento aumente menos ($S_I$).
 
 Assim, o $DID_3$ compara a evolução dos outcomes das unidades que mudam menos com as que mudam mais:
 
 $$DID_3 = \Delta Y_{S_m} - \Delta Y_{S_I}$$
 
-Antes de continuar, vamos assumir que $Y_{S_m,t}(d) = Y_{S_m,t}(0) + \delta S_md$ e $Y_{S_I,t}(d) = Y_{S_I,t}(0) + \delta S_Id$ e que $\delta_{S_I} - 3\delta_{S_m} > 0$. Ou seja, o efeito tratamento dos dois grupos é capturado pela inclinação $\delta_i$, que esses dois efeitos são estritamente positivos mas um é três vezes maior que o outro.
+Antes de continuar, vamos assumir que $Y_{S_m,t}(d) = Y_{S_m,t}(0) + \delta S_md$ e $Y_{S_I,t}(d) = Y_{S_I,t}(0) + \delta S_Id$ e que $\delta_{S_I} - 3\delta_{S_m} > 0$. Ou seja, o efeito tratamento dos dois grupos é capturado pela inclinação $\delta_i$, que esses dois efeitos são estritamente positivos, CONTUDO, um é **três vezes maior** que o outro.
 
-Vamos assumir agora que o tratamento das unidades de $S_m$ aumente de 0 para 2, enquanto que as unidades de $S_I$, vão de 0 para 1. Assim, a evolução do outcome será
+Vamos assumir agora que o tratamento das unidades de $S_m$ aumente de 0 para 2, enquanto que as unidades de $S_I$, vão de 0 para 1. Assim, a evolução do outcome será:
 
 $$\Delta Y_{S_m} = Y_{S_m,t} + 2\delta_{S_m} - Y_{S_m,t-1}(0) = \Delta Y(0) + 2\delta_{S_m} = \Delta Y(0) + 2/3\delta_{S_I}$$
 
-Assim, o efeito tratamento do grupo $S_m$ é 2/3 do efeito do grupo $S_I$. 
+A equação mostra que o efeito tratamento do grupo $S_m$ é 2/3 do efeito do grupo $S_I$. 
 
-Para o grupo $S_I$ a evolução do outcome é dada por
+Para o grupo $S_I$ a evolução do outcome é dada por:
 
 $$\Delta Y_{S_I} = Y_{S_I,t} + 1\delta_{S_I} - Y_{S_I,t-1}(0) = \Delta Y(0) + 1\delta_{S_I} = \Delta Y(0) + \delta_{S_I}$$
 
-Portanto, o $DID_3$, que toma a diferença entre $\Delta Y_{S_m}$ e $\Delta Y_{S_I}$ será
+E o $DID_3$, que toma a diferença entre $\Delta Y_{S_m}$ e $\Delta Y_{S_I}$ será
 
 $$DID_3 = \Delta Y(0) + 2/3\delta_{S_I} - \Delta Y(0) - \delta S_I$$
 $$DID_3 = - 1/3 \delta_{S_I} < 0 $$
@@ -148,6 +149,8 @@ Assim, mesmo considerando que $\delta_{S_M}$ e $\delta_{S_I}$ sejam estritamente
 **Novamente, este problema só surge quando os efeitos $\delta_{S_M}$ e $\delta_{S_I}$ são diferentes. Caso eles fossem iguais, os efeitos se cancelariam.**
 
 
-## Como solucionar o problema?
+# Como solucionar o problema?
 
-Em dC & DH (2020), os autores propõem um estimador alternativo.
+Em @de_chaisemartin_two-way_2020, os autores propõem um estimador alternativo disponível no pacote `DIDmultiplegt`. A discussão sobre o pacote ficará para uma postagem futura.
+
+# Referências

@@ -1,16 +1,23 @@
 ---
-bio: Data analysis and modelling with a focus on Economics.
+#bio: Data analysis and modelling with a focus on Economics.
 education:
   courses:
-  - course: Doutorado em Economia
+  - course: Doutorado em Economia Aplicada
     institution: UFPB
     year: 2021
+  - course: Mestrado em Economia Aplicada
+    institution: UFPB
+    year: 2013
+  - course: Graduação em Ciências Econômicas
+    institution: UFPB
+    year: 2011
 email: ""
-highlight_name: false
+highlight_name: true
 interests:
-- Causalidade 
+- Inferência Causal
 - Machine Learning
 - Séries Temporais
+- R 
 organizations:
 - name: IFPB
   url: https://www.ifpb.edu.br/joaopessoa
@@ -46,5 +53,5 @@ title: Robson Oliveira
 ---
 
 **Robson Oliveira Lima** é um professor de Economia no Instituto Federal da Paraíba.
-Seus interesses de pesquisa incluem causalidade e modelos preditivos. 
+Seus interesses de pesquisa incluem inferência causal e modelos preditivos. 
 
