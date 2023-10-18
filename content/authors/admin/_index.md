@@ -2,25 +2,19 @@
 bio: Data analysis and modelling with a focus on Economics.
 education:
   courses:
-  - course: Doc in Economics
+  - course: Doutorado em Economia
     institution: UFPB
     year: 2021
-  - course: MEng in Economics
-    institution: UFPB
-    year: 2013
-  - course: BSc in Economics
-    institution: UFPB
-    year: 2010
 email: ""
 highlight_name: false
 interests:
-- Causality 
+- Causalidade 
 - Machine Learning
-- Time Series
+- Séries Temporais
 organizations:
 - name: IFPB
   url: https://www.ifpb.edu.br/joaopessoa
-role: Professor
+role: Professor de Economia
 social:
 - icon: envelope
   icon_pack: fas
@@ -43,12 +37,12 @@ social:
 - icon: id-badge
   icon_pack: far
   link:  http://lattes.cnpq.br/9025662742228276
-- icon: google
-  icon_pack: fab
+- icon: graduation-cap
+  icon_pack: fas
   link:  https://scholar.google.com.br/citations?user=2shgdncAAAAJ&hl=pt-BR
 superuser: true
 title: Robson Oliveira 
 ---
 
-Robson Oliveira Lima is a professor of Economics at Instituto de Educação Tecnológica da Paraíba (IFPB). His research interests include causality and predictive modelling.
-
+**Robson Oliveira Lima** é um professor de Economia no Instituto Federal da Paraíba.
+Seus interesses de pesquisa incluem causalidade e modelos preditivos. 
