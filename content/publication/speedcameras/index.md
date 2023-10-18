@@ -14,16 +14,21 @@ publication: ""
 publication_short: ""
 publication_types:
 - "1"
+links:
+- name: PDF do Working Paper
+  url: https://www.overleaf.com/read/hsjnsyvbpgsy
 publishDate: "2023-09-15T00:00:00Z"
 tags:
 - Oil
 - Passthrough
 - Assymetric effect
 title: "Limiting Speed Improves Highway Safety: Evidence from Brazil"
+summary: Em 2010, o Programa Nacional de Controle de Velocidade passou a instalar milhares de câmeras de controle de velocidade (lombadas) nas estradas federais do Brasil.Usando dados de acidentes de tráfego para o período 2011-2018, foi possível mostrar que a instalação de uma lombada pode reduzir o total de acidentes e a sua severidade.
+
 publication: '*Working Paper*'
 url_code: ""
 url_dataset: ""
-url_pdf: https://www.overleaf.com/read/hsjnsyvbpgsy
+# url_pdf: https://www.overleaf.com/read/hsjnsyvbpgsy
 url_poster: ""
 url_project: ""
 url_slides: ""

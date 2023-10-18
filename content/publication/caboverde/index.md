@@ -12,17 +12,20 @@ featured: false
 image:
   focal_point: "featured.jpeg"
   preview_only: false
-links:
-- name: Custom Link
-  url: https://portalrevistas.ucb.br/index.php/rbee/article/view/5378
 publication: ""
 publication_short: ""
 publishDate: "2015-09-15T00:00:00Z"
-summary: ResumoEste estudo analisou o comportamento dinâmico da taxa de desem-prego brasileiro focando no nível de persistência da série. Sendo assim,foram utilizados num primeiro momento modelos de integraçãofracioná-ria e testes de mudança de persistência da série.
+summary:  "Cabo Verde é um país onde a estrutura produtiva é fraca, o que lhe torna
+fortemente dependente das importações de bens e mercadorias.
+Neste trabalho investigamos o grau de dependência da inflação
+cabo-verdiana em relação à inflação portuguesa a partir de um modelo de cópulas. A grande vantagem do uso dessa metodologia é a não necessidade de fazer suposição a respeito da distribuição das variáveis, e por ser capaz de captar
+a presença de associação não linear entre as variáveis e ainda conhecer o formato desta
+relação. Nossos resultados indicam que a inflação de Cabo Verde apresenta uma
+relação de dependência muito fraca com a inflação de Portugal."
 tags:
-- Persistência
-- mercado de trabalho
-- informalidade
+- Cópulas
+- Inflação
+- Cabo Verde
 title: "The dependence between Cape-Verdean and Portuguese inflations: A copula approach"
 publication: '*Revista Brasileira de Economia de Empresas*'
 url_code: ""

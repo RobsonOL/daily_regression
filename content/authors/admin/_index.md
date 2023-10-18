@@ -42,7 +42,9 @@ social:
   link:  https://scholar.google.com.br/citations?user=2shgdncAAAAJ&hl=pt-BR
 superuser: true
 title: Robson Oliveira 
+
 ---
 
 **Robson Oliveira Lima** é um professor de Economia no Instituto Federal da Paraíba.
 Seus interesses de pesquisa incluem causalidade e modelos preditivos. 
+

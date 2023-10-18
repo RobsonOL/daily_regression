@@ -17,9 +17,9 @@ image:
   caption: 'Image credit: [**Crimestoppers**](https://crimestoppers.ca/wp-content/uploads/2022/12/CarTheft01.jpg)'
   focal_point: "featured2.jpeg"
   preview_only: false
-links:
-- name: Custom Link
-  url: https://periodicos.ufpb.br/index.php/tpa/article/view/50891
+# links:
+# - name: Custom Link
+#   url: https://periodicos.ufpb.br/index.php/tpa/article/view/50891
 publication: ""
 publication_short: ""
 publishDate: "2015-12-09T00:00:00Z"
@@ -28,6 +28,7 @@ tags:
 - Roubos de automóveis
 - Modelos de clusterização
 title: "Padrões de Concentração Espacial de Roubos de Automóveis em Municípios da Grande João Pessoa a Partir de Técnicas de Aprendizado de Máquinas"
+summary: Com uso de dados de ocorrências do 190 obtidos junto à Secretaria de Estado da Segurança e da Defesa Social da Paraíba para o período de 2017 a 2019 e a aplicação de algorítmos de *Density-Based Spatial Clustering of Applications with Noise (DBSCAN*) pudemos identificar *hotspots* de furtos e roubos de automóveis na Grande João Pessoa. Tais resultados têm potencial para auxiliar a elaboração de um planejamento mais eficaz de segurança pública na região, pois sugerem como deslocar o efetivo policial de modo a se alcançar maior eficiência na prevenção de crimes e captura de criminosos.
 publication: '*Teoria E Prática Em Administração*'
 url_code: ""
 url_dataset: ""

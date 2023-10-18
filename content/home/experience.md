@@ -11,9 +11,9 @@ active: false
 
 
 # Order that this section appears on the page.
-weight: 40
+weight: 100
 
-title: Experience
+title: Experiência
 subtitle:
 
 # Date format for experience
@@ -26,24 +26,27 @@ date_format: Jan 2006
 #   Leave `date_end` empty if it's your current employer.
 #   Begin multi-line descriptions with YAML's `|2-` multi-line prefix.
 experience:
-  - title: CEO
-    company: GenCoin
+  - title: Professor
+    company: IFPB
     company_url: ''
-    location: California
-    date_start: '2017-01-01'
+    location: Brasil
+    date_start: '2015-02-01'
     date_end: ''
     description: |2-
-        Responsibilities include:
-        
-        * Analysing
-        * Modelling
-        * Deploying
-        
-  - title: Professor
-    company: University X
+  - title: Coordenador de Curso
+    company: CST de Negócios Imobiliários
     company_url: ''
-    location: California
-    date_start: '2016-01-01'
-    date_end: '2016-12-31'
-    description: Taught electronic engineering and researched semiconductor physics.
+    location: Brasil
+    date_start: '2021-11-01'
+    date_end: ''
+    description: |2-
+  - title: Coordenador de Curso
+    company: CT Contabilidade
+    company_url: ''
+    location: Brasil
+    date_start: '2017-01-01'
+    date_end: '2017-11-01'
+    description: |2-
+
+
 ---

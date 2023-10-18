@@ -16,15 +16,12 @@ image:
   caption: 'Image credit: [**Wikimedia**](https://upload.wikimedia.org/wikipedia/commons/5/5e/Oil_platform_%28Brazil%29_1.jpg)'
   focal_point: "featured2.jpeg"
   preview_only: false
-links:
-- name: Custom Link
-  url: https://www.emerald.com/insight/content/doi/10.1108/JES-08-2022-0437/full/html?skipTracking=true
 publication: ""
 publication_short: ""
 publication_types:
 - "2"
 publishDate: "2023-09-15T00:00:00Z"
-summary: The aim of this study was to determine if there are asymmetries in the pass-through of West Texas Intermediate (WTI) crude oil prices to its derivatives (diesel and gasoline) in the Brazilian market.
+summary: O objetivo do estudo foi determinar se existe uma assimetria no repasse das variações do preço internacional do petróleo para o preço dos seus derivados no Brasil - diesel e gasolina.
 tags:
 - Oil
 - Passthrough

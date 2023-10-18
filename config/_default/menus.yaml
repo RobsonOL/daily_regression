@@ -19,6 +19,3 @@ main:
   - name: Cursos
     url: courses/
     weight: 60
-  - name: Contato
-    url: '#contact'
-    weight: 70
