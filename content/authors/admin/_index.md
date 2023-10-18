@@ -34,11 +34,11 @@ social:
 - icon: researchgate
   icon_pack: fab
   link: https://www.researchgate.net/profile/Robson-Oliveira-Lima
-- icon: id-badge
-  icon_pack: far
+- icon: lattes
+  icon_pack: ai
   link:  http://lattes.cnpq.br/9025662742228276
-- icon: graduation-cap
-  icon_pack: fas
+- icon: google-scholar
+  icon_pack: ai
   link:  https://scholar.google.com.br/citations?user=2shgdncAAAAJ&hl=pt-BR
 superuser: true
 title: Robson Oliveira 
